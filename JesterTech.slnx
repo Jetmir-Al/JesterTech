@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="jestertech.client/jestertech.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="JesterTech.Server/JesterTech.Server.csproj" />
+</Solution>

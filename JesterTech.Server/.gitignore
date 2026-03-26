@@ -1,0 +1,26 @@
+.appsettings.Development.json
+
+# --- Build Outputs ---
+[Bb]in/
+[Oo]bj/
+
+# --- Visual Studio Specific ---
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+
+# --- Secrets and Environment ---
+# Ignore the User Secrets ID folder
+# (Matches the folder created in %APPDATA%\Microsoft\UserSecrets\)
+appsettings.Development.json
+
+# --- Database ---
+# If you use SQLite for local dev, ignore the DB file itself
+*.db
+*.db-shm
+*.db-wal
+
+# --- Tools ---
+.devcontainer/
+.vscode/
