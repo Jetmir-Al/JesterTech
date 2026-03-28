@@ -1,0 +1,30 @@
+.navbar-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+/*    background: var(--gradient2);*/
+}
+
+.navbar-left {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+.navbar-left .icons, .navbar-left h5{
+    font: var(--h4)
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+    .navbar-right .icons {
+        font: var(--h5);
+    }
+    .navbar-right button {
+        background: none;
+        border: none;
+    }
