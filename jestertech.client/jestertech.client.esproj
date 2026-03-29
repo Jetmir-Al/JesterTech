@@ -11,10 +11,8 @@
   <ItemGroup>
     <Folder Include="src\api\" />
     <Folder Include="src\components\forms\" />
-    <Folder Include="src\components\ui\" />
     <Folder Include="src\routes\" />
     <Folder Include="src\pages\" />
-    <Folder Include="src\types\" />
     <Folder Include="src\utils\" />
     <Folder Include="src\services\" />
   </ItemGroup>

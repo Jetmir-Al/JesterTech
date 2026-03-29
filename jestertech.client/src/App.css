@@ -1,4 +1,8 @@
-﻿/*reset */
+﻿/*font*/
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+
+/*reset */
 * {
     margin: 0;
     padding: 0;
@@ -7,27 +11,66 @@
 
 /*Variables */
 :root {
-    --first-color: hsl(0, 60%, 45%);
-    --title-color: hsl(45, 10%, 15%);
-    --text-color: hsl(0, 10%, 35%);
-    --border-color: hsl(45, 20%, 90%);
-    --gold-color: hsl(45, 60%, 50%);
-    --white-color: hsl(0, 0%, 100%);
-    --body-color: hsl(0, 0%, 100%);
-    --container-color: hsl(0, 100%, 98%);
-    --red: hsl(0, 100%, 45%);
-    --redHover: hsl(0, 100%, 35%);
-    --gradient: linear-gradient(135deg, var(--container-color), var(--white-color));
-    --gradient2: linear-gradient(135deg, var(--white-color), var(--container-color));
-    --boxShadow: 0 4px 12px hsla(0, 0%, 0%, 0.15);
-    --ff: "Times New Roman", Times, sans-serif;
-    --ff2: "Times New Roman", Times, sans-serif;
-    --p: 1rem/1.5rem var(--ff);
-    --h1: 600 3rem/1.2em var(--ff2);
-    --h2: 600 2rem/1.2em var(--ff2);
-    --h3: 500 1.5rem/1.2rem var(--ff);
-    --h4: 450 1.3rem/1.2rem var(--ff);
-    --h5: 400 1.1rem/1.2rem var(--ff);
+    --color-primary: hsl(0, 65%, 45%);
+    --color-primary-hover: hsl(0, 65%, 38%);
+    --color-primary-light: hsl(0, 70%, 92%);
+    --color-accent: hsl(42, 65%, 55%);
+    --color-accent-soft: hsl(42, 70%, 90%);
+    --color-success: hsl(145, 55%, 40%);
+    --color-success-bg: hsl(145, 60%, 92%);
+    --color-warning: hsl(38, 92%, 50%);
+    --color-warning-bg: hsl(38, 100%, 92%);
+    --color-danger: hsl(0, 75%, 50%);
+    --color-danger-bg: hsl(0, 85%, 92%);
+    --color-info: hsl(210, 90%, 50%);
+    --color-info-bg: hsl(210, 90%, 92%);
+    --color-title: hsl(210, 25%, 18%);
+    --color-text: hsl(210, 15%, 35%);
+    --color-text-light: hsl(210, 10%, 50%);
+    --color-text-inverse: hsl(0, 0%, 100%);
+    --color-body: hsl(210, 30%, 98%);
+    --color-surface: hsl(0, 0%, 100%);
+    --color-surface-alt: hsl(210, 25%, 96%);
+    --color-border: hsl(210, 20%, 88%);
+    --color-border-strong: hsl(210, 20%, 75%);
+    --price-color: hsl(0, 65%, 45%);
+    --sale-badge: hsl(0, 80%, 55%);
+    --rating-star: hsl(42, 85%, 55%);
+    --gradient-surface: linear-gradient( 135deg, hsl(210, 25%, 96%), hsl(0, 0%, 100%) );
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.06);
+    /* Font family */
+
+    --font-primary: "Inter", system-ui, -apple-system, sans-serif;
+    /* Font weights */
+
+    --fw-light: 300;
+    --fw-regular: 400;
+    --fw-medium: 500;
+    --fw-semibold: 600;
+    --fw-bold: 700;
+    /* Typography scale */
+
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-md: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 2rem;
+    --text-4xl: 2.75rem;
+    /* Line heights */
+
+    --lh-tight: 1.2;
+    --lh-normal: 1.5;
+    --lh-relaxed: 1.7;
+    --p: var(--fw-regular) var(--text-md) / var(--lh-normal) var(--font-primary);
+    --h1: var(--fw-bold) var(--text-4xl) / var(--lh-tight) var(--font-primary);
+    --h2: var(--fw-semibold) var(--text-3xl) / var(--lh-tight) var(--font-primary);
+    --h3: var(--fw-semibold) var(--text-2xl) / var(--lh-tight) var(--font-primary);
+    --h4: var(--fw-medium) var(--text-xl) / var(--lh-normal) var(--font-primary);
+    --h5: var(--fw-medium) var(--text-lg) / var(--lh-normal) var(--font-primary);
 }
 
 /* global styles */
@@ -41,30 +84,36 @@ h2,
 h3,
 h4,
 h5 {
-    color: var(--title-color);
+    color: var(--color-title);
 }
 
 body {
     text-wrap: balance;
     font: var(--p);
-    background-color: var(--body-color);
-    color: var(--text-color);
+    background-color: var(--color-body);
+    color: var(--color-text);
 }
 
     body.dark-theme {
-        --title-color: hsl(45, 10%, 85%);
-        --text-color: hsl(0, 0%, 70%);
-        --border-color: hsl(0, 0%, 20%);
-        --body-color: hsl(0, 0%, 10%);
-        --container-color: hsl(0, 0%, 15%);
+        --shadow-sm: 0 1px 2px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+        --shadow-md: 0 4px 12px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
+        --shadow-lg: 0 10px 25px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.06);
+        --color-title: hsl(45, 60%, 80%);
+        --color-text: hsl(210, 10%, 70%);
+        --color-text-light: hsl(210, 10%, 55%);
+        --color-body: hsl(210, 30%, 10%);
+        --color-surface: hsl(210, 25%, 15%);
+        --color-surface-alt: hsl(210, 25%, 18%);
+        --color-border: hsl(210, 20%, 25%);
+        --color-border-strong: hsl(210, 20%, 35%);
     }
 
 .icons {
-    color: var(--title-color);
+    color: var(--color-title);
 }
 
     .icons:hover {
-        color: var(--first-color);
+        cursor: pointer;
     }
 
 h1 {
@@ -95,5 +144,5 @@ legend {
 
 a {
     text-decoration: none;
-    color: var(--text-color);
+    color: var(--color-text);
 }
