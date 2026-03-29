@@ -16,6 +16,7 @@
     --color-primary-light: hsl(0, 70%, 92%);
     --color-accent: hsl(42, 65%, 55%);
     --color-accent-soft: hsl(42, 70%, 90%);
+/* utils colors*/
     --color-success: hsl(145, 55%, 40%);
     --color-success-bg: hsl(145, 60%, 92%);
     --color-warning: hsl(38, 92%, 50%);
@@ -24,19 +25,22 @@
     --color-danger-bg: hsl(0, 85%, 92%);
     --color-info: hsl(210, 90%, 50%);
     --color-info-bg: hsl(210, 90%, 92%);
+/*   text colors */
     --color-title: hsl(210, 25%, 18%);
     --color-text: hsl(210, 15%, 35%);
     --color-text-light: hsl(210, 10%, 50%);
     --color-text-inverse: hsl(0, 0%, 100%);
+/* background colors*/
     --color-body: hsl(210, 30%, 98%);
     --color-surface: hsl(0, 0%, 100%);
     --color-surface-alt: hsl(210, 25%, 96%);
     --color-border: hsl(210, 20%, 88%);
     --color-border-strong: hsl(210, 20%, 75%);
+/* shop colors*/
     --price-color: hsl(0, 65%, 45%);
     --sale-badge: hsl(0, 80%, 55%);
     --rating-star: hsl(42, 85%, 55%);
-    --gradient-surface: linear-gradient( 135deg, hsl(210, 25%, 96%), hsl(0, 0%, 100%) );
+/* box shadows   */
     --shadow-sm: 0 1px 2px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
     --shadow-md: 0 4px 12px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
     --shadow-lg: 0 10px 25px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.06);
@@ -141,8 +145,26 @@ button,
 legend {
     font: var(--p);
 }
-
+button {
+    cursor: pointer;
+}
 a {
     text-decoration: none;
     color: var(--color-text);
+}
+
+
+@media screen and (max-width: 768px) {
+    h1 {
+        font: var(--h2);
+    }
+    h2 {
+        font: var(--h3);
+    }
+    h3 {
+        font: var(--h4);
+    }
+    h4 {
+        font: var(--h5);
+    }
 }
