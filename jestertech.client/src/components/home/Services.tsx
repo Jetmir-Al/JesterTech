@@ -8,7 +8,7 @@ function Services() {
                 <div className="service">
                     <FontAwesomeIcon className="serviceIcon" icon={faTruck} />
                     <h3 className="">Free Shipping</h3>
-                    <p className="">Order more than 100$</p>
+                <p className="">Order more than 100€</p>
 
             </div>
             <div className="service">

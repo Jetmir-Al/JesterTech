@@ -1,3 +1,4 @@
+import Featured from "../components/home/Featured";
 import Services from "../components/home/Services";
 import Button from "../components/ui/Button";
 import "./pageStyles/home.css";
@@ -23,7 +24,7 @@ const Home = () => {
                         <img src="./src/assets/s26.png" alt="samsung galaxy S26" className="hero-image" />
                     </div>
                     <div className="img-container">
-                        <img src="./src/assets/oneplus 15_upscaled.png" alt="oneplus 15" className="hero-image main-img" />
+                        <img src="./src/assets/oneplus 15.png" alt="oneplus 15" className="hero-image main-img" />
                     </div>
                     <div className="img-container">
                         <img src="./src/assets/iphone 17.png" alt="iphone 17" className="hero-image" />
@@ -32,6 +33,7 @@ const Home = () => {
             </div>
 
             <Services />
+            <Featured />
         </div>
     );
 }

@@ -4,6 +4,7 @@
     flex-direction: column;
     align-self: center;
     justify-content: center;
+    gap: 2rem;
 }
 
 .hero-section {
@@ -13,7 +14,7 @@
     width: 100%;
     gap: 2rem;
     padding: 0.5rem;
-    background-color: var(--color-surface-alt);
+    background-color: var(--color-surface);
     min-height: 70vh;
 }
 
