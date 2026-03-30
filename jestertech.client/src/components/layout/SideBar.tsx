@@ -3,8 +3,8 @@
 
 const SideBar = () => {
     return (
-        <div>
-        </div>
+        <aside>
+        </aside>
     );
 }
 

@@ -20,7 +20,7 @@ const Card = ({ img, price, name, rating }: ICard) => {
                 type="button"
                 onClick={() => { }}
                 className="cart-btn">
-                ADD TO CART
+                Add to Cart
             </Button>
         </div>
     );

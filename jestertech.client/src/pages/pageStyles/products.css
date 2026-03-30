@@ -1,0 +1,215 @@
+.products-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 90vh;
+}
+.productSearch-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    color: var(--color-text);
+    background-color: var(--color-border);
+    padding: 2rem 1.5rem;
+    margin-top: 100px;
+}
+
+.productSearch-form {
+    display: flex;
+    align-items: center;
+    column-gap: .5rem;
+    background-color: var(--color-surface);
+    border: 2px solid var(--color-border);
+    padding-inline: 1rem;
+    width: 40%;
+}
+
+.search-input {
+    width: 100%;
+    padding-block: 1rem;
+    background-color: var(--color-surface);
+    color: var(--color-text);
+}
+
+
+
+
+
+/* Books display */
+
+.productsDisplay-container {
+    margin-top: 20px;
+    width: 100%;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    padding: 0 2rem;
+}
+
+.productCard {
+    max-width: 250px;
+    max-height: 385px;
+    min-height: 380px
+}
+
+
+
+
+.productCard {
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+/* Books page number */
+.pageNumbers-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    color: var(--color-text);
+    background-color: var(--color-border);
+    padding: 1rem 0.7rem;
+    margin: 5rem 0;
+}
+
+.pageLink {
+    padding: 0.5rem;
+    border: 2px solid var(--color-border);
+    background-color: white;
+}
+
+.active {
+    border: 2px solid var(--color-border);
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.sortFilter-Container {
+    position: relative;
+}
+
+.sortFilter {
+    display: none;
+    /* display: flex; */
+    min-width: 400px;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-surface-alt);
+    position: absolute;
+    right: 0;
+    top: 60px;
+    z-index: 9999999999900;
+    border-radius: 10px 0 10px 10px;
+    padding: 1rem;
+}
+
+    .sortFilter h4 {
+        border-bottom: 2px solid var(--color-border-strong);
+    }
+
+.sortFilter-btn {
+    cursor: pointer;
+    width: 100%;
+    padding-block: 1rem;
+    color: var(--color-text);
+    background-color: transparent;
+    border: none;
+}
+
+.sortFilter-icon {
+    font: var(--h4);
+    width: 100%;
+    padding-block: 1rem;
+}
+
+.sortForm {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sortForm-inputs {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+    .sortForm-inputs label {
+        display: flex;
+        gap: 5px;
+        padding: 0 1rem;
+    }
+
+
+.filterForm {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+
+.sortFilter-btns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+}
+
+    .sortFilter-btns button {
+        cursor: pointer;
+        color: var(--color-text);
+        background-color: var(--color-border);
+        padding: 0.3rem 0.7rem;
+        border: none;
+    }
+
+    .sortFilter-btns :first-child {
+        background-color: var(--color-primary);
+        color: white;
+        cursor: pointer;
+    }
+
+
+@media screen and (max-width: 1024px) {
+    .productsDisplay-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+@media screen and (max-width: 758px) {
+    .productSearch-form {
+        width: 60%;
+    }
+
+    .sortBooks {
+        padding: 1rem 0.5rem;
+    }
+
+    .productsDisplay-container {
+        grid-template-columns: 1fr;
+        padding: 0 1rem;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .sortFilter {
+        width: 300px;
+        min-width: 250px;
+    }
+}

@@ -8,7 +8,7 @@ import Button from "../ui/Button";
 const NavBar = () => {
     const { toggleMode, mode } = useToggleModeHook();
     return (
-        <div className="navbar-container">
+        <nav className="navbar-container">
             <div className="navbar-left">
                 <FontAwesomeIcon icon={faBars} className="icons" />
                 <h5>JESTER TECH</h5>
@@ -45,7 +45,7 @@ const NavBar = () => {
                 <FontAwesomeIcon icon={faUser} className="icons" />
                 </Button>
             </div>
-        </div>
+        </nav>
     );
 }
 

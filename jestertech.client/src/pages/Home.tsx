@@ -1,3 +1,4 @@
+import Categories from "../components/home/Categories";
 import Featured from "../components/home/Featured";
 import Services from "../components/home/Services";
 import Button from "../components/ui/Button";
@@ -34,6 +35,7 @@ const Home = () => {
 
             <Services />
             <Featured />
+            <Categories />
         </div>
     );
 }
