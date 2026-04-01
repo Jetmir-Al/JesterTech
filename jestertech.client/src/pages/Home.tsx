@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import Categories from "../components/home/Categories";
 import Featured from "../components/home/Featured";
 import Services from "../components/home/Services";
@@ -5,6 +6,9 @@ import Button from "../components/ui/Button";
 import "./pageStyles/home.css";
 
 const Home = () => {
+
+    const navigate = useNavigate();
+
     return (
         <div className="home-container">
             <div className="hero-section">
@@ -16,7 +20,7 @@ const Home = () => {
                     <Button
                         className="hero-btn"
                         type="button"
-                        onClick={() => { } }>
+                        onClick={() => navigate('/products') }>
                         Shop Now
                     </Button>
                 </div>
