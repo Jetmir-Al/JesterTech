@@ -3,10 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import Button from '../ui/Button';
-import { useToggleFormsHook } from '../../hooks/useToggleFormsHook';
+import { useToggleNavbarUtilsHook } from '../../hooks/useToggleNavbarUtils';
 function LogIn() {
 
-    const { toggleFormFunc, toggleDisplayFormFunc } = useToggleFormsHook();
+    const { toggleFormFunc, toggleDisplayFormFunc } = useToggleNavbarUtilsHook();
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [badInfo, setBadInfo] = useState<boolean>(false);

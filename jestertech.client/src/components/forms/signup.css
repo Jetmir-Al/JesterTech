@@ -61,6 +61,10 @@
 .signup__button {
     width: 100%;
     cursor: pointer;
+    color: white;
+    background-color: var(--color-primary);
+    padding: 0.5rem;
+    border: none;
 }
 
 .signup__close {

@@ -68,6 +68,10 @@
 .login__button {
     width: 100%;
     cursor: pointer;
+    background-color: var(--color-primary);
+    padding: 0.5rem;
+    border: none;
+    color: white;
 }
 
 .login__close {

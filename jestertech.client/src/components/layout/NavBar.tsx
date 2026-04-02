@@ -3,20 +3,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faMagnifyingGlass, faCartShopping, faUser, faSun } from "@fortawesome/free-solid-svg-icons";
 import { faMoon } from "@fortawesome/free-regular-svg-icons/faMoon";
 import { useToggleModeHook } from "../../hooks/useToggleModeHook";
-import { useToggleFormsHook } from "../../hooks/useToggleFormsHook";
+import { useToggleNavbarUtilsHook } from "../../hooks/useToggleNavbarUtils";
 import Button from "../ui/Button";
 import LogIn from "../forms/Login";
 import SignUp from "../forms/Signup";
+import { useNavigate } from "react-router";
 
 const NavBar = () => {
     const { toggleMode, mode } = useToggleModeHook();
-    const { toggleDisplayForm, toggleDisplayFormFunc, toggleForm } = useToggleFormsHook();
+    const { toggleDisplayForm, toggleDisplayFormFunc, toggleForm } = useToggleNavbarUtilsHook();
+    const navigate = useNavigate();
+
     return (
         <>
         <nav className="navbar-container">
-            <div className="navbar-left">
-                <FontAwesomeIcon icon={faBars} className="icons" />
-                <h5>JESTER TECH</h5>
+                <div className="navbar-left">
+                    <FontAwesomeIcon icon={faBars} className="icons" />
+                    <h5>JESTER TECH</h5>
                 </div>
                 <div className="navbar-right">
                 
@@ -40,7 +43,7 @@ const NavBar = () => {
                 <Button
                     type="button"
                     className=""
-                    onClick={() => { } }>
+                    onClick={() => navigate("/cart") }>
                 <FontAwesomeIcon icon={faCartShopping} className="icons" />
                 </Button>
                 <Button
@@ -53,10 +56,12 @@ const NavBar = () => {
             </nav>
 
             {
-                toggleDisplayForm &&    
+                toggleDisplayForm && (
                     toggleForm ?
-                    <LogIn /> :
-                    <SignUp />
+                        <LogIn /> :
+                        <SignUp />
+                )   
+
                     
             }
         </>

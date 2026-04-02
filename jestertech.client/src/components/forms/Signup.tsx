@@ -3,12 +3,12 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import './signup.css';
 import { useState } from "react";
 import Button from '../ui/Button';
-import { useToggleFormsHook } from "../../hooks/useToggleFormsHook";
+import { useToggleNavbarUtilsHook } from "../../hooks/useToggleNavbarUtils";
 
 
 function SignUp() {
 
-    const { toggleFormFunc, toggleDisplayFormFunc } = useToggleFormsHook();
+    const { toggleFormFunc, toggleDisplayFormFunc } = useToggleNavbarUtilsHook();
     const [name, setName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
