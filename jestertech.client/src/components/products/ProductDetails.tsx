@@ -1,12 +1,12 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import AddReview from "../forms/AddReview";
 import Button from "../ui/Button";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
 import "./productDetails.css";
+import { useState } from "react";
 
 
 
 const ProductDetails = () => {
-
+    const [reviewForm, setReviewForm] = useState<boolean>(false);
 
     return (
         <div className="productDetails-container">
@@ -68,65 +68,18 @@ const ProductDetails = () => {
                                     //    ))
                                 }
                             </div>
-                            {
-                                
-                                <>
+                        {
+                            reviewForm ? 
+                                <AddReview />
+                                        :
+                                <Button
+                                    className="addReview"
+                                    type="button"
+                                    onClick={() => setReviewForm(r => !r)}
+                                >
+                                    ADD YOUR REVIEW
+                                </Button>
 
-                                        <Button className="addReview"
-                                            type="button"
-                                            onClick={() => { }}>
-                                            ADD YOUR REVIEW
-                                        </Button>
-
-                                        <form className="productReview-form" id="productReview-form"
-                                            style={{ display:'flex'  }}
-                                            onSubmit={() => { } }>
-                                        <div className="productReview-inputs">
-                                            <h2 className="userTitle">
-                                                {"user.name"}
-                                            </h2>
-
-                                            <label htmlFor="comment">
-                                                Comment: <br />
-                                            <textarea name="comment" id="comment"
-                                                required cols={30} rows={5}
-                                                        onChange={() => { } }
-                                                ></textarea>
-                                            </label>
-                                            <div className="starRating">
-                                                {[...Array(5)].map((_, index) => {
-                                                    const starValue = index + 1;
-
-                                                    return (
-                                                        <FontAwesomeIcon
-                                                            key={index}
-                                                            icon={faStar}
-                                                            className={
-                                                                starValue ? "star filled" : "star"
-                                                            }
-                                                            onClick={() => { }}
-                                                            onMouseEnter={() => { } }
-                                                        />
-                                                    );
-                                                })}
-                                            </div>
-
-                                                <div className="productReviewBtns">
-                                                    <Button
-                                                        className=""
-                                                        type="submit"
-                                                        onClick={() => { }}
-                                                    >
-                                                        Submit
-                                                    </Button>
-                                                    <Button className="cancelReview"
-                                                        type="button"
-                                                        onClick={() => { }}>Cancel
-                                                    </Button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </>
                             }
                         </div>
 
