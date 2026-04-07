@@ -14,6 +14,7 @@
 # Ignore the User Secrets ID folder
 # (Matches the folder created in %APPDATA%\Microsoft\UserSecrets\)
 appsettings.Development.json
+appsettings.json
 
 # --- Database ---
 # If you use SQLite for local dev, ignore the DB file itself
