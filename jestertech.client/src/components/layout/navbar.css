@@ -21,6 +21,7 @@
     .navbar-left button {
         background: none;
         border: none;
+        color: var(--color-title);
     }
 .navbar-title {
     font: var(--h4);

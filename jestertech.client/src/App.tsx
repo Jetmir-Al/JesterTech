@@ -8,6 +8,7 @@ import Footer from './components/layout/Footer';
 import Products from './pages/Products';
 import NotFound from './pages/NotFound';
 import Cart from './pages/Cart';
+import ProductDetails from './components/products/ProductDetails';
 
 
 function App() {
@@ -20,7 +21,7 @@ function App() {
                 <Route path="*" element={<NotFound/>} />
                 <Route path="/" element={<Home />} />
                 <Route path="/products" element={<Products />} />
-                <Route path="/products/:id" element={< ></>} />
+                <Route path="/products/:id" element={<ProductDetails />} />
                 <Route path="/cart" element={<Cart/>} />
             </Routes>
             <Footer />

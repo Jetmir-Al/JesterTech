@@ -1,0 +1,232 @@
+.productDetails-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 60vh;
+}
+
+.productDetails {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    position: relative;
+    width: 100%;
+    gap: 10rem;
+    margin-top: 100px;
+    padding: 1rem;
+    background-color: var(--color-surface-alt);
+}
+
+.productPresentation {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.productBtns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .productBtns button {
+        padding: 0.7rem 1rem;
+        background-color: var(--color-primary);
+        color: white;
+        border: 2px solid var(--color-primary);
+        cursor: pointer;
+        width: 100%;
+    }
+    .productBtns button:hover {
+        background-color: var(--color-primary-hover);
+        border: 2px solid var(--color-primary-hover);
+    }
+
+
+
+.productImg {
+    width: 250px;
+    min-height: 300px;
+    max-height: 400px;
+}
+
+.productInfo {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    width: 25%;
+}
+
+    .productInfo h4 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.5rem 1rem;
+        border-bottom: 2px solid var(--color-border);
+    }
+
+
+.productReviews-container {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 1rem;
+    gap: 2rem;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+}
+
+.productReview-form {
+/*     display: flex; */
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 1rem;
+}
+
+.productReview-inputs {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 40%;
+    padding: 2rem;
+    background-color: var(--color-surface);
+    border: 2px solid var(--color-border);
+}
+
+    .productReview-inputs h2 {
+        width: 100%;
+        align-self: flex-start;
+        border-bottom: 2px solid var(--color-border);
+    }
+
+.productReview-form label {
+    font: var(--h5);
+    width: 100%;
+}
+
+.productReview-form input,
+.productReview-form textarea {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border: none;
+    outline: none;
+    background-color: var(--color-surface-alt);
+}
+
+
+
+.productReviewBtns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+    .productReviewBtns button {
+        background-color: var(--color-primary);
+        border: 2px solid var(--color-primary);
+        color: white;
+        padding: 0.5rem 0.7rem;
+        cursor: pointer;
+    }
+
+    .productReviewBtns :last-child {
+        background-color: transparent;
+        color: var(--color-primary);
+    }
+
+.productReviews {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.addReview {
+    background-color: var(--color-primary);
+    color: white;
+    padding: 0.5rem 0.7rem;
+    cursor: pointer;
+    border: none;
+}
+
+#buyContent,
+#borrowContent {
+    margin-top: 100px;
+    display: none;
+    text-align: center;
+    position: absolute;
+    z-index: 9999;
+}
+
+
+.userTitle {
+    font-size: var(--h2-font-size);
+    margin-bottom: .75rem;
+}
+
+
+.starRating {
+    display: flex;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.star {
+    font-size: 28px;
+    color: #ccc;
+    transition: 0.2s;
+}
+
+    .star.filled {
+        color: gold;
+    }
+
+
+
+.starIcons {
+    color: gold;
+}
+
+
+@media screen and (max-width: 758px) {
+    .productDetails {
+        justify-content: space-evenly;
+        gap: 1rem;
+    }
+
+    .productInfo {
+        width: 45%;
+    }
+
+        .productInfo h4 {
+            justify-content: space-between;
+        }
+
+    .productReview-inputs {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .productDetails {
+        flex-direction: column;
+    }
+
+    .productInfo {
+        width: 85%;
+    }
+
+}

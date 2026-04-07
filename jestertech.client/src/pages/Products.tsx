@@ -88,7 +88,7 @@ const Products = () => {
 
                
 
-                <Link to={`/bookdetails`}
+                <Link to={`/products/1`}
                                     className='productCard'
                 >
                     <Card
@@ -98,7 +98,6 @@ const Products = () => {
                         rating={5}
                     />
                                 </Link>
-
             </div>
             <div className="pageNumbers-container">
                 {
