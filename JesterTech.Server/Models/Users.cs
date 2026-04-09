@@ -16,5 +16,8 @@ namespace JesterTech.Server.Models
         public string Password { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        public ICollection<Purchases> Purchases { get; set; }
+        public ICollection<Reviews> Reviews { get; set; }
     }
 }
