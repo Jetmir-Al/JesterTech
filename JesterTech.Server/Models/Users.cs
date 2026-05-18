@@ -15,6 +15,9 @@ namespace JesterTech.Server.Models
         [Required(ErrorMessage = "Write Password")]
         public string Password { get; set; }
 
+        [Required(ErrorMessage = "Write Role")]
+        public string? Role { get; set; } = "Customer";
+
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public ICollection<Purchases> Purchases { get; set; }

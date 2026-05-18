@@ -1,5 +1,6 @@
 ﻿using JesterTech.Server.Data;
 using JesterTech.Server.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace JesterTech.Server.Repositories
 {
@@ -23,7 +24,16 @@ namespace JesterTech.Server.Repositories
 
         public List<Products> GetAllProducts()
         {
-             return _context.Products.ToList();
+            try
+            {
+                return _context.Products.ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error occurred while fetching products: " + ex.Message);
+                return new List<Products>();
+            }
+            
         }
 
         public Products GetProductById(int id)

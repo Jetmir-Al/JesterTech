@@ -1,14 +1,17 @@
 using JesterTech.Server.Data;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-
+using JesterTech.Server.Services;
+using JesterTech.Server.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
-
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
 
 builder.Services.AddControllersWithViews();
 
@@ -20,7 +23,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: "JesterTechPolicy",
                       policy =>
                       {
-                          policy.WithOrigins("")
+                          policy.WithOrigins("https://localhost:62346")
                                 .AllowAnyHeader()
                                 .AllowAnyMethod()
                                 .AllowCredentials();
@@ -28,18 +31,7 @@ builder.Services.AddCors(options =>
 }
     );
 
-
-
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.Cookie.Name = "UserSessionCookie";
-        options.Cookie.HttpOnly = true;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-        options.Cookie.SameSite = SameSiteMode.None;
-        options.ExpireTimeSpan = TimeSpan.FromDays(6);
-        options.SlidingExpiration = true;
-    });
+builder.Services.AddIdentityServices(builder.Configuration);
 
 var app = builder.Build();
 
@@ -58,14 +50,14 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 
-app.UseCors("LibrariaPolicy");
+app.UseCors("JesterTechPolicy");
 
 
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-
+app.MapControllers();
 
 
 app.Run();

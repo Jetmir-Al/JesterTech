@@ -17,7 +17,7 @@ namespace JesterTech.Server.Controllers
         }
 
         [HttpGet("products")]
-        public IActionResult GetProducts()
+        public async Task<IActionResult> GetProducts()
         {
             var products = _productRepository.GetAllProducts();
             return Ok(products);
@@ -32,6 +32,68 @@ namespace JesterTech.Server.Controllers
                 return NotFound();
             }
             return Ok(product);
+        }
+        [HttpGet("featured")]
+        public IActionResult GetEightBooks()
+        {
+            var books = _productRepository.GetAllProducts()
+                .Take(8)
+                .ToList();
+
+            return Ok(books);
+        }
+
+        [HttpGet("advanced")]
+        public IActionResult GetBooksAdvanced(
+            int page = 1,
+            int pageSize = 20,
+            string? search = null,
+            string? categories = null,
+            string? sort = null)
+        {
+            var query = _productRepository.GetAllProducts().AsQueryable();
+
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(b =>
+                    b.Title.Contains(search) ||
+                    b.Brand.Contains(search));
+            }
+
+
+            if (!string.IsNullOrEmpty(categories))
+            {
+                var list = categories.Split(',').ToList();
+                query = query.Where(b => list.Contains(b.Category));
+            }
+
+
+            query = sort switch
+            {
+                "name" => query.OrderBy(b => b.Title),
+                "price" => query.OrderBy(b => b.Price),
+                "new" => query.OrderByDescending(b => b.Id),
+                "old" => query.OrderBy(b => b.Id),
+                _ => query.OrderBy(b => b.Id)
+            };
+
+
+            var productCount = query.Count();
+
+
+            var products = query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return Ok(new
+            {
+                data = products,
+                page = page,
+                totalProducts = productCount,
+                totalPages = (int)Math.Ceiling(productCount / (double)pageSize)
+            });
         }
     }
 }

@@ -1,13 +1,13 @@
 ﻿using JesterTech.Server.DTO;
 using JesterTech.Server.Models;
 using JesterTech.Server.Repositories;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-
+using System.Text;
 
 namespace JesterTech.Server.Controllers
 {
@@ -17,9 +17,12 @@ namespace JesterTech.Server.Controllers
     {
         private readonly IAuthRepository _authRepository;
         private readonly IPasswordHasher<Users> _passwordHasher;
-        public AuthController(IAuthRepository authRepository)
+        private readonly IConfiguration _configuration; 
+
+        public AuthController(IAuthRepository authRepository, IConfiguration configuration)
         {
             _authRepository = authRepository;
+            _configuration = configuration;
             _passwordHasher = new PasswordHasher<Users>();
         }
 
@@ -28,13 +31,13 @@ namespace JesterTech.Server.Controllers
         {
             if (authDTO == null)
             {
-                return BadRequest("Invalid Credecials!");
+                return BadRequest("Invalid Credentials!");
             }
             var userEmail = _authRepository.GetUserByEmail(authDTO.Email);
 
             if (userEmail != null)
             {
-                return BadRequest("Invalid Credecials");
+                return BadRequest("Invalid Credentials");
             }
             var user = new Users
             {
@@ -46,7 +49,6 @@ namespace JesterTech.Server.Controllers
 
             _authRepository.CreateUser(user);
             _authRepository.Save();
-
 
             return Ok("User registered successfully");
         }
@@ -60,42 +62,51 @@ namespace JesterTech.Server.Controllers
             }
 
             var user = _authRepository.GetUserByEmail(loginDTO.Email);
-
             if (user == null)
             {
                 return Unauthorized("Email or password incorrect.");
             }
-            var res = _passwordHasher.VerifyHashedPassword(user, user.Password, loginDTO.Password);
 
+            var res = _passwordHasher.VerifyHashedPassword(user, user.Password, loginDTO.Password);
             if (res == PasswordVerificationResult.Failed)
             {
                 return Unauthorized("Email or password incorrect.");
             }
 
-
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim("Id", user.Id.ToString())
+                new Claim("Id", user.Id.ToString()),
+                new Claim(ClaimTypes.Role, user.Role)
             };
 
+            var jwtSettings = _configuration.GetSection("JwtSettings");
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"] ?? "fallback_key_for_local_dev_only"));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var claimsIdentity = new ClaimsIdentity(
-                claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-            var authProperties = new AuthenticationProperties
+            var tokenDescriptor = new SecurityTokenDescriptor
             {
-                IsPersistent = true,
-                ExpiresUtc = DateTimeOffset.UtcNow.AddDays(7)
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddDays(6), 
+                Issuer = jwtSettings["Issuer"],
+                Audience = jwtSettings["Audience"],
+                SigningCredentials = creds
             };
 
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(claimsIdentity),
-                authProperties);
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            var tokenString = tokenHandler.WriteToken(token);
 
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,             
+                Secure = true,               
+                SameSite = SameSiteMode.None, 
+                Expires = DateTimeOffset.UtcNow.AddDays(6)
+            };
 
+            Response.Cookies.Append("JesterTechToken", tokenString, cookieOptions);
 
             return Ok(new
             {
@@ -106,17 +117,19 @@ namespace JesterTech.Server.Controllers
             });
         }
 
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+        [Authorize]
         [HttpGet("status")]
         public IActionResult CheckStatus()
         {
             var userId = User.FindFirst("Id")?.Value;
             var name = User.FindFirst(ClaimTypes.Name)?.Value;
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
+
             if (userId == null || name == null || email == null)
             {
                 return Unauthorized("User is not authenticated.");
             }
+
             return Ok(new
             {
                 message = "User is authenticated.",
@@ -127,10 +140,17 @@ namespace JesterTech.Server.Controllers
         }
 
         [HttpPost("logout")]
-        public async Task<IActionResult> Logout()
+        public IActionResult Logout()
         {
-            await HttpContext.SignOutAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme);
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                Expires = DateTimeOffset.UtcNow.AddDays(-1) 
+            };
+
+            Response.Cookies.Append("JesterTechToken", "", cookieOptions);
             return Ok("Logout successful.");
         }
     }
