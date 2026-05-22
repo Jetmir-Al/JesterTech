@@ -5,7 +5,7 @@ using JesterTech.Server.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
@@ -23,7 +23,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: "JesterTechPolicy",
                       policy =>
                       {
-                          policy.WithOrigins("https://localhost:62346")
+                          policy.WithOrigins("https://localhost:62346", "http://localhost:5231", "https://localhost:7070")
                                 .AllowAnyHeader()
                                 .AllowAnyMethod()
                                 .AllowCredentials();

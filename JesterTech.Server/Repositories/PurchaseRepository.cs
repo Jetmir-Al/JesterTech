@@ -6,6 +6,10 @@ namespace JesterTech.Server.Repositories
     public class PurchaseRepository: IPurchaseRepository
     {
         private readonly ApplicationDbContext _context;
+        public PurchaseRepository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
         public void CreatePurchase(Purchases purchases)
         {

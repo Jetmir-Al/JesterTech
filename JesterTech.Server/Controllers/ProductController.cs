@@ -1,4 +1,6 @@
-﻿using JesterTech.Server.Repositories;
+﻿using JesterTech.Server.Models;
+using JesterTech.Server.Repositories;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JesterTech.Server.Controllers
@@ -17,10 +19,22 @@ namespace JesterTech.Server.Controllers
         }
 
         [HttpGet("products")]
-        public async Task<IActionResult> GetProducts()
+        public IActionResult GetProducts()
         {
-            var products = _productRepository.GetAllProducts();
-            return Ok(products);
+            try
+            {
+
+                var products = _productRepository.GetAllProducts().ToList();
+                if (!products.Any())
+                {
+                    return NotFound("No products found.");
+                }
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpGet("products/{id}")]
@@ -44,7 +58,7 @@ namespace JesterTech.Server.Controllers
         }
 
         [HttpGet("advanced")]
-        public IActionResult GetBooksAdvanced(
+        public IActionResult GetProductsAdvanced(
             int page = 1,
             int pageSize = 20,
             string? search = null,

@@ -7,7 +7,10 @@ namespace JesterTech.Server.Repositories
     public class ProductRepository : IProductRepository
     {
         private readonly ApplicationDbContext _context;
-
+        public ProductRepository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
         public void CreateProduct(Products product)
         {
             _context.Products.Add(product);
@@ -22,16 +25,16 @@ namespace JesterTech.Server.Repositories
             }
         }
 
-        public List<Products> GetAllProducts()
+        public IQueryable<Products> GetAllProducts()
         {
             try
             {
-                return _context.Products.ToList();
+                return _context.Products.AsQueryable();
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error occurred while fetching products: " + ex.Message);
-                return new List<Products>();
+                return new List<Products>().AsQueryable();
             }
             
         }
