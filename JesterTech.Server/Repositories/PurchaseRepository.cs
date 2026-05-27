@@ -1,5 +1,6 @@
 ﻿using JesterTech.Server.Data;
 using JesterTech.Server.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace JesterTech.Server.Repositories
 {
@@ -40,6 +41,14 @@ namespace JesterTech.Server.Repositories
         {
             _context.SaveChanges();
         }
-
+            
+        public List<Purchases> GetPurchasesByUserId(int userId)
+        {
+            return _context.Purchases
+                .Include(p => p.User)
+                .Include(p => p.Products)
+                .Where(p => p.UserId == userId)
+                .ToList();
+        }
     }
 }

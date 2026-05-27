@@ -48,13 +48,13 @@ namespace JesterTech.Server.Controllers
             return Ok(product);
         }
         [HttpGet("featured")]
-        public IActionResult GetEightBooks()
+        public IActionResult GetFeaturedProducts()
         {
-            var books = _productRepository.GetAllProducts()
+            var products = _productRepository.GetAllProducts()
                 .Take(8)
                 .ToList();
 
-            return Ok(books);
+            return Ok(products);
         }
 
         [HttpGet("advanced")]

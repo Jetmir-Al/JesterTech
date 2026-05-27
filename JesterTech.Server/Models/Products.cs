@@ -6,7 +6,7 @@ namespace JesterTech.Server.Models
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Please enter the book title")]
+        [Required(ErrorMessage = "Please enter the product title")]
         public string Title { get; set; }
 
         [Required(ErrorMessage = "Please enter the Brand's name")]

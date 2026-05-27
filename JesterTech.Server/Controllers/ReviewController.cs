@@ -20,7 +20,7 @@ namespace JesterTech.Server.Controllers
         }
 
         [HttpPost("add/{productId}")]
-        public IActionResult CreateReview(int productID, [FromBody] CreateReviewDto dto)
+        public IActionResult CreateReview(int productId, [FromBody] CreateReviewDto dto)
         {
 
             var userIdClaim = User.FindFirst("Id");
@@ -30,18 +30,15 @@ namespace JesterTech.Server.Controllers
             int userId = int.Parse(userIdClaim.Value);
 
 
-            var product = _productRepository.GetProductById(productID);
+            var product = _productRepository.GetProductById(productId);
             if (product == null)
                 return BadRequest("Product not found");
 
 
-            var review = new ReviewDTO
+            var review = new Reviews
             {
-                Id = productID,
-                User = new UserDto
-                {
-                    Id = userId
-                },
+                ProductID = productId,  
+                UserId = userId,
                 Rating = dto.Rating,
                 Comment = dto.Comment
             };
@@ -52,7 +49,7 @@ namespace JesterTech.Server.Controllers
             return Ok("Review created successfully.");
         }
 
-        [HttpGet("reviews/{productId}")]
+        [HttpGet("product/{productId}")]
         public IActionResult GetReviewsForProduct(int productId)
         {
             var reviews = _reviewRepository.GetReviewsByProductId(productId)

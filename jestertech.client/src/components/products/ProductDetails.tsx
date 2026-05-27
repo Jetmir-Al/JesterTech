@@ -45,7 +45,8 @@ const ProductDetails = () => {
                                             </Button>
                                            
                                     </div>
-                                    {/*: <h4><span>Unable to buy or borrow this book</span></h4>*/}
+                                    {/*: <h4><span>Unable to buy or borrow this 
+                                        </span></h4>*/}
                                 
                             </div>
                             

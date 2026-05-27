@@ -38,7 +38,6 @@
 
 
 
-/* Books display */
 
 .productsDisplay-container {
     margin-top: 20px;
@@ -67,7 +66,7 @@
 
 
 
-/* Books page number */
+/* Products page number */
 .pageNumbers-container {
     display: flex;
     justify-content: center;
@@ -197,7 +196,7 @@
         width: 60%;
     }
 
-    .sortBooks {
+    .sortProducts {
         padding: 1rem 0.5rem;
     }
 
