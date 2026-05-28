@@ -21,8 +21,8 @@
     --color-success-bg: hsl(145, 60%, 92%);
     --color-warning: hsl(38, 92%, 50%);
     --color-warning-bg: hsl(38, 100%, 92%);
-    --color-danger: hsl(0, 75%, 50%);
-    --color-danger-bg: hsl(0, 85%, 92%);
+    --color-error: hsl(0, 75%, 50%);
+    --color-error-bg: hsl(0, 85%, 92%);
     --color-info: hsl(210, 90%, 50%);
     --color-info-bg: hsl(210, 90%, 92%);
 /*   text colors */

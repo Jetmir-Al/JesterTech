@@ -9,11 +9,21 @@ import Products from './pages/Products';
 import NotFound from './pages/NotFound';
 import Cart from './pages/Cart';
 import ProductDetails from './components/products/ProductDetails';
+import AlertBox from './components/ui/AlertBox';
+import { useToggleAlertHook } from './hooks/useToggleAlert';
 
 
 function App() {
+    const { showAlert } = useToggleAlertHook();
     return (
         <Router>
+            {
+                showAlert === false &&
+                <AlertBox
+                    message="This is a test alert!"
+                    type="error"
+                />
+            }
             <NavbarUtilsProvider>
                 <NavBar />
             </NavbarUtilsProvider>

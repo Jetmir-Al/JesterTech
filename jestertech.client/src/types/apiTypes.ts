@@ -1,7 +1,7 @@
 
-export interface RequestOptions extends RequestInit {
-    headers?: Record<string, string>;
-    body?: any | object;
+export interface RequestOptions extends Omit<RequestInit, 'body'> {
+    headers?: HeadersInit;
+    body?: Record<string, unknown> | string | null | undefined;
 }
 
 export interface RequestParams {
