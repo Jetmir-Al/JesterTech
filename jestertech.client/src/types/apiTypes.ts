@@ -8,3 +8,4 @@ export interface RequestParams {
     endpoint: string;
     options?: RequestOptions;
 }
+

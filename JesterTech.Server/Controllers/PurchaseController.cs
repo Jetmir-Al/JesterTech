@@ -25,8 +25,8 @@ namespace JesterTech.Server.Controllers
             _productRepository = productRepository;
         }
 
-        [HttpPost("create/{bookId}")]
-        public IActionResult CreatePurchase(int bookId, [FromBody] CreatePurchaseDto dto)
+        [HttpPost("create/{productId}")]
+        public IActionResult CreatePurchase(int productId, [FromBody] CreatePurchaseDto dto)
         {
             var userIdClaim = User.FindFirst("Id");
             if (userIdClaim == null)
@@ -34,9 +34,9 @@ namespace JesterTech.Server.Controllers
 
             int userId = int.Parse(userIdClaim.Value);
 
-            var product = _productRepository.GetProductById(bookId);
+            var product = _productRepository.GetProductById(productId);
             if ( product == null)
-                return BadRequest("Book not found");
+                return BadRequest("Product not found");
 
 
             if (product.Quantity < dto.Quantity)

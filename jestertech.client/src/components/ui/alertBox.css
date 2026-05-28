@@ -31,18 +31,27 @@
 .alert-info {
     border-color: var(--color-info);
 }
+    .alert-info button {
+        background-color: var(--color-info);
+    }
 .alert-success{
     border-color: var(--color-success);
 }
+    .alert-success button {
+        background-color: var(--color-success);
+    }
 .alert-error {
     border-color: var(--color-error);   
 }
+    .alert-error button {
+        background-color: var(--color-error);
+    }
 .alert-warning {
     border-color: var(--color-warning);
 }
-.alert-warning button {
-    background-color: var(--color-warning);
-}
+    .alert-warning button {
+        background-color: var(--color-warning);
+    }
 
 .alert-heading {
     width: 30%;

@@ -14,14 +14,14 @@ import { useToggleAlertHook } from './hooks/useToggleAlert';
 
 
 function App() {
-    const { showAlert } = useToggleAlertHook();
+    const { showAlert, message, type } = useToggleAlertHook();
     return (
         <Router>
             {
-                showAlert === false &&
+                showAlert &&
                 <AlertBox
-                    message="This is a test alert!"
-                    type="error"
+                    message={message}
+                    type={type}
                 />
             }
             <NavbarUtilsProvider>
