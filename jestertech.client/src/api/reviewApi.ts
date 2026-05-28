@@ -3,7 +3,10 @@ import { api } from "./api";
 
 export const AddReview = async (rating: number, comment: string, productId: number) => {
     try {
-        const response = await api.post(`/Review/add/${productId}`, { rating, comment });
+        const response = await api.post(`/Review/add/${productId}`,
+            { rating, comment },
+            { credentials: 'include' }
+        );
         return response;
     }
     catch {
@@ -13,7 +16,9 @@ export const AddReview = async (rating: number, comment: string, productId: numb
 
 export const GetReviews = async (productId: number) => {
     try {
-        const response = await api.get(`/Review/get/${productId}`);
+        const response = await api.get(`/Review/get/${productId}`,
+            { credentials: 'include' }
+        );
         return response;
     }
     catch {

@@ -21,7 +21,8 @@ export const Login = async (email: string, password: string) => {
 
 export const Status = async () => {
     try {
-        const response = await api.get('/Auth/status');
+        const response = await api.get('/Auth/status',
+            { credentials: 'include' });
         return response;
     }
     catch {
@@ -31,11 +32,13 @@ export const Status = async () => {
 
 export const Logout = async () => {
     try {
-        const response = await api.post('/Auth/logout');
+        const response = await api.post('/Auth/logout',
+            {},
+            { credentials: 'include' }
+        );
         return response;
     }
     catch {
         return "Problem with logout!";
     }
-
 }

@@ -9,7 +9,7 @@ const request = async <T>({ endpoint, options = {} }: RequestParams): Promise<T 
             'Content-Type': 'application/json',
             ...(options.headers as Record<string, string>),
         },
-        credentials: 'include',
+        credentials: options.credentials || 'omit',
     } as RequestInit; 
 
     const response = await fetch(`${BASE_URL}${endpoint}`, config);
@@ -30,13 +30,14 @@ export const api = {
     post: <T>(endpoint: string, body?: Record<string, unknown>, options?: RequestOptions) =>
         request<T>({
             endpoint,
-            options: { ...options, method: 'POST', body: JSON.stringify(body) }
+            options: { ...options, method: 'POST', body: JSON.stringify(body) },
         }),
 
     put: <T>(endpoint: string, body?: Record<string, unknown>, options?: RequestOptions) =>
         request<T>({
             endpoint,
             options: { ...options, method: 'PUT', body: JSON.stringify(body) }
+
         }),
 
     delete: <T>(endpoint: string, options?: RequestOptions) =>
