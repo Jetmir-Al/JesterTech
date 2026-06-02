@@ -2,7 +2,7 @@ import type { IProductParams } from "../types/IProduct";
 import { api } from "./api";
 
 
-export const GetProductById = async (id: string) => {
+export const GetProductById = async (id: number) => {
     try {
         const response = await api.get(`/Products/${id}`);
         return response;
