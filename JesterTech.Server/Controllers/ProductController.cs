@@ -1,6 +1,6 @@
-﻿using JesterTech.Server.Models;
+﻿using JesterTech.Server.DTO;
+using JesterTech.Server.Models;
 using JesterTech.Server.Repositories;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JesterTech.Server.Controllers
@@ -119,6 +119,42 @@ namespace JesterTech.Server.Controllers
                 totalProducts = productCount,
                 totalPages = (int)Math.Ceiling(productCount / (double)pageSize)
             });
+        }
+
+        [HttpPost("InsertProduct")]
+        public async Task<IActionResult> InsertProduct([FromForm] InsertProductDTO productDto)
+        {
+            var product = new Products
+            {
+                Title = productDto.Title,
+                Brand = productDto.Brand,
+                Garantee = productDto.Garantee,
+                Price = productDto.Price,
+                Quantity = productDto.Quantity,
+                Category = productDto.Category,
+            };
+
+            if (productDto.ImgFile != null && productDto.ImgFile.Length > 0)
+            {
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                Directory.CreateDirectory(uploadsFolder);
+
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + productDto.ImgFile.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    productDto.ImgFile.CopyTo(fileStream);
+                }
+
+
+                product.Image = "/images/" + uniqueFileName;
+            }
+
+            _productRepository.CreateProduct(product);
+            _productRepository.Save();
+
+            return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
         }
     }
 }
