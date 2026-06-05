@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./sidebar.css";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { useToggleNavbarUtilsHook } from "../../hooks/useToggleNavbarUtils";
+import { useToggleNavbarUtilsHook } from "../../hooks/useToggle/useToggleNavbarUtils";
 import Button from "../ui/Button";
 
 

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { NavbarUtilsContext } from "../context/NavbarUtilsContext";
+import { NavbarUtilsContext } from "../../context/NavbarUtilsContext";
 
 
 

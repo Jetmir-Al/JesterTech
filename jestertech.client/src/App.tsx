@@ -10,7 +10,7 @@ import NotFound from './pages/NotFound';
 import Cart from './pages/Cart';
 import ProductDetails from './components/products/ProductDetails';
 import AlertBox from './components/ui/AlertBox';
-import { useToggleAlertHook } from './hooks/useToggleAlert';
+import { useToggleAlertHook } from './hooks/useToggle/useToggleAlert';
 
 
 function App() {

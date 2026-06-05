@@ -3,7 +3,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import './signup.css';
 import { useState } from "react";
 import Button from '../ui/Button';
-import { useToggleNavbarUtilsHook } from "../../hooks/useToggleNavbarUtils";
+import { useToggleNavbarUtilsHook } from "../../hooks/useToggle/useToggleNavbarUtils";
 
 
 function SignUp() {
@@ -12,14 +12,6 @@ function SignUp() {
     const [name, setName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [badInfo, setBadInfo] = useState<boolean>(false);
-    const [badEmail, setBadEmail] = useState<boolean>(false);
-
-    async function handleSignUp() {
-       
-    }
-
-
 
 
 
@@ -27,7 +19,7 @@ function SignUp() {
 
     return (
         <div className="login signup grid" id="signup-content">
-            <form className="signup__form grid" onSubmit={handleSignUp}>
+            <form className="signup__form grid" onSubmit={() => { } }>
                 <h3 className="signup__title">Sign Up</h3>
 
                 <div className="signup__group grid">
@@ -52,19 +44,6 @@ function SignUp() {
                             id="signup-pass" className="signup__input" name="fjalekalimi" required
                             onChange={(e) => setPassword(e.target.value)} />
                     </div>
-
-                    {
-                        badInfo &&
-                        <div>
-                            <h5 className="badInfo">Try a diffrent email or password!</h5>
-                        </div>
-                    }
-                    {
-                        badEmail &&
-                        <div>
-                            <h5 className="badInfo">Try a useing .com at the end of the Email!</h5>
-                        </div>
-                    }
 
                     <div>
 
