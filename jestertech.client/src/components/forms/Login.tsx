@@ -3,19 +3,40 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import Button from '../ui/Button';
-import { useToggleNavbarUtilsHook } from '../../hooks/useToggleNavbarUtils';
+import { useToggleNavbarUtilsHook } from '../../hooks/useToggle/useToggleNavbarUtils';
+import { useLogin } from '../../hooks/useQueries/useAuthQueries';
+import { useAuthHook } from '../../hooks/useAuthHook';
 function LogIn() {
 
     const { toggleFormFunc, toggleDisplayFormFunc } = useToggleNavbarUtilsHook();
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [badInfo, setBadInfo] = useState<boolean>(false);
+    const { setAuth, setUser } = useAuthHook();
+    const { mutateAsync: loginFunc } = useLogin();
 
-      
+    const handleLogin = async (e: React.SubmitEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (email === "" || password === "" || !emailRegex.test(email)) {
+            setBadInfo(true);
+            return;
+        }
+        const result = await loginFunc({ email, password });
+        if (result === "Problem with login!") {
+            setBadInfo(true);
+        }
+        if (result) {
+            setAuth(true);
+            setUser(result.data);
+        }
+    }
+
     return (
         <>
             <div className="login grid" id="login-content">
-                <form className="login__form grid" onSubmit={() => { } }>
+                <form className="login__form grid" onSubmit={handleLogin}>
                     <h3 className="login__title">Login</h3>
 
                     <div className="login__group grid">
@@ -47,8 +68,7 @@ function LogIn() {
                         <br />
                         <Button
                             type="submit"
-                            className="login__button button"
-                            onClick={() => { } }>
+                            className="login__button button">
                             Login
                         </Button>
                     </div>

@@ -1,6 +1,6 @@
 import type { RequestOptions, RequestParams } from '../types/apiTypes';
 
-const BASE_URL = import.meta.env.SERVER_API_URL;
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 const request = async <T>({ endpoint, options = {} }: RequestParams): Promise<T | null> => {
     const config: RequestInit = {

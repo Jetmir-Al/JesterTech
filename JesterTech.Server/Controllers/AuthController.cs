@@ -43,7 +43,8 @@ namespace JesterTech.Server.Controllers
             {
                 Name = authDTO.Name,
                 Email = authDTO.Email,
-                CreatedAt = DateTime.Now
+                Role = authDTO.Role,
+                CreatedAt = DateTime.UtcNow
             };
             user.Password = _passwordHasher.HashPassword(user, authDTO.Password);
 

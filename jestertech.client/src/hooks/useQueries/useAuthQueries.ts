@@ -6,6 +6,9 @@ export const useLogin = () => {
         mutationFn: async (params: { email: string, password: string }) => {
             return await Login(params.email, params.password);
         },
+        onError: () => {
+            return "Problem with login!";
+        }
     });
 }
 
@@ -14,5 +17,8 @@ export const useRegister = () => {
         mutationFn: async (params: { name: string, email: string, password: string, role: string }) => {
             return await Register(params.name, params.email, params.password, params.role);
         },
+        onError: () => {
+            return "Problem with registration!";
+        }
     });
 }

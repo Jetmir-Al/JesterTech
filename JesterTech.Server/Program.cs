@@ -1,7 +1,8 @@
 using JesterTech.Server.Data;
-using Microsoft.EntityFrameworkCore;
-using JesterTech.Server.Services;
 using JesterTech.Server.Repositories;
+using JesterTech.Server.Services;
+using Microsoft.EntityFrameworkCore;
+using static System.Net.WebRequestMethods;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -21,7 +22,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "JesterTechPolicy",
-                      policy =>
+                      policy => 
                       {
                           policy.WithOrigins("https://localhost:62346", "http://localhost:5231", "https://localhost:7070")
                                 .AllowAnyHeader()

@@ -4,6 +4,7 @@ import './signup.css';
 import { useState } from "react";
 import Button from '../ui/Button';
 import { useToggleNavbarUtilsHook } from "../../hooks/useToggle/useToggleNavbarUtils";
+import { useRegister } from "../../hooks/useQueries/useAuthQueries";
 
 
 function SignUp() {
@@ -12,14 +13,31 @@ function SignUp() {
     const [name, setName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [badInfo, setBadInfo] = useState<boolean>(false);
+    const { mutateAsync: registerFunc } = useRegister();
 
+    const handleSignup = async (e: React.SubmitEvent<HTMLFormElement>) => {
+        e.preventDefault();
 
-
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (name === "" || email === "" || password === "" || !emailRegex.test(email)) {
+            setBadInfo(true);
+            return;
+        }
+        const result = await registerFunc({ name, email, password, role: "User" });
+        if (result === "Problem with registration!") {
+            setBadInfo(true);
+            return;
+        }
+        if (result) {
+            toggleFormFunc();
+        }
+    }
 
 
     return (
         <div className="login signup grid" id="signup-content">
-            <form className="signup__form grid" onSubmit={() => { } }>
+            <form className="signup__form grid" onSubmit={handleSignup}>
                 <h3 className="signup__title">Sign Up</h3>
 
                 <div className="signup__group grid">
@@ -41,10 +59,17 @@ function SignUp() {
                     <div>
                         <label htmlFor="signup-pass" className="signup__label">Password</label>
                         <input type="password" placeholder="Create a password"
-                            id="signup-pass" className="signup__input" name="fjalekalimi" required
+                            id="signup-pass" className="signup__input" name="fjalekalimi"
+                            minLength={6}
+                            required
                             onChange={(e) => setPassword(e.target.value)} />
                     </div>
-
+                    {
+                        badInfo &&
+                        <div>
+                            <h5 className="badInfo">Invalid information provided!</h5>
+                        </div>
+                    }
                     <div>
 
                         <span className="signup__login">

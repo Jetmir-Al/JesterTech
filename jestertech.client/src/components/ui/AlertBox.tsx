@@ -1,4 +1,4 @@
-import { useToggleAlertHook } from "../../hooks/useToggleAlert";
+import { useToggleAlertHook } from "../../hooks/useToggle/useToggleAlert";
 import Button from "./Button";
 import './alertBox.css';
 
