@@ -31,13 +31,20 @@ namespace JesterTech.Server.Controllers
         {
             if (authDTO == null)
             {
-                return BadRequest("Invalid Credentials!");
+                return BadRequest(new { message = "Invalid Credentials!" });
             }
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                Console.WriteLine(errors);
+            }
+
+
             var userEmail = _authRepository.GetUserByEmail(authDTO.Email);
 
             if (userEmail != null)
             {
-                return BadRequest("Invalid Credentials");
+                return Conflict(new { message = "Invalid Credentials" });
             }
             var user = new Users
             {
@@ -51,7 +58,7 @@ namespace JesterTech.Server.Controllers
             _authRepository.CreateUser(user);
             _authRepository.Save();
 
-            return Ok("User registered successfully");
+            return Ok(new { message = "User registered successfully" });
         }
 
         [HttpPost("login")]
@@ -59,19 +66,19 @@ namespace JesterTech.Server.Controllers
         {
             if (loginDTO == null)
             {
-                return BadRequest("User data is null.");
+                return BadRequest(new { message = "User data is null." });
             }
 
             var user = _authRepository.GetUserByEmail(loginDTO.Email);
             if (user == null)
             {
-                return Unauthorized("Email or password incorrect.");
+                return Unauthorized(new { message = "Email or password incorrect." });
             }
 
             var res = _passwordHasher.VerifyHashedPassword(user, user.Password, loginDTO.Password);
             if (res == PasswordVerificationResult.Failed)
             {
-                return Unauthorized("Email or password incorrect.");
+                return Unauthorized(new { message = "Email or password incorrect." });
             }
 
             var claims = new List<Claim>
@@ -114,7 +121,8 @@ namespace JesterTech.Server.Controllers
                 message = "Login successful.",
                 Id = user.Id,
                 Name = user.Name,
-                Email = user.Email
+                Email = user.Email,
+                CreatedAt = user.CreatedAt,
             });
         }
 
@@ -128,7 +136,7 @@ namespace JesterTech.Server.Controllers
 
             if (userId == null || name == null || email == null)
             {
-                return Unauthorized("User is not authenticated.");
+                return Unauthorized(new { message = "User is not authenticated." });
             }
 
             return Ok(new
@@ -152,7 +160,7 @@ namespace JesterTech.Server.Controllers
             };
 
             Response.Cookies.Append("JesterTechToken", "", cookieOptions);
-            return Ok("Logout successful.");
+            return Ok(new { message = "Logout successful." });
         }
     }
 }

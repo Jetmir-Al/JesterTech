@@ -6,9 +6,11 @@ import Button from '../ui/Button';
 import { useToggleNavbarUtilsHook } from '../../hooks/useToggle/useToggleNavbarUtils';
 import { useLogin } from '../../hooks/useQueries/useAuthQueries';
 import { useAuthHook } from '../../hooks/useAuthHook';
+import { useToggleAlertHook } from '../../hooks/useToggle/useToggleAlert';
 function LogIn() {
 
     const { toggleFormFunc, toggleDisplayFormFunc } = useToggleNavbarUtilsHook();
+    const { setMessage, setType, setShowAlert } = useToggleAlertHook();
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [badInfo, setBadInfo] = useState<boolean>(false);
@@ -24,12 +26,16 @@ function LogIn() {
             return;
         }
         const result = await loginFunc({ email, password });
-        if (result === "Problem with login!") {
+        if (!result) {
             setBadInfo(true);
         }
         if (result) {
             setAuth(true);
-            setUser(result.data);
+            setUser(result);
+            toggleDisplayFormFunc();
+            setMessage("Login successful!");
+            setType("success");
+            setShowAlert(true);
         }
     }
 

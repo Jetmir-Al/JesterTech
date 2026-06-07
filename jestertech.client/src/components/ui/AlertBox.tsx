@@ -16,7 +16,7 @@ const AlertBox = ({ message, type = 'info' }: AlertBoxProps) => {
             <div className={`alert alert-${type}`} role="alert"
             >
                 <h4 className="alert-heading"
-                >Alert</h4>
+                >{type.charAt(0).toUpperCase() + type.slice(1)}</h4>
                 <p>{message}</p>
                 <Button
                     type="button"

@@ -10,3 +10,7 @@ export interface RequestParams {
     options?: RequestOptions;
 }
 
+export interface IAPIMessage {
+    data: object;
+    message?: string;
+}

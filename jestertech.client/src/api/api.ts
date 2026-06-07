@@ -13,14 +13,17 @@ const request = async <T>({ endpoint, options = {} }: RequestParams): Promise<T 
     } as RequestInit; 
 
     const response = await fetch(`${BASE_URL}${endpoint}`, config);
+
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : null;
+
     if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+        throw new Error(data?.message || `HTTP error! status: ${response.status}`);
     }
 
     if (response.status === 204) return null;
 
-    return response.json() as Promise<T>;
+    return data as T;
 };
 
 export const api = {

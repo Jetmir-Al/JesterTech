@@ -25,11 +25,11 @@ function SignUp() {
             return;
         }
         const result = await registerFunc({ name, email, password, role: "User" });
-        if (result === "Problem with registration!") {
+        if (result?.message === "Problem with registration!") {
             setBadInfo(true);
             return;
         }
-        if (result) {
+        if (result?.message === "User registered successfully") {
             toggleFormFunc();
         }
     }
@@ -39,7 +39,12 @@ function SignUp() {
         <div className="login signup grid" id="signup-content">
             <form className="signup__form grid" onSubmit={handleSignup}>
                 <h3 className="signup__title">Sign Up</h3>
-
+                {
+                    badInfo &&
+                    <div>
+                        <h5 className="badInfo">Invalid information provided!</h5>
+                    </div>
+                }
                 <div className="signup__group grid">
                     <div>
                         <label htmlFor="signup-name" className="signup__label">Name</label>
@@ -64,12 +69,7 @@ function SignUp() {
                             required
                             onChange={(e) => setPassword(e.target.value)} />
                     </div>
-                    {
-                        badInfo &&
-                        <div>
-                            <h5 className="badInfo">Invalid information provided!</h5>
-                        </div>
-                    }
+               
                     <div>
 
                         <span className="signup__login">

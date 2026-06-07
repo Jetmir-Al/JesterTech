@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Status } from "../api/authApi";
 import type { IUser } from "../types/IUser";
 import { AuthContext} from "./AuthContext";
+import type { IAPIMessage } from "../types/apiTypes";
 interface IAuthProvider {
     children: ReactNode
 }
@@ -9,7 +10,7 @@ interface IAuthProvider {
 
 export const AuthProvider = ({ children }: IAuthProvider) => {
     const [authenticated, setAuthenticated] = useState<boolean>(false);
-    const [user, setUserInfo] = useState<IUser | string | null>(null);
+    const [user, setUserInfo] = useState<IUser | IAPIMessage | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [reFetch, setRefetch] = useState<boolean>(false);
 

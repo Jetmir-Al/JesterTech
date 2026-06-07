@@ -3,7 +3,7 @@ import type { IUser } from "../types/IUser";
 
 interface IAuthContext {
     authenticated: boolean,
-    user: IUser | null,
+    user: IUser | null | object,
     setUser: (user: IUser | null) => void,
     setAuth: (value: boolean) => void,
     reFetch: boolean,
