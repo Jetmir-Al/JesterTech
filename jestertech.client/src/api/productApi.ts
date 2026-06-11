@@ -36,6 +36,5 @@ export const GetProductsAdvanced = async ({ params }: IProductParams) => {
 }
 
 export const getImageUrl = (filename: string) => {
-    console.log(`${import.meta.env.VITE_API_URL}${filename}`)
-    return `${import.meta.env.VITE_API_URL}/${filename}`;
+    return `${import.meta.env.VITE_IMG_API_URL}/${filename}`;
 }

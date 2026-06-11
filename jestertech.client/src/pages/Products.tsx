@@ -6,10 +6,8 @@ import { Link } from "react-router";
 import Card from "../components/ui/Card";
 import Button from "../components/ui/Button";
 import "./pageStyles/products.css";
-import { useQuery } from "@tanstack/react-query";
-import { GetProductCategories } from "../api/productApi";
 import Loading from "../utils/Loading";
-import { useGetProductsAdvanced } from "../hooks/useQueries/useProductQueries";
+import { useGetProductCategories, useGetProductsAdvanced } from "../hooks/useQueries/useProductQueries";
 import type { IProduct } from "../types/IProduct";
 import { useSearchParams } from "react-router";
 
@@ -32,28 +30,35 @@ const Products = () => {
             sort
         }
     });
-    const { data: Categories } = useQuery({
-        queryKey: ["categories"],
-        queryFn: async () => {
-            return await GetProductCategories();
-        }
-    });
-    const cartItemValues = {
-        id: 1,
-        name: "test",
-        price: 12,
-        image: "sssssssss",
-        quantity: 1,
-    }
+    const { data: Categories } = useGetProductCategories();
+
+    const handleSortFilter = (e: React.SubmitEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+
+        const sortValue = formData.get("sort");
+
+        const selectedCategories = formData.getAll("categories") || [];
+        const newParams = new URLSearchParams();
+        newParams.set("page", "1");
+        if (search) newParams.set("search", search);
+        if (sortValue) newParams.set("sort", sortValue.toString());
+        selectedCategories.forEach(c => newParams.append("categories", c.toString()));
+        console.log(selectedCategories);
+        setSearchParams(newParams);
+        setToggleSortFilter(false);
+    };
+
     return (
         <main className="products-container">
             <div className="productSearch-container">
-                <form className="productSearch-form" onSubmit={() => { }}>
+                <form className="productSearch-form" onSubmit={() => { } }>
                     <FontAwesomeIcon
                         className="search__icon"
                         icon={faMagnifyingGlass} />
                     <input type="text" placeholder="What are you looking?"
                         className="search-input" name="search"
+                        defaultValue={search}
                         onChange={() => { }}
                     />
                 </form>
@@ -70,29 +75,25 @@ const Products = () => {
                     >
                         <form
                             className="sortForm"
-                            onSubmit={() => { }}
+                            onSubmit={handleSortFilter}
                         >
                             <h4>Sort by: </h4>
                             <div className="sortForm-inputs">
                                 <label htmlFor="name">Name
                                     <input type="radio" name="sort" id="name"
-                                        value="name"
-                                        onChange={() => { }} />
+                                        value="name" />
                                 </label>
                                 <label htmlFor="price">Price
                                     <input type="radio" name="sort" id="price"
-                                        value="price"
-                                        onChange={() => { }} />
+                                        value="price" />
                                 </label>
                                 <label htmlFor="new">New
                                     <input type="radio" name="sort" id="new"
-                                        value="new"
-                                        onChange={() => { }} />
+                                        value="new" />
                                 </label>
                                 <label htmlFor="old">Old
                                     <input type="radio" name="sort" id="old"
-                                        value="old"
-                                        onChange={() => { }} />
+                                        value="old" />
                                 </label>
                             </div>
 
@@ -102,10 +103,9 @@ const Products = () => {
                                     Categories &&
                                     Categories.map((c: string, index: number) => (
                                         <label key={index}>
-                                            <input type="checkbox" name={c} id={c}
+                                            <input type="checkbox" name="categories" id={c}
                                                 value={c}
-
-                                                onChange={() => { }}
+                                                defaultChecked={categories.includes(c)}
                                             /> {c}
                                         </label>
                                     ))
@@ -114,10 +114,17 @@ const Products = () => {
                             </div>
 
                             <div className="sortFilter-btns">
-                                <button type="submit">Submit</button>
-                                <button id="closeSortFilter" type="button"
+                                <Button type="submit"
+                                    className="">
+                                    Submit
+                                </Button>
+                                <Button
+                                    className="closeSortFilter"
+                                    type="button"
                                     onClick={() => setToggleSortFilter(t => !t)}
-                                >Cancel</button>
+                                >
+                                    Cancel
+                                </Button>
                             </div>
                         </form>
                     </div>
@@ -129,13 +136,20 @@ const Products = () => {
                         products?.data.map((p: IProduct) => (
 
                             <Link to={`/products/${p.id}`}
-                                className='productCard'>
+                                className='productCard'
+                                key={p.id}>
                                 <Card
                                     img={p.image}
                                     name={p.title}
                                     price={p.price}
                                     rating={5}
-                                    cartItem={cartItemValues}
+                                    cartItem={{
+                                        name: p.title,
+                                        price: p.price,
+                                        image: p.image,
+                                        quantity: p.quantity,
+                                        id: p.id,
+                                    }}
                                 />
                             </Link>
                         ))

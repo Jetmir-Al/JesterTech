@@ -27,15 +27,17 @@
     flex-direction: column;
     gap: 1rem;
 }
-    .sidebar-show p {
+    .sidebar-show button {
         font: var(--h5);
         color: var(--color-text-secondary);
-        border-bottom: 1px solid var(--color-border);
+        border: none;
+        border-bottom: 1px solid var(--color-border-strong);
         width: 100%;
         cursor: pointer;
         padding: 0.25rem;
+        background-color: var(--color-secondary)
     }
-        .sidebar-show p:hover {
+        .sidebar-show button:hover {
             background-color: var(--color-primary);
             color: white;
         }

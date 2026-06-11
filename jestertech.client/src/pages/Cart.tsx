@@ -3,6 +3,7 @@ import "./pageStyles/cart.css";
 import type { CartItem } from "../context/CartContext";
 import NoInfo from "../utils/NoInfo";
 import { useCartHook } from "../hooks/useCartHook";
+import { getImageUrl } from "../api/productApi";
 
 const Cart = () => {
     const { cartItems, removeCartItem } = useCartHook();
@@ -17,12 +18,12 @@ const Cart = () => {
                         cartItems.map((c: CartItem) => (
 
                             <div className="cart-item">
-                                <img src="src/assets/s26.png"
+                                <img src={getImageUrl(c.image)}
                                     alt="Product Image"
                                     className="cart-item-image" />
                                 <div className="cart-item-content">
                                     <p>{c.name}</p>
-                                    <p className="cart-item-price">Price: {c.price}</p>
+                                    <p className="cart-item-price">Price: {c.price}$</p>
                                     <Button
                                         className="cart-item-btn"
                                         type="button"

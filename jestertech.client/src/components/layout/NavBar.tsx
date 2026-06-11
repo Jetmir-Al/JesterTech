@@ -86,9 +86,18 @@ const NavBar = () => {
                     )
                 }
             {
-                openSearchBar && <form className="searchbar-container">
+                openSearchBar &&
+                <form className="searchbar-container" onSubmit={
+                        (e: React.SubmitEvent<HTMLFormElement>) => {
+                            e.preventDefault();
+                            const formData = new FormData(e.currentTarget);
+                            navigate(`/products?search=${formData.get("search")}`);
+                            openSearchBarFunc();
+                        }
+                    }>
                     <input
-                        type="text"
+                            type="text"
+                            name="search"
                         placeholder="Search for products, brands and more..."
                         className="searchbar-input" />
                     <FontAwesomeIcon

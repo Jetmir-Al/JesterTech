@@ -17,7 +17,8 @@ export interface IProduct {
     guarantee: number;
     price: number;
     category: string;
-    image: string
+    image: string;
+    quantity: number;
 }
 
 export interface IProductAdvanced {

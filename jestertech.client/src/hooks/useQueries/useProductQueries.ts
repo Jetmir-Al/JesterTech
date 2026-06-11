@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetProductById, GetProductsAdvanced } from "../../api/productApi";
+import { GetProductById, GetProductCategories, GetProductsAdvanced } from "../../api/productApi";
 import type { IProductParams } from "../../types/IProduct";
 
 export const useGetProductById = (id: number) => {
@@ -22,6 +22,15 @@ export const useGetProductsAdvanced = ({ params }: IProductParams) => {
         queryFn: async () => {
             const response = await GetProductsAdvanced({ params });
             return response;
+        },
+    });
+}
+
+export const useGetProductCategories = () => {
+    return useQuery({
+        queryKey: ["categories"],
+        queryFn: async () => {
+            return await GetProductCategories();
         },
     });
 }
