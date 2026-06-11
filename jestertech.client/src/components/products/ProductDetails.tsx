@@ -1,35 +1,44 @@
+import { useParams } from "react-router";
+import { useGetProductById } from "../../hooks/useQueries/useProductQueries";
+import Loading from "../../utils/Loading";
 import AddReview from "../forms/AddReview";
 import Button from "../ui/Button";
 import "./productDetails.css";
 import { useState } from "react";
+import { getImageUrl } from "../../api/productApi";
+import { useAuthHook } from "../../hooks/useAuthHook";
 
 
 
 const ProductDetails = () => {
     const [reviewForm, setReviewForm] = useState<boolean>(false);
-
+    const { id } = useParams();
+    const { authenticated, user } = useAuthHook();
+    const { data: product, isLoading } = useGetProductById(Number(id));
+    
+    if (isLoading) return <Loading />
     return (
         <div className="productDetails-container">
 
             {
+                product &&
                 <>
                         <div className="productDetails">
 
                             <div className='productPresentation'>
-                                <img className='productImg'
-                                    src="/src/assets/s26.png"
+                            <img className='productImg'
+                                src={getImageUrl(product.image)}
                                     alt="sd" />
-                                <h2 className='productTitle'>
-                                    {""}
+                            <h2 className='productTitle'>
+                                {product.brand}
                                 </h2>
                             </div>
 
                             <div className='productInfo'>
-                                <h4><span>Author:</span> <span>{""}</span></h4>
-                                <h4><span>Category:</span> <span>{""}</span></h4>
-                                <h4><span>Year:</span> <span>{""}</span></h4>
-                                <h4><span>Price:</span> <span>{""}$</span></h4>
-                                <h4><span>Quantity:</span> <span>{""}</span></h4>
+                            <h4><span>Title:</span> <span>{product.title}</span></h4>
+                            <h4><span>Category:</span> <span>{product.category}</span></h4>
+                            <h4><span>Guarantee:</span> <span>{product.garantee} years</span></h4>
+                            <h4><span>Price:</span> <span>{product.price}$</span></h4>
 
 
                                 
@@ -52,7 +61,8 @@ const ProductDetails = () => {
                             
                         </div >
 
-
+                    {
+                        (authenticated && user) &&
                         <div className="productReviews-container">
                             <h2 className="review-title">Reviews</h2>
                             <div className="productReviews">
@@ -84,6 +94,7 @@ const ProductDetails = () => {
                             }
                         </div>
 
+                    }
                     </>
             }
         </div>

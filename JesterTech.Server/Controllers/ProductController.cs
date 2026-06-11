@@ -48,7 +48,7 @@ namespace JesterTech.Server.Controllers
         }
 
 
-        [HttpGet("products/{id}")]
+        [HttpGet("{id}")]
         public IActionResult GetProduct(int id)
         {
             var product = _productRepository.GetProductById(id);

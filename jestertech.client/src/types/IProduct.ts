@@ -14,7 +14,7 @@ export interface IProduct {
     id: number;
     title: string;
     brand: string;
-    guarantee: number;
+    garantee: number;
     price: number;
     category: string;
     image: string;

@@ -44,7 +44,6 @@ const Products = () => {
         if (search) newParams.set("search", search);
         if (sortValue) newParams.set("sort", sortValue.toString());
         selectedCategories.forEach(c => newParams.append("categories", c.toString()));
-        console.log(selectedCategories);
         setSearchParams(newParams);
         setToggleSortFilter(false);
     };
