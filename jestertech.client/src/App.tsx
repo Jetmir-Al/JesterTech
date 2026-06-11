@@ -2,7 +2,6 @@ import './App.css';
 import NavBar from './components/layout/NavBar';
 import { BrowserRouter as Router, Route, Routes } from 'react-router';
 import { NavbarUtilsProvider } from './context/NavbarUtilsProvider';
-
 import Home from './pages/Home';
 import Footer from './components/layout/Footer';
 import Products from './pages/Products';
@@ -11,6 +10,8 @@ import Cart from './pages/Cart';
 import ProductDetails from './components/products/ProductDetails';
 import AlertBox from './components/ui/AlertBox';
 import { useToggleAlertHook } from './hooks/useToggle/useToggleAlert';
+import ProtectedRoutes from './routes/ProtectedRoutes';
+import Profile from './pages/Profile';
 
 
 function App() {
@@ -32,7 +33,11 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/products/:id" element={<ProductDetails />} />
-                <Route path="/cart" element={<Cart/>} />
+                <Route path="/cart" element={<Cart />} />
+                <Route element={<ProtectedRoutes />}>
+                    <Route path="/profile" element={<Profile />} />
+                </Route>
+
             </Routes>
             <Footer />
         </Router>

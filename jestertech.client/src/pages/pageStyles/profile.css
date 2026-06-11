@@ -1,0 +1,71 @@
+.userPage-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px;
+    width: 100%;
+    padding: 2rem 1rem;
+    background-color: var(--color-border);
+}
+
+
+.boughtProducts {
+    min-width: 500px;
+}
+
+.boughtInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+.boughtProductInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+    .boughtProductInfo h4 {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+span {
+    color: var(--color-text);
+}
+
+.userCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 2.5rem 3rem;
+    border-radius: 10px;
+    background-color: var(--color-surface-alt);
+    box-shadow: var(--shadow-sm);
+}
+
+    .userCard button {
+        padding: 0.5rem 1rem;
+        color: white;
+        background-color: var(--color-primary);
+        cursor: pointer;
+        border: none;
+    }
+
+
+.new__img {
+    min-height: 200px;
+}

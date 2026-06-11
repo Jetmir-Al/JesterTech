@@ -17,6 +17,9 @@ export const useCreatePurchase = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["purchases"] });
+        },
+        onError: (err) => {
+            console.error("Error during purchase creation", err);
         }
     });
 }

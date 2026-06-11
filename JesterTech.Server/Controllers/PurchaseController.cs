@@ -30,17 +30,17 @@ namespace JesterTech.Server.Controllers
         {
             var userIdClaim = User.FindFirst("Id");
             if (userIdClaim == null)
-                return Unauthorized("User is not logged in");
+                return Unauthorized(new { message = "User is not logged in" });
 
             int userId = int.Parse(userIdClaim.Value);
 
             var product = _productRepository.GetProductById(productId);
             if ( product == null)
-                return BadRequest("Product not found");
+                return BadRequest(new { message = "Product not found" });
 
 
             if (product.Quantity < dto.Quantity)
-                return BadRequest("Nuk ka sasi të mjaftueshme!");
+                return BadRequest(new { message = "Nuk ka sasi të mjaftueshme!" });
 
 
             product.Quantity -= dto.Quantity;
@@ -61,7 +61,7 @@ namespace JesterTech.Server.Controllers
             _purchaseRepository.CreatePurchase(purchase);
             _purchaseRepository.Save();
 
-            return Ok("Purchase created successfully.");
+            return Ok(new { message = "Purchase created successfully." });
         }
 
 

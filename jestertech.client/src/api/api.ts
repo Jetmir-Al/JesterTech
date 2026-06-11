@@ -9,7 +9,7 @@ const request = async <T>({ endpoint, options = {} }: RequestParams): Promise<T 
             'Content-Type': 'application/json',
             ...(options.headers as Record<string, string>),
         },
-        credentials: options.credentials || 'omit',
+        credentials: options.credentials || 'include',
     } as RequestInit; 
 
     const response = await fetch(`${BASE_URL}${endpoint}`, config);

@@ -25,14 +25,14 @@ namespace JesterTech.Server.Controllers
 
             var userIdClaim = User.FindFirst("Id");
             if (userIdClaim == null)
-                return Unauthorized("User is not logged in");
+                return Unauthorized(new { message = "User is not logged in" });
 
             int userId = int.Parse(userIdClaim.Value);
 
 
             var product = _productRepository.GetProductById(productId);
             if (product == null)
-                return BadRequest("Product not found");
+                return BadRequest(new { message = "Product not found" });
 
 
             var review = new Reviews
@@ -46,7 +46,7 @@ namespace JesterTech.Server.Controllers
             _reviewRepository.CreateReview(review);
             _reviewRepository.Save();
 
-            return Ok("Review created successfully.");
+            return Ok(new { message = "Review created successfully." });
         }
 
         [HttpGet("product/{productId}")]

@@ -17,6 +17,9 @@ export const useCreateReview = () => {
         },
         onSuccess: () => {
              queryClient.invalidateQueries({ queryKey: ["reviews"] });
+        },
+        onError: (err) => {
+            console.error("Error during review creation", err); 
         }
     });
 }

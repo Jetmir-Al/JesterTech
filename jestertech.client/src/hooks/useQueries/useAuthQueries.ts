@@ -4,11 +4,10 @@ import { Login, Register } from "../../api/authApi";
 export const useLogin = () => {
     return useMutation({
         mutationFn: async (params: { email: string, password: string }) => {
-
             return await Login(params.email, params.password);
         },
-        onError: () => {
-            return { message: "Problem with login!" };  
+        onError: (err) => {
+            console.error("Error during login", err);
         }
     });
 }
@@ -18,8 +17,8 @@ export const useRegister = () => {
         mutationFn: async (params: { name: string, email: string, password: string, role: string }) => {
             return await Register(params.name, params.email, params.password, params.role);
         },
-        onError: () => {
-            return { message: "Problem with registration!" };   
+        onError: (err) => {
+            console.error("Error during registration", err);
         }
     });
 }

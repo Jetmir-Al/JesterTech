@@ -18,19 +18,17 @@ function SignUp() {
 
     const handleSignup = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (name === "" || email === "" || password === "" || !emailRegex.test(email)) {
-            setBadInfo(true);
-            return;
-        }
-        const result = await registerFunc({ name, email, password, role: "User" });
-        if (result?.message === "Problem with registration!") {
-            setBadInfo(true);
-            return;
-        }
-        if (result?.message === "User registered successfully") {
+        try {
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (name === "" || email === "" || password === "" || !emailRegex.test(email)) {
+                setBadInfo(true);
+                return;
+            }
+            await registerFunc({ name, email, password, role: "User" });
             toggleFormFunc();
+        } catch {
+            setBadInfo(true);
+            return;
         }
     }
 

@@ -9,9 +9,12 @@ import LogIn from "../forms/Login";
 import SignUp from "../forms/Signup";
 import { useNavigate } from "react-router";
 import SideBar from "./SideBar";
+import { useAuthHook } from "../../hooks/useAuthHook";
+import { faUserGear } from "@fortawesome/free-solid-svg-icons/faUserGear";
 
 const NavBar = () => {
     const { toggleMode, mode } = useToggleModeHook();
+    const { user, authenticated } = useAuthHook();
     const { toggleDisplayForm, openSideBar, openSideBarFunc, openSearchBarFunc, openSearchBar, toggleDisplayFormFunc, toggleForm } = useToggleNavbarUtilsHook();
     const navigate = useNavigate();
 
@@ -26,6 +29,7 @@ const NavBar = () => {
                     >
                         <FontAwesomeIcon icon={faBars} className="icons" />
                     </Button>
+
                     <Button
                         className="navbar-title"
                         type="button"
@@ -52,28 +56,35 @@ const NavBar = () => {
                         onClick={() => openSearchBarFunc()}>
                     <FontAwesomeIcon icon={faMagnifyingGlass} className="icons" />
                 </Button>   
-                <Button
-                    type="button"
-                    className=""
-                    onClick={() => navigate("/cart") }>
-                <FontAwesomeIcon icon={faCartShopping} className="icons" />
-                </Button>
-                <Button
-                    type="button"
-                    className=""
-                    onClick={() => toggleDisplayFormFunc()}>
-                <FontAwesomeIcon icon={faUser} className="icons" />
-                </Button>
+                    <Button
+                        type="button"
+                        className=""
+                        onClick={() => navigate("/cart")}>
+                        <FontAwesomeIcon icon={faCartShopping} className="icons" />
+                    </Button>
+                    {authenticated && user ?
+                        <Button
+                            type="button"
+                            className=""
+                            onClick={() => navigate("/profile")}>
+                            <FontAwesomeIcon icon={faUserGear} className="icons" />
+                        </Button>
+                        : <Button
+                            type="button"
+                            className=""
+                            onClick={() => toggleDisplayFormFunc()}>
+                            <FontAwesomeIcon icon={faUser} className="icons" />
+                        </Button>
+                    }
             </div>
             </nav>
-
             {
-                toggleDisplayForm && (
-                    toggleForm ?
-                        <LogIn /> :
-                        <SignUp />
-                )
-            }
+                    toggleDisplayForm && (
+                        toggleForm ?
+                            <LogIn /> :
+                            <SignUp />
+                    )
+                }
             {
                 openSearchBar && <form className="searchbar-container">
                     <input

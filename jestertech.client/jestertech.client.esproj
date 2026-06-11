@@ -10,7 +10,5 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="src\pages\pageStyles\" />
-    <Folder Include="src\routes\" />
-    <Folder Include="src\utils\" />
   </ItemGroup>
 </Project>

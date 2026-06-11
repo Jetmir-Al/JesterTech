@@ -19,23 +19,29 @@ function LogIn() {
 
     const handleLogin = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
+        try {
 
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (email === "" || password === "" || !emailRegex.test(email)) {
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (email === "" || password === "" || !emailRegex.test(email)) {
+                setBadInfo(true);
+                return;
+            }
+            const result = await loginFunc({ email, password });
+            if (!result) {
+                setBadInfo(true);
+                return;
+            }
+            if (result) {
+                setAuth(true);
+                setUser(result);
+                toggleDisplayFormFunc();
+                setMessage("Login successful!");
+                setType("success");
+                setShowAlert(true);
+            }
+        } catch {
             setBadInfo(true);
             return;
-        }
-        const result = await loginFunc({ email, password });
-        if (!result) {
-            setBadInfo(true);
-        }
-        if (result) {
-            setAuth(true);
-            setUser(result);
-            toggleDisplayFormFunc();
-            setMessage("Login successful!");
-            setType("success");
-            setShowAlert(true);
         }
     }
 
