@@ -3,17 +3,17 @@ import { api } from "./api";
 
 
 export const GetProductById = async (id: number) => {
-    const response = await api.get<IProduct>(`/Products/${id}`);
+    const response = await api.get<IProduct>(`/Product/${id}`);
     return response;
 }
 
 export const GetFeaturedProducts = async () => {
-    const response = await api.get<IProduct[]>(`/Products/featured`);
+    const response = await api.get<IProduct[]>(`/Product/featured`);
     return response;
 }
 
 export const GetProductCategories = async () => {
-    const response = await api.get<string[]>(`/Products/categories`);
+    const response = await api.get<string[]>(`/Product/categories`);
     return response;
 }
 
@@ -30,5 +30,12 @@ export const GetProductsAdvanced = async ({ params }: IProductParams) => {
     const queryString = searchParams.toString();
 
     const response = await api.get<IProductAdvanced>(`/Product/advanced?${queryString}`);
-    return response;
+    if (response !== null) {
+        return response;
+    }
+}
+
+export const getImageUrl = (filename: string) => {
+    console.log(`${import.meta.env.VITE_API_URL}${filename}`)
+    return `${import.meta.env.VITE_API_URL}/${filename}`;
 }

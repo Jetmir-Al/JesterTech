@@ -6,107 +6,149 @@ import { Link } from "react-router";
 import Card from "../components/ui/Card";
 import Button from "../components/ui/Button";
 import "./pageStyles/products.css";
+import { useQuery } from "@tanstack/react-query";
+import { GetProductCategories } from "../api/productApi";
+import Loading from "../utils/Loading";
+import { useGetProductsAdvanced } from "../hooks/useQueries/useProductQueries";
+import type { IProduct } from "../types/IProduct";
+import { useSearchParams } from "react-router";
 
 
 const Products = () => {
     const [toggleSortFilter, setToggleSortFilter] = useState(false);
 
+    const [searchParams, setSearchParams] = useSearchParams();
+    const page = searchParams.get("page") || 1;
+    const search = searchParams.get("search") || "";
+    const sort = searchParams.get("sort") || "";
+    const categories = searchParams.getAll("categories");
+
+    const { data: products, isLoading } = useGetProductsAdvanced({
+        params: {
+            page: String(page),
+            pageSize: "20",
+            search,
+            categories: categories.join(","),
+            sort
+        }
+    });
+    const { data: Categories } = useQuery({
+        queryKey: ["categories"],
+        queryFn: async () => {
+            return await GetProductCategories();
+        }
+    });
+    const cartItemValues = {
+        id: 1,
+        name: "test",
+        price: 12,
+        image: "sssssssss",
+        quantity: 1,
+    }
     return (
         <main className="products-container">
             <div className="productSearch-container">
-            <form className="productSearch-form" onSubmit={() => { } }>
-                <FontAwesomeIcon
-                    className="search__icon"
-                    icon={faMagnifyingGlass} />
-                <input type="text" placeholder="What are you looking?"
-                    className="search-input" name="search"
-                    onChange={() => { } }
-                />
-            </form>
+                <form className="productSearch-form" onSubmit={() => { }}>
+                    <FontAwesomeIcon
+                        className="search__icon"
+                        icon={faMagnifyingGlass} />
+                    <input type="text" placeholder="What are you looking?"
+                        className="search-input" name="search"
+                        onChange={() => { }}
+                    />
+                </form>
 
                 <div className="sortFilter-Container">
                     <Button className="sortFilter-btn"
                         onClick={() => setToggleSortFilter(s => !s)}>
-                    <FontAwesomeIcon className="sortFilter-icon"
-                        icon={faEllipsisVertical} />
-                </Button>
-                <div className="sortFilter"
-                    id="sortFilter-field"
-                    style={{ display: toggleSortFilter ? 'flex' : 'none' }}
-                >
-                    <form
-                        className="sortForm"
-                        onSubmit={() => { } }
+                        <FontAwesomeIcon className="sortFilter-icon"
+                            icon={faEllipsisVertical} />
+                    </Button>
+                    <div className="sortFilter"
+                        id="sortFilter-field"
+                        style={{ display: toggleSortFilter ? 'flex' : 'none' }}
                     >
-                        <h4>Sort by: </h4>
-                        <div className="sortForm-inputs">
-                            <label htmlFor="name">Name
-                                <input type="radio" name="sort" id="name"
-                                    value="name"
-                                    onChange={() => { } } />
-                            </label>
-                            <label htmlFor="price">Price
-                                <input type="radio" name="sort" id="price"
-                                    value="price"
-                                    onChange={() => { } } />
-                            </label>
-                            <label htmlFor="new">New
-                                <input type="radio" name="sort" id="new"
-                                    value="new"
-                                    onChange={() => { } } />
-                            </label>
-                            <label htmlFor="old">Old
-                                <input type="radio" name="sort" id="old"
-                                    value="old"
-                                    onChange={() => { } } />
-                            </label>
-                        </div>
+                        <form
+                            className="sortForm"
+                            onSubmit={() => { }}
+                        >
+                            <h4>Sort by: </h4>
+                            <div className="sortForm-inputs">
+                                <label htmlFor="name">Name
+                                    <input type="radio" name="sort" id="name"
+                                        value="name"
+                                        onChange={() => { }} />
+                                </label>
+                                <label htmlFor="price">Price
+                                    <input type="radio" name="sort" id="price"
+                                        value="price"
+                                        onChange={() => { }} />
+                                </label>
+                                <label htmlFor="new">New
+                                    <input type="radio" name="sort" id="new"
+                                        value="new"
+                                        onChange={() => { }} />
+                                </label>
+                                <label htmlFor="old">Old
+                                    <input type="radio" name="sort" id="old"
+                                        value="old"
+                                        onChange={() => { }} />
+                                </label>
+                            </div>
 
-                        <h4>Filter by:</h4>
-                        <div className="filterForm">
-                           
-                               <label>
-                                    <input type="checkbox" name="ss" id={"s"}
-                                    value="yes"
-                                    onChange={() => { } }
-                                        /> category
-                               </label>
-                               
-                        </div>
+                            <h4>Filter by:</h4>
+                            <div className="filterForm">
+                                {
+                                    Categories &&
+                                    Categories.map((c: string, index: number) => (
+                                        <label key={index}>
+                                            <input type="checkbox" name={c} id={c}
+                                                value={c}
 
-                        <div className="sortFilter-btns">
-                            <button type="submit">Submit</button>
+                                                onChange={() => { }}
+                                            /> {c}
+                                        </label>
+                                    ))
+                                }
+
+                            </div>
+
+                            <div className="sortFilter-btns">
+                                <button type="submit">Submit</button>
                                 <button id="closeSortFilter" type="button"
                                     onClick={() => setToggleSortFilter(t => !t)}
-                            >Cancel</button>
-                        </div>
-                    </form>
+                                >Cancel</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
             <div className="productsDisplay-container">
+                {
+                    isLoading ? <Loading /> :
+                        products?.data.map((p: IProduct) => (
 
-               
-
-                <Link to={`/products/1`}
-                                    className='productCard'
-                >
-                    <Card
-                        img="./src/assets/s26.png"
-                        name="Samsung Galaxy S26"
-                        price={999.99}
-                        rating={5}
-                    />
-                                </Link>
+                            <Link to={`/products/${p.id}`}
+                                className='productCard'>
+                                <Card
+                                    img={p.image}
+                                    name={p.title}
+                                    price={p.price}
+                                    rating={5}
+                                    cartItem={cartItemValues}
+                                />
+                            </Link>
+                        ))
+                }
             </div>
             <div className="pageNumbers-container">
                 {
-                    Array.from({ length: 2 }, (_, index) => (
+                    Array.from({ length: products?.totalPages || 1 }, (_, index) => (
                         <Button
                             key={index}
                             type="button"
                             className={`pageLink`}
-                            onClick={() => { } }
+                            onClick={() => { }}
                         >
                             {index + 1}
                         </Button>

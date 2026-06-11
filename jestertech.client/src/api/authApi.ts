@@ -11,6 +11,7 @@ export const Login = async (email: string, password: string) => {
 }
 
 export const Status = async () => {
+
     return await api.get<IUser>('/Auth/status',
         { credentials: 'include' });
 }

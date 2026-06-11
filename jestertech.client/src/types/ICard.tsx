@@ -1,3 +1,4 @@
+import type { CartItem } from "../context/CartContext";
 
 
 export interface ICard {
@@ -5,4 +6,5 @@ export interface ICard {
     name: string;
     price: number;
     rating: number;
+    cartItem: CartItem;
 }

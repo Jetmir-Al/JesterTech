@@ -3,12 +3,16 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import type { ICard } from "../../types/ICard";
 import Button from "./Button";
 import "./card.css";
+import { useCartHook } from "../../hooks/useCartHook";
+import { getImageUrl } from "../../api/productApi";
 
 
-const Card = ({ img, price, name, rating }: ICard) => {
+const Card = ({ img, price, name, rating, cartItem }: ICard) => {
+    const { addCartItems } = useCartHook();
+
     return (
         <div className="card-container">
-            <img src={img} alt={name} className="card-img" />
+            <img src={getImageUrl(img)} alt={name} className="card-img" />
             <div className="card-content">
                 <p>{name}</p>
                 {Array.from({ length: rating }).map((_, index) => (
@@ -18,7 +22,7 @@ const Card = ({ img, price, name, rating }: ICard) => {
             </div>
             <Button
                 type="button"
-                onClick={() => { }}
+                onClick={() => addCartItems(cartItem)}
                 className="cart-btn">
                 Add to Cart
             </Button>
