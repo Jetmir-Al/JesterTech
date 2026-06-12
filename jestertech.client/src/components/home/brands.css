@@ -1,4 +1,4 @@
-.categories-container {
+.Brands-container {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -6,7 +6,7 @@
     text-align: center;
 }
 
-.categories {
+.Brands {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
@@ -16,7 +16,7 @@
     flex-wrap: wrap;
 }
 
-.category-item {
+.brand-item {
     background-color: var(--color-surface);
     padding: 0.5rem;
     box-shadow: var(--shadow-sm);
@@ -25,11 +25,7 @@
     width: 150px
 }
 
-    .category-item img {
-        width: 100px;
-        height: 100px;
-        object-fit: cover;
-    }
-    .category-item p {
-        text-align: center;
+    .brand-item button {
+        background-color: transparent;
+        border: none;
     }

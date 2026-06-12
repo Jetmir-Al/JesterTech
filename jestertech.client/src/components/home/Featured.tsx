@@ -1,29 +1,39 @@
+import { useQuery } from "@tanstack/react-query";
 import Card from "../ui/Card";
 import "./featured.css";
+import { GetFeaturedProducts } from "../../api/productApi";
+import Loading from "../../utils/Loading";
 
 const Featured = () => {
+    const { data: featured, isLoading } = useQuery({
+        queryKey: ["featured"],
+        queryFn: async () => {
+            return await GetFeaturedProducts();
+        }
+    })
     return (
         <div className="featured-container">
             <h2 className="featured-title">Featured Products</h2>
             <div className="featured-products">
-                <Card
-                    img="./src/assets/s26.png"
-                    name="Samsung Galaxy S26"
-                    price={999.99}
-                    rating={5}
-                />
-                <Card
-                    img="./src/assets/iphone 17.png"
-                    name="Iphone 17 Pro Max"
-                    price={999.99}
-                    rating={4}
-                />
-                <Card
-                    img="./src/assets/oneplus 15.png"
-                    name="One Plus 15"
-                    price={999.99}
-                    rating={4}
-                />
+                {
+                    isLoading ? <Loading />
+                        : featured?.map((f) => (
+                            <Card
+                                key={f.id}
+                                img={f.image}
+                                name={f.title}
+                                price={f.price}
+                                rating={5}
+                                cartItem={{
+                                    id: f.id,
+                                    image: f.image,
+                                    name: f.title,
+                                    price: f.price,
+                                    quantity: f.quantity
+                                } }
+                            />
+                        ))
+                }
             </div>
         </div>
     );

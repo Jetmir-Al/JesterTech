@@ -53,6 +53,8 @@
     width: 250px;
     min-height: 300px;
     max-height: 400px;
+    background-color: var(--color-surface);
+    border-radius: 5px;
 }
 
 .productInfo {
@@ -69,6 +71,7 @@
         gap: 1rem;
         padding: 0.5rem 1rem;
         border-bottom: 2px solid var(--color-border);
+        width: 100%;
     }
 
 

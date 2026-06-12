@@ -35,7 +35,7 @@ const ProductDetails = () => {
                             </div>
 
                             <div className='productInfo'>
-                            <h4><span>Title:</span> <span>{product.title}</span></h4>
+                            <h4>{product.title}</h4>
                             <h4><span>Category:</span> <span>{product.category}</span></h4>
                             <h4><span>Guarantee:</span> <span>{product.garantee} years</span></h4>
                             <h4><span>Price:</span> <span>{product.price}$</span></h4>

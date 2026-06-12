@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
-import Categories from "../components/home/Categories";
 import Featured from "../components/home/Featured";
 import Services from "../components/home/Services";
+import Brands from "../components/home/Brands";
 import Button from "../components/ui/Button";
 import "./pageStyles/home.css";
 
@@ -39,7 +39,7 @@ const Home = () => {
 
             <Services />
             <Featured />
-            <Categories />
+            <Brands />
         </div>
     );
 }

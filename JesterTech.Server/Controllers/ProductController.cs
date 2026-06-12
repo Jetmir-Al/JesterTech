@@ -46,6 +46,15 @@ namespace JesterTech.Server.Controllers
                 .ToList();
             return Ok(categories);
         }
+        [HttpGet("brands")]
+        public IActionResult GetBrands()
+        {
+            var brands = _productRepository.GetAllProducts()
+                .Select(p => p.Brand)
+                .Distinct()
+                .ToList();
+            return Ok(brands);
+        }
 
 
         [HttpGet("{id}")]

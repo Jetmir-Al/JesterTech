@@ -17,6 +17,10 @@ export const GetProductCategories = async () => {
     return response;
 }
 
+export const GetProductBrands = async () => {
+    const response = await api.get<string[]>(`/Product/brands`);
+    return response;
+}
 
 export const GetProductsAdvanced = async ({ params }: IProductParams) => {
     const searchParams = new URLSearchParams();

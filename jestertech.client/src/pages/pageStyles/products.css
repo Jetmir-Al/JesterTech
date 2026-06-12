@@ -96,8 +96,7 @@
 }
 
 .sortFilter {
-    display: none;
-    /* display: flex; */
+    display: flex; 
     min-width: 400px;
     align-items: center;
     justify-content: center;
