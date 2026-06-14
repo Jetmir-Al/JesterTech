@@ -14,24 +14,29 @@ const Featured = () => {
     return (
         <div className="featured-container">
             <h2 className="featured-title">Featured Products</h2>
-            <div className="featured-products">
+            <div className="swiperFeatured">
                 {
                     isLoading ? <Loading />
-                        : featured?.map((f) => (
-                            <Card
+                        : featured?.map((f, index: number) => (
+                            <div
+                                className={`item item${index}`}
                                 key={f.id}
-                                img={f.image}
-                                name={f.title}
-                                price={f.price}
-                                rating={5}
-                                cartItem={{
-                                    id: f.id,
-                                    image: f.image,
-                                    name: f.title,
-                                    price: f.price,
-                                    quantity: f.quantity
-                                } }
-                            />
+                            >
+                                <Card
+                                    img={f.image}
+                                    name={f.title}
+                                    price={f.price}
+                                    rating={5}
+                                    cartItem={{
+                                        id: f.id,
+                                        image: f.image,
+                                        name: f.title,
+                                        price: f.price,
+                                        quantity: f.quantity
+                                    }}
+                                />
+
+                            </div>
                         ))
                 }
             </div>

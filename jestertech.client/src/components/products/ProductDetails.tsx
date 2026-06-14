@@ -1,22 +1,36 @@
 import { useParams } from "react-router";
 import { useGetProductById } from "../../hooks/useQueries/useProductQueries";
 import Loading from "../../utils/Loading";
-import AddReview from "../forms/AddReview";
 import Button from "../ui/Button";
 import "./productDetails.css";
-import { useState } from "react";
 import { getImageUrl } from "../../api/productApi";
 import { useAuthHook } from "../../hooks/useAuthHook";
+import Reviews from "../review/Reviews";
+import { useToggleAlertHook } from "../../hooks/useToggle/useToggleAlert";
 
 
 
 const ProductDetails = () => {
-    const [reviewForm, setReviewForm] = useState<boolean>(false);
     const { id } = useParams();
     const { authenticated, user } = useAuthHook();
     const { data: product, isLoading } = useGetProductById(Number(id));
-    
+    const { setShowAlert, setMessage, setType } = useToggleAlertHook();
+
+    async function handleBuyForm() {
+        if (authenticated && user) {
+            // throw new Exept
+
+            setType("success");
+            setMessage("Product has been purchased! You can view details on your profile!");
+            setShowAlert(true);
+        } else {
+            setType("error");
+            setMessage("Please create an account to proceede with this action!");
+            setShowAlert(true);
+        }
+    }
     if (isLoading) return <Loading />
+
     return (
         <div className="productDetails-container">
 
@@ -28,7 +42,7 @@ const ProductDetails = () => {
                             <div className='productPresentation'>
                             <img className='productImg'
                                 src={getImageUrl(product.image)}
-                                    alt="sd" />
+                                alt={product.title} />
                             <h2 className='productTitle'>
                                 {product.brand}
                                 </h2>
@@ -46,55 +60,16 @@ const ProductDetails = () => {
 
                                             <Button type='button'
                                                 className='buy'
-                                            onClick={() => {
-                                               
-                                            }}
+                                            onClick={() => handleBuyForm()}
                                             >
                                                 Buy
                                             </Button>
                                            
                                     </div>
-                                    {/*: <h4><span>Unable to buy or borrow this 
-                                        </span></h4>*/}
-                                
                             </div>
                             
                         </div >
-
-                    {
-                        (authenticated && user) &&
-                        <div className="productReviews-container">
-                            <h2 className="review-title">Reviews</h2>
-                            <div className="productReviews">
-
-                                {
-                                    //reviews === null ?
-                                    //    <NoInfo /> :
-                                    //    reviews.map((rev, index) => (
-                                    //        <Reviews key={index}
-                                    //            name={rev.name}
-                                    //            comment={rev.comment}
-                                    //            stars={rev.rating}
-                                    //        />
-                                    //    ))
-                                }
-                            </div>
-                        {
-                            reviewForm ? 
-                                <AddReview />
-                                        :
-                                <Button
-                                    className="addReview"
-                                    type="button"
-                                    onClick={() => setReviewForm(r => !r)}
-                                >
-                                    ADD YOUR REVIEW
-                                </Button>
-
-                            }
-                        </div>
-
-                    }
+                        <Reviews/>
                     </>
             }
         </div>
