@@ -19,21 +19,22 @@
     gap: 1rem;
     justify-content: space-evenly;
     position: relative;
-    width: 80%;
+    width: 100%;
     min-height: 500px;
     mask-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1) 20%, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, 0));
-    overflow-x: auto;
+    overflow: hidden;
+
 }
 
 
 .item {
-    left: max(calc(300px * 8), 100%);
     width: 100%;
     position: absolute;
     animation: scrollLeft infinite 35s linear;
-    min-height: 300px;
-    min-width: 300px;
-/*    overflow: hidden;*/
+    left: max(calc(300px * 8), 100%);
+    min-height: 400px;
+    max-width: 250px;
+    height: 400px;
 }
 
 .item1 {

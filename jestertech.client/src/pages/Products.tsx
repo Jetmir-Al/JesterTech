@@ -1,18 +1,17 @@
-import { Link } from "react-router";
 import Card from "../components/ui/Card";
 import Button from "../components/ui/Button";
 import "./pageStyles/products.css";
 import Loading from "../utils/Loading";
 import { useGetProductsAdvanced } from "../hooks/useQueries/useProductQueries";
 import type { IProduct } from "../types/IProduct";
-import { useSearchParams } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import SearchBar from "../components/products/SearchBar";
 import SortFilter from "../components/products/SortFilter";
 
 
 const Products = () => {
     const [searchParams] = useSearchParams();
-
+    const navigate = useNavigate();
 
     const { data: products, isLoading } = useGetProductsAdvanced({
         params: Object.fromEntries(searchParams)
@@ -30,8 +29,7 @@ const Products = () => {
                 {
                     isLoading ? <Loading /> :
                         products?.data.map((p: IProduct) => (
-
-                            <Link to={`/products/${p.id}`}
+                            <div onClick={() => navigate(`/products/${p.id}`)}
                                 className='productCard'
                                 key={p.id}>
                                 <Card
@@ -47,7 +45,7 @@ const Products = () => {
                                         id: p.id,
                                     }}
                                 />
-                            </Link>
+                            </div>
                         ))
                 }
             </div>

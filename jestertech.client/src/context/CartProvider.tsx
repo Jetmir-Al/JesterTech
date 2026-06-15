@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { CartContext, type CartItem } from "./CartContext";
+import { useToggleAlertHook } from "../hooks/useToggle/useToggleAlert";
 
 interface CartProviderProps {
     children: ReactNode;
@@ -7,7 +8,7 @@ interface CartProviderProps {
 
 
 export const CartProvider = ({ children }: CartProviderProps) => {
-
+    const { setMessage, setShowAlert, setType } = useToggleAlertHook();
     const getInitialCart = () => {
         try {
             const cartArr = localStorage.getItem("cartItems");
@@ -20,6 +21,14 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     const [cartItems, setCartItems] = useState<CartItem[]>(getInitialCart);
 
     const addCartItems = (item: CartItem) => {
+        const cartArr = localStorage.getItem("cartItems");
+        const arrLength = cartArr ? JSON.parse(cartArr) : [];
+        if (arrLength.length >= 10) {
+            setType("warning");
+            setMessage("You have hit the max number of cart items!");
+            setShowAlert(true);
+            return;
+        }
         setCartItems(prev => {
             const updated = [...prev, item];
             localStorage.setItem("cartItems", JSON.stringify(updated));

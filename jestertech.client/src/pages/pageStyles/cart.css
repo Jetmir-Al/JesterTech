@@ -23,7 +23,8 @@
     border: 1px solid var(--color-border);
     border-radius: 5px;
     padding: 1rem;
-    min-width: 420px
+    width: 420px;
+    box-shadow: var(--shadow-sm);
 }
 .cart-item-content {
     display: flex;

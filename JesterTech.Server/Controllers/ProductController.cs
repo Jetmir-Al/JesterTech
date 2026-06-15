@@ -118,7 +118,7 @@ namespace JesterTech.Server.Controllers
 
             var products = query
                 .Skip((page - 1) * pageSize)
-                .Take(pageSize)
+                .Take(pageSize).OrderBy(b => b.Id).OrderDescending()
                 .ToList();
 
             return Ok(new

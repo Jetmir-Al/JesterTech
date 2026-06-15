@@ -22,7 +22,10 @@ const Card = ({ img, price, name, rating, cartItem }: ICard) => {
             </div>
             <Button
                 type="button"
-                onClick={() => addCartItems(cartItem)}
+                onClick={(e: Event) => {
+                    e.stopPropagation();
+                    addCartItems(cartItem);
+                }}
                 className="cart-btn">
                 Add to Cart
             </Button>

@@ -52,8 +52,9 @@
 
 .productCard {
     max-width: 250px;
-    max-height: 385px;
-    min-height: 380px
+    max-height: 400px;
+    min-height: 380px;
+    cursor: pointer;
 }
 
 

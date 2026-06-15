@@ -14,11 +14,11 @@ createRoot(document.getElementById('root')!).render(
         <QueryClientProvider client={queryClient}>
             <AuthProvider>
                 <ToggleModeProvider>
-                    <CartProvider>
                         <AlertProvider>
-                            <App />
+                            <CartProvider>
+                                 <App />
+                            </CartProvider>
                         </AlertProvider>
-                    </CartProvider>
                 </ToggleModeProvider>
             </AuthProvider>
         </QueryClientProvider>

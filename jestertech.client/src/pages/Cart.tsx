@@ -15,9 +15,9 @@ const Cart = () => {
             <div className="cart-items-container">
                 {
                     cartItems.length === 0 ? <NoInfo noInfo="No cart items!" /> :
-                        cartItems.map((c: CartItem) => (
+                        cartItems.map((c: CartItem, index: number) => (
 
-                            <div className="cart-item">
+                            <div className="cart-item" key={index}>
                                 <img src={getImageUrl(c.image)}
                                     alt="Product Image"
                                     className="cart-item-image" />
