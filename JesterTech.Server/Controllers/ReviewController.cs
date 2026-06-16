@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace JesterTech.Server.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
     public class ReviewController: ControllerBase
     {
         private readonly IReviewRepository _reviewRepository;
@@ -18,7 +17,7 @@ namespace JesterTech.Server.Controllers
             _reviewRepository = reviewRepository;
             _productRepository = productRepository;
         }
-
+        [Authorize]
         [HttpPost("add/{productId}")]
         public IActionResult CreateReview(int productId, [FromBody] CreateReviewDto dto)
         {
@@ -60,13 +59,14 @@ namespace JesterTech.Server.Controllers
                      Id = r.Id,
                      User = new UserDto
                      {
-                         Name = r.User.Name
+                         Name = r.User.Name,
                      },
                      Rating = r.Rating,
-                     Comment = r.Comment
+                     Comment = r.Comment,
                  })
-                .ToList(); ;
+                .ToList();
             return Ok(reviews);
+
         }
     }
 }

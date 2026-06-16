@@ -7,6 +7,8 @@ import { getImageUrl } from "../../api/productApi";
 import { useAuthHook } from "../../hooks/useAuthHook";
 import Reviews from "../review/Reviews";
 import { useToggleAlertHook } from "../../hooks/useToggle/useToggleAlert";
+import { useState } from "react";
+import PurchaseForm from "../purchase/PurchaseForm";
 
 
 
@@ -15,14 +17,11 @@ const ProductDetails = () => {
     const { authenticated, user } = useAuthHook();
     const { data: product, isLoading } = useGetProductById(Number(id));
     const { setShowAlert, setMessage, setType } = useToggleAlertHook();
+    const [toggleBuy, setToggleBuy] = useState<boolean>(false);
 
     async function handleBuyForm() {
         if (authenticated && user) {
-            // throw new Exept
-
-            setType("success");
-            setMessage("Product has been purchased! You can view details on your profile!");
-            setShowAlert(true);
+            setToggleBuy(true);
         } else {
             setType("error");
             setMessage("Please create an account to proceede with this action!");
@@ -37,40 +36,46 @@ const ProductDetails = () => {
             {
                 product &&
                 <>
-                        <div className="productDetails">
+                    <div className="productDetails">
 
-                            <div className='productPresentation'>
+                        <div className='productPresentation'>
                             <img className='productImg'
                                 src={getImageUrl(product.image)}
                                 alt={product.title} />
                             <h2 className='productTitle'>
                                 {product.brand}
-                                </h2>
-                            </div>
+                            </h2>
+                        </div>
 
-                            <div className='productInfo'>
+                        <div className='productInfo'>
                             <h4>{product.title}</h4>
                             <h4><span>Category:</span> <span>{product.category}</span></h4>
                             <h4><span>Guarantee:</span> <span>{product.garantee} years</span></h4>
                             <h4><span>Price:</span> <span>{product.price}$</span></h4>
 
+                            <div className='productBtns'>
 
-                                
-                                    <div className='productBtns'>
+                                <Button type='button'
+                                    className='buy'
+                                    onClick={() => handleBuyForm()}
+                                >
+                                    Buy
+                                </Button>
 
-                                            <Button type='button'
-                                                className='buy'
-                                                onClick={() => handleBuyForm()}
-                                            >
-                                                Buy
-                                            </Button>
-                                           
-                                    </div>
                             </div>
-                            
-                        </div >
-                        <Reviews/>
-                    </>
+                        </div>
+                        {
+                            toggleBuy ?
+                                <PurchaseForm
+                                    setBuyForm={() => setToggleBuy(b => !b)}
+                                    Quantity={product.quantity}
+                                />
+
+                                : null
+                        }
+                    </div >
+                    <Reviews />
+                </>
             }
         </div>
     );

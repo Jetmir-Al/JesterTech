@@ -12,8 +12,8 @@ export const useGetPurchases = (userId: number) => {
 export const useCreatePurchase = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async (params: { productId: number, CardholderName: string, CardNumber: string, quantity: number }) => {
-            return await CreatePurchase(params.productId, params.CardholderName, params.CardNumber, params.quantity);
+        mutationFn: async (params: { productId: number, CardholderName: string, CardNumber: string, quantity: number, address: string }) => {
+            return await CreatePurchase(params.productId, params.CardholderName, params.CardNumber, params.quantity, params.address);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["purchases"] });

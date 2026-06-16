@@ -71,7 +71,7 @@ namespace JesterTech.Server.Controllers
         public IActionResult GetFeaturedProducts()
         {
             var products = _productRepository.GetAllProducts()
-                .Take(8)
+                .Distinct().Take(8)
                 .ToList();
 
             return Ok(products);

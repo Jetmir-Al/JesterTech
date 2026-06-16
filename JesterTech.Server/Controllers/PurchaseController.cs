@@ -52,10 +52,11 @@ namespace JesterTech.Server.Controllers
                 UserId = userId,
                 ProductId = product.Id,
                 Quantity = dto.Quantity,
+                Address = dto.Address,
                 Total = dto.Quantity * product.Price,
                 CardholderName = dto.CardholderName,
                 CardNumber = dto.CardNumber.Length >= 4 ? dto.CardNumber[^4..] : dto.CardNumber,
-                PurchaseDate = DateTime.Now
+                PurchaseDate = DateTime.UtcNow
             };
 
             _purchaseRepository.CreatePurchase(purchase);
@@ -77,6 +78,7 @@ namespace JesterTech.Server.Controllers
                     ProductTitle = p.Product.Title,
                     Quantity = p.Quantity,
                     Total = p.Total,
+                    Address = p.Address,
                     PurchaseDate = p.PurchaseDate,
                     CardholderName = p.CardholderName,
                     MaskedCardNumber = "**** **** **** " + p.CardNumber,

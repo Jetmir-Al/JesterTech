@@ -9,6 +9,7 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./review.css";
 import { useAuthHook } from "../../hooks/useAuthHook";
+import type { IReview } from "../../types/IReview";
 function Reviews() {
     const [reviewForm, setReviewForm] = useState<boolean>(false);
     const { id } = useParams();
@@ -21,21 +22,21 @@ function Reviews() {
 
               {
                   isLoading ? <Loading /> :
-                      reviews?.length === 0 || reviews === undefined ?
-                      <NoInfo noInfo="No reviews on this product!" /> :
-                          reviews?.map((rev) => (
-                              <div className='' key={rev.Id}>
-                                  <h2 className=''>{rev.Name}</h2>
-                                  <p className=''>
-                                      {rev.Comment}
+                      reviews?.length === 0 ?
+                          <NoInfo noInfo="No reviews on this product!" /> :
+                          reviews?.map((rev: IReview, index: number) => (
+                              <div className='reviews' key={index}>
+                                  <h2 className='reviews-user'>{rev.user.name}</h2>
+                                  <p className='reviews-comment'>
+                                      {rev.comment}
                                   </p>
                                   <div className=''>
-                                      {Array.from({ length: rev.Rating }).map((_, index) => (
+                                      {Array.from({ length: rev.rating }).map((_, index) => (
                                           <FontAwesomeIcon key={index} icon={faStar} className="starIcons" />
                                       ))}
                                   </div>
                               </div>
-                     ))
+                          ))
               }
           </div>
           {

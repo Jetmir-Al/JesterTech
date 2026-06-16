@@ -18,6 +18,7 @@ namespace JesterTech.Server.Models
 
         public int Quantity { get; set; }
 
+        public string Address { get; set; } = string.Empty;
         public decimal Total { get; set; }
 
         public string CardholderName { get; set; } = string.Empty;

@@ -1,5 +1,6 @@
 ﻿using JesterTech.Server.Data;
 using JesterTech.Server.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace JesterTech.Server.Repositories
 {
@@ -30,6 +31,7 @@ namespace JesterTech.Server.Repositories
         public List<Reviews> GetReviewsByProductId(int productId)
         {
             return _context.Reviews
+                .Include(r => r.User)
                 .Where(r => r.ProductId == productId)
                 .ToList();
         }

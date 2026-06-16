@@ -12,7 +12,7 @@ export const AddReview = async (rating: number, comment: string, productId: numb
 }
 
 export const GetReviews = async (productId: number) => {
-    const response = await api.get<IReview[]>(`/Review/get/${productId}`,
+    const response = await api.get<IReview[]>(`/Review/product/${productId}`,
         { credentials: 'include' }
     );
     return response;

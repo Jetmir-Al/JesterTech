@@ -1,8 +1,10 @@
 
 
 export interface IReview {
-    Id: number;
-    Name: string;
-    Rating: number;
-    Comment: string;
+    id: number;
+    user: {
+        name: string;
+    }
+    rating: number;
+    comment: string;
 }
