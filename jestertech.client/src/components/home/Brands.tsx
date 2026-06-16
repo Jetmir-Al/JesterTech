@@ -20,8 +20,9 @@ const Brands = () => {
             <div className="Brands">
                 {
                     isLoading ? <Loading /> :
-                        brands?.map((b) => (
-                            <div className="brand-item">
+                        brands?.map((b: string, index: number) => (
+                            <div className="brand-item"
+                                key={index}>
                                 <Button
                                     type="button"
                                     className=""

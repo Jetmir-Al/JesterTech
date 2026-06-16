@@ -50,7 +50,7 @@ namespace JesterTech.Server.Controllers
             var purchase = new Purchases
             {
                 UserId = userId,
-                ProductID = product.Id,
+                ProductId = product.Id,
                 Quantity = dto.Quantity,
                 Total = dto.Quantity * product.Price,
                 CardholderName = dto.CardholderName,
@@ -74,13 +74,13 @@ namespace JesterTech.Server.Controllers
                 {
                     Id = p.Id,
                     UserName = p.User.Name,
-                    ProductTitle = p.Products.Title,
+                    ProductTitle = p.Product.Title,
                     Quantity = p.Quantity,
                     Total = p.Total,
                     PurchaseDate = p.PurchaseDate,
                     CardholderName = p.CardholderName,
                     MaskedCardNumber = "**** **** **** " + p.CardNumber,
-                    Image = p.Products.Image
+                    Image = p.Product.Image
                 })
                 .ToList();
 

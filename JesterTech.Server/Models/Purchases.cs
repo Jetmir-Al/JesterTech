@@ -1,17 +1,19 @@
-﻿namespace JesterTech.Server.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace JesterTech.Server.Models
 {
     public class Purchases
     {
         public int Id { get; set; }
 
-
+        [ForeignKey("User")]
         public int UserId { get; set; }
-        public Users User { get; set; }
+        public Users User { get; set; } = new Users();
 
-
-        public int ProductID { get; set; }
-        public Products Products { get; set; }
-
+        [ForeignKey("Product")]
+        public int ProductId { get; set; }
+        public Products Product { get; set; }
+         
         public DateTime PurchaseDate { get; set; }
 
         public int Quantity { get; set; }

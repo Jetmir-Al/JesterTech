@@ -60,7 +60,7 @@ const ProductDetails = () => {
 
                                             <Button type='button'
                                                 className='buy'
-                                            onClick={() => handleBuyForm()}
+                                                onClick={() => handleBuyForm()}
                                             >
                                                 Buy
                                             </Button>

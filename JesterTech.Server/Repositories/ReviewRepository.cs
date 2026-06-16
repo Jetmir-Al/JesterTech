@@ -30,7 +30,7 @@ namespace JesterTech.Server.Repositories
         public List<Reviews> GetReviewsByProductId(int productId)
         {
             return _context.Reviews
-                .Where(r => r.ProductID == productId)
+                .Where(r => r.ProductId == productId)
                 .ToList();
         }
 

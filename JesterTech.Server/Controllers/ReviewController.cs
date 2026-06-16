@@ -23,12 +23,14 @@ namespace JesterTech.Server.Controllers
         public IActionResult CreateReview(int productId, [FromBody] CreateReviewDto dto)
         {
 
-            var userIdClaim = User.FindFirst("Id");
+            var userIdClaim = User.FindFirst("Id") ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
             if (userIdClaim == null)
                 return Unauthorized(new { message = "User is not logged in" });
 
-            int userId = int.Parse(userIdClaim.Value);
-
+            if (!int.TryParse(userIdClaim.Value, out int userId))
+            {
+                return BadRequest(new { message = "Invalid user identity format." });
+            }
 
             var product = _productRepository.GetProductById(productId);
             if (product == null)
@@ -37,7 +39,7 @@ namespace JesterTech.Server.Controllers
 
             var review = new Reviews
             {
-                ProductID = productId,  
+                ProductId = productId,  
                 UserId = userId,
                 Rating = dto.Rating,
                 Comment = dto.Comment

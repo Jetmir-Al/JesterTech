@@ -46,7 +46,7 @@ namespace JesterTech.Server.Repositories
         {
             return _context.Purchases
                 .Include(p => p.User)
-                .Include(p => p.Products)
+                .Include(p => p.Product)
                 .Where(p => p.UserId == userId)
                 .ToList();
         }

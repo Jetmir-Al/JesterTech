@@ -16,10 +16,11 @@ export const useCreateReview = () => {
             return await AddReview(params.rating, params.comment, params.productId);
         },
         onSuccess: () => {
-             queryClient.invalidateQueries({ queryKey: ["reviews"] });
+            queryClient.invalidateQueries({ queryKey: ["reviews"] });
+           
         },
         onError: (err) => {
-            console.error("Error during review creation", err); 
+            console.error("Error during review creation", err);
         }
     });
 }
