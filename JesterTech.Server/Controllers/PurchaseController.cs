@@ -3,6 +3,7 @@ using JesterTech.Server.Models;
 using JesterTech.Server.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace JesterTech.Server.Controllers
 {
@@ -46,7 +47,6 @@ namespace JesterTech.Server.Controllers
             product.Quantity -= dto.Quantity;
             _productRepository.Save();
 
-
             var purchase = new Purchases
             {
                 UserId = userId,
@@ -67,9 +67,17 @@ namespace JesterTech.Server.Controllers
 
 
 
-        [HttpGet("user/{userId}")]
-        public IActionResult GetPurchasesByUser(int userId)
+        [HttpGet("user")]
+        public IActionResult GetPurchasesByUser()
         {
+            var userIdClaim = User.FindFirst("Id") ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+                return Unauthorized(new { message = "User is not logged in" });
+
+            if (!int.TryParse(userIdClaim.Value, out int userId))
+            {
+                return BadRequest(new { message = "Invalid user identity format." });
+            }
             var purchases = _purchaseRepository.GetPurchasesByUserId(userId)
                 .Select(p => new PurchaseDTO
                 {

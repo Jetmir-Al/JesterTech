@@ -8,7 +8,7 @@ namespace JesterTech.Server.Models
 
         [ForeignKey("User")]
         public int UserId { get; set; }
-        public Users User { get; set; } = new Users();
+        public Users User { get; set; }
 
         [ForeignKey("Product")]
         public int ProductId { get; set; }

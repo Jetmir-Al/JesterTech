@@ -1,12 +1,13 @@
 
 export interface IPurchase {
-    Id: number;
-    UserName: string;
-    ProductTitle: string;
-    Quantity: number;
-    Total: number;
-    PurchaseDate: string;
-    CardholderName: string;
-    MaskedCardNumber: string;
-    Image: string;
+    id: number;
+    userName: string;
+    productTitle: string;
+    quantity: number;
+    total: number;
+    purchaseDate: string;
+    cardholderName: string;
+    maskedCardNumber: string;
+    image: string;
+    address: string;
 }

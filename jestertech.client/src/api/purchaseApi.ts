@@ -11,8 +11,8 @@ export const CreatePurchase = async (productId: number, CardholderName: string, 
     return response;
 }
 
-export const GetPurchases = async (userId: number) => {
-    const response = await api.get<IPurchase[]>(`/Purchase/user/${userId}`,
+export const GetPurchases = async () => {
+    const response = await api.get<IPurchase[]>(`/Purchase/user`,
         { credentials: 'include' }
     );
     return response;
