@@ -67,6 +67,7 @@ namespace JesterTech.Server.Controllers
             }
             return Ok(product);
         }
+
         [HttpGet("featured")]
         public IActionResult GetFeaturedProducts()
         {

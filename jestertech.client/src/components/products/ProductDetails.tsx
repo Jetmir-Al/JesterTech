@@ -73,6 +73,7 @@ const ProductDetails = () => {
 
                                 : null
                         }
+                       
                     </div >
                     <Reviews />
                 </>

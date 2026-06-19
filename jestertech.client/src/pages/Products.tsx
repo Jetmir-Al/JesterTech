@@ -7,6 +7,7 @@ import type { IProduct } from "../types/IProduct";
 import { useNavigate, useSearchParams } from "react-router";
 import SearchBar from "../components/products/SearchBar";
 import SortFilter from "../components/products/SortFilter";
+import AiDisplay from "../components/ai/AiDisplay";
 
 
 const Products = () => {
@@ -63,6 +64,7 @@ const Products = () => {
                     ))
                 }
             </div>
+            <AiDisplay mode="general" />
         </main>
     );
 }
