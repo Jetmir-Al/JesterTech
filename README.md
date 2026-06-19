@@ -11,7 +11,7 @@ The standout feature of JesterTech is an **integrated AI Product Assistant**, al
 ### Frontend
 * **Framework:** React.js (with TypeScript for strict type safety)
 * **Styling:** Vanilla CSS 
-* **State Management** Context API
+* **State Management** Tanstach Query
 
 ### Backend
 * **Runtime & Framework:** .NET Core / ASP.NET Core Web API
