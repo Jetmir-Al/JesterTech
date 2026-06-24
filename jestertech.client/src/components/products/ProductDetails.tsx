@@ -9,6 +9,7 @@ import Reviews from "../review/Reviews";
 import { useToggleAlertHook } from "../../hooks/useToggle/useToggleAlert";
 import { useState } from "react";
 import PurchaseForm from "../purchase/PurchaseForm";
+import AiDisplay from "../ai/AiDisplay";
 
 
 
@@ -67,6 +68,7 @@ const ProductDetails = () => {
                         {
                             toggleBuy ?
                                 <PurchaseForm
+                                    id={Number(id)}
                                     setBuyForm={() => setToggleBuy(b => !b)}
                                     Quantity={product.quantity}
                                 />
@@ -78,6 +80,7 @@ const ProductDetails = () => {
                     <Reviews />
                 </>
             }
+            <AiDisplay mode="details" />
         </div>
     );
 

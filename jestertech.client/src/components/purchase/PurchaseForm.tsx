@@ -4,9 +4,9 @@ import Button from "../ui/Button";
 import { useState } from "react";
 import { useToggleAlertHook } from "../../hooks/useToggle/useToggleAlert";
 import { useCreatePurchase } from "../../hooks/useQueries/usePurchaseQueries";
-import { useParams } from "react-router";
+import { useCartHook } from "../../hooks/useCartHook";
 
-function PurchaseForm({ setBuyForm, Quantity }: { setBuyForm: () => void, Quantity: number }) {
+function PurchaseForm({ setBuyForm, Quantity, id }: { setBuyForm: () => void, Quantity: number, id: number }) {
 
     const [CardholderName, setCardName] = useState<string>("");
     const [CardNumber, setCardNum] = useState<string>("0");
@@ -14,7 +14,7 @@ function PurchaseForm({ setBuyForm, Quantity }: { setBuyForm: () => void, Quanti
     const [quantity, setQuantity] = useState<number>(0);
     const { setMessage, setShowAlert, setType } = useToggleAlertHook();
     const { mutateAsync: createPurchase } = useCreatePurchase();
-    const { id } = useParams();
+    const { removeCartItem } = useCartHook();
     const handleBuySubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
@@ -22,14 +22,16 @@ function PurchaseForm({ setBuyForm, Quantity }: { setBuyForm: () => void, Quanti
             setShowAlert(true);
             setType("info");
             setMessage("Procesing your purchase...!");
-            await createPurchase({ productId: Number(id), CardholderName, CardNumber, quantity, address });
-            setType("success");
-            setMessage("Product has been purchased! You can view details on your profile!");
+            await createPurchase({ productId: id, CardholderName, CardNumber, quantity, address });
         } catch {
             setBuyForm();
             setShowAlert(true);
             setType("error");
             setMessage("Could not process your purchase! Try again later!");
+        } finally {
+            setType("success");
+            setMessage("Product has been purchased! You can view details on your profile!");
+            removeCartItem(id);
         }
     }
 

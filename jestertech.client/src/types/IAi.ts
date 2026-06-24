@@ -8,6 +8,9 @@ export interface IAskAiParams {
     userQuestion: string;
 }
 
+export interface IDisplayAi {
+    mode: "details" | "general";
+}
 export interface IAskAiDetailsProps {
     mode: "details" | "general";
     setDisplay: () => void;

@@ -102,7 +102,7 @@ Customer Question: {dto.UserQuestion}
 
 
         [HttpPost("ask-general")]
-        public async Task<IActionResult> AskGlobalAi([FromBody] string userQuestion)
+        public async Task<IActionResult> AskGlobalAi([FromBody] GeneralQuestionDTO dto)
         {
             var apiKey = _configuration["AiSettings: ApiKey"];
             var allProducts = _productRepository.GetAllProducts().ToList();
@@ -125,7 +125,7 @@ If they ask for something we do not sell, say: 'We do not carry that specific it
 {catalogBuilder}
 [/STORE INVENTORY CATALOG]
 
-Customer Question: {userQuestion}
+Customer Question: {dto.UserQuestion}
 ";
             var requestBody = new
             {

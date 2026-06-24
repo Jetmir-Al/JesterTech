@@ -51,3 +51,12 @@
     .cart-item-btn:hover {
         background-color: var(--color-primary-hover);
     }
+
+
+.cart-item-buy {
+    width: 100%;
+    border: none;
+    color: white;
+    background-color: var(--color-accent);
+    padding: 0.3rem 0.6rem;
+}

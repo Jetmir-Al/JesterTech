@@ -4,7 +4,7 @@ import "./ai.css";
 import { faArrowRight, faSpinner, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { useParams } from "react-router";
-import { useAskAi } from "../../hooks/useQueries/useAiQueries";
+import { useAskAi, useAskAiGeneral } from "../../hooks/useQueries/useAiQueries";
 import Loading from "../../utils/Loading";
 import { faRobot } from "@fortawesome/free-solid-svg-icons/faRobot";
 import type { IAskAiDetailsProps } from "../../types/IAi";
@@ -14,37 +14,62 @@ function AskAiDetails({ mode, setDisplay }: IAskAiDetailsProps) {
     const [question, setQuestion] = useState<string>("");
     const [response, setResponse] = useState<string>("");
     const { id } = useParams();
-    const { mutateAsync, isPending } = useAskAi();
+    const { mutateAsync: askDetails, isPending } = useAskAi();
+    const { mutateAsync: askGeneral, isPending: pendingGeneral } = useAskAiGeneral();
 
 
     const handleAiQuestion = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!id || isPending || question === "") return;
         setResponse("");
-        await mutateAsync(
-            { productId: Number(id), userQuestion: question },
-            {
-                onSuccess: (data) => {
-                    if (data && data.answer) {
-                        setResponse(data.answer);
-                        setQuestion("");
+        if (mode === "details") {
+            if (!id || isPending || question === "") return;
+
+            await askDetails(
+                { productId: Number(id), userQuestion: question },
+                {
+                    onSuccess: (data) => {
+                        if (data && data.answer) {
+                            setResponse(data.answer);
+                            setQuestion("");
+                        }
+                    },
+                    onError: () => {
+                        setResponse("No answer as of this moment. Try later!");
                     }
-                },
-                onError: () => {
-                    setResponse("No answer as of this moment. Try later!");
                 }
-            }
-        );
+            );
+        } else if (mode === "general") {
+            if (pendingGeneral || question === "") return;
+
+            await askGeneral(
+                { userQuestion: question },
+                {
+                    onSuccess: (data) => {
+                        if (data && data.answer) {
+                            setResponse(data.answer);
+                            setQuestion("");
+                        }
+                    },
+                    onError: () => {
+                        setResponse("No answer as of this moment. Try later!");
+                    }
+                }
+            );
+        }
+        else {
+            return;
+        }
     }
+
 
 
     return (
         <div className="ai-container">
             <div className="ai-response">
                 {
-                    isPending ? <Loading /> :
+                    isPending || pendingGeneral ? <Loading /> :
                         <p>{response ||
-                            "Ask anything about this product's specifications below!"}
+                            "Ask anything about product's specifications!"}
                         </p>
                 }
                 <p className="ai-icon">
@@ -54,9 +79,9 @@ function AskAiDetails({ mode, setDisplay }: IAskAiDetailsProps) {
             <form className="ai-form" onSubmit={handleAiQuestion}>
                 <input
                     required
-                    placeholder={isPending ? "Waiting for AI..." : "Ask AI about the product!"}
+                    placeholder={isPending || pendingGeneral ? "Waiting for AI..." : "Ask AI about the product!"}
                     type="text"
-                    disabled={isPending}
+                    disabled={isPending || pendingGeneral}
                     value={question}
                     onChange={(e) => setQuestion(e.target.value)}
                 />
@@ -64,7 +89,7 @@ function AskAiDetails({ mode, setDisplay }: IAskAiDetailsProps) {
                     className=""
                     type="submit"
                 >
-                    <FontAwesomeIcon icon={isPending ? faSpinner : faArrowRight} spin={isPending} />
+                    <FontAwesomeIcon icon={isPending || pendingGeneral ? faSpinner : faArrowRight} spin={isPending} />
                 </Button>
             </form>
             <FontAwesomeIcon

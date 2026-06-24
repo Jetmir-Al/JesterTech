@@ -4,9 +4,9 @@ import "./ai.css";
 import { faRobot } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import AskAiDetails from "./AskAiDetails";
-import type { IAskAiDetailsProps } from "../../types/IAi";
+import type { IDisplayAi } from "../../types/IAi";
 
-function AiDisplay({ mode }: IAskAiDetailsProps) {
+function AiDisplay({ mode }: IDisplayAi) {
     const [displayAi, setDisplayAi] = useState<boolean>(false);
     return (
         <div className="aiDisplay-container">

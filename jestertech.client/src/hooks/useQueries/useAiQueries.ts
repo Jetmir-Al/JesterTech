@@ -12,8 +12,8 @@ export const useAskAi = () => {
 
 export const useAskAiGeneral = () => {
     return useMutation({
-        mutationFn: async (userQuestion: string) => {
-            return await AskAiGeneral(userQuestion);
+        mutationFn: async (params: { userQuestion: string }) => {
+            return await AskAiGeneral(params.userQuestion);
         }
     });
 }

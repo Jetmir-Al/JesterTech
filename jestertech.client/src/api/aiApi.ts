@@ -14,5 +14,6 @@ export const AskAiGeneral = async (userQuestion: string) => {
     return await api.post<IAskAI>("/Ai/ask-general", {
         userQuestion
     },
-        { credentials: "include" })
+        { credentials: "include" }
+    );
 }
