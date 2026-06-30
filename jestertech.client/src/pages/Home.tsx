@@ -4,10 +4,20 @@ import Services from "../components/home/Services";
 import Brands from "../components/home/Brands";
 import Button from "../components/ui/Button";
 import "./pageStyles/home.css";
+import { useQuery } from "@tanstack/react-query";
+import { getImageUrl, GetTopProducts } from "../api/productApi";
+import Loading from "../utils/Loading";
 
 const Home = () => {
 
     const navigate = useNavigate();
+
+    const { data: top, isLoading } = useQuery({
+        queryKey: ["topProducts"],
+        queryFn: async () => {
+            return await GetTopProducts();
+        }
+    })
 
     return (
         <div className="home-container">
@@ -25,15 +35,18 @@ const Home = () => {
                     </Button>
                 </div>
                 <div className="hero-imgs">
-                    <div className="img-container">
-                        <img src="./src/assets/s26.png" alt="samsung galaxy S26" className="hero-image" />
-                    </div>
-                    <div className="img-container">
-                        <img src="./src/assets/oneplus 15.png" alt="oneplus 15" className="hero-image main-img" />
-                    </div>
-                    <div className="img-container">
-                        <img src="./src/assets/iphone 17.png" alt="iphone 17" className="hero-image" />
-                    </div>
+                    {
+                        isLoading ? <Loading /> :
+                            top?.map((t) => (
+                                <div className="img-container" key={t.id}>
+                                    <img
+                                        src={getImageUrl(t.image)}
+                                        alt={t.title}
+                                        className="hero-image" />
+                                </div>
+
+                            ))
+                    }
                 </div>
             </div>
 

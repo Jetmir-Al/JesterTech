@@ -12,6 +12,12 @@ export const GetFeaturedProducts = async () => {
     return response;
 }
 
+export const GetTopProducts = async () => {
+    const response = await api.get<IProduct[]>(`/Product/topProducts`);
+    return response;
+}
+
+
 export const GetProductCategories = async () => {
     const response = await api.get<string[]>(`/Product/categories`);
     return response;
@@ -42,3 +48,5 @@ export const GetProductsAdvanced = async ({ params }: IProductParams) => {
 export const getImageUrl = (filename: string) => {
     return `${import.meta.env.VITE_IMG_API_URL}/${filename}`;
 }
+
+

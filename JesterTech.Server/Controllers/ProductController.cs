@@ -2,6 +2,7 @@
 using JesterTech.Server.Models;
 using JesterTech.Server.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace JesterTech.Server.Controllers
 {
@@ -129,6 +130,12 @@ namespace JesterTech.Server.Controllers
                 totalProducts = productCount,
                 totalPages = (int)Math.Ceiling(productCount / (double)pageSize)
             });
+        }
+        [HttpGet("topProducts")]
+        public IActionResult GetTopProducts()
+        {
+            var products = _productRepository.GetAllProducts().Where(x => x.Category == "Smartphone").Take(3).ToList();
+            return Ok(products);
         }
 
         [HttpPost("InsertProduct")]

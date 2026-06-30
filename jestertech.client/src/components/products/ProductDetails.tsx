@@ -46,6 +46,13 @@ const ProductDetails = () => {
                             <h2 className='productTitle'>
                                 {product.brand}
                             </h2>
+                            {
+                                product.quantity === 0 && (
+                                    <div className="outOfStock-banner">
+                                        Out of stock
+                                    </div>
+                                )
+                            }
                         </div>
 
                         <div className='productInfo'>
