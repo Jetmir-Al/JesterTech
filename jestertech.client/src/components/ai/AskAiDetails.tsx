@@ -4,7 +4,7 @@ import "./ai.css";
 import { faArrowRight, faSpinner, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { useParams } from "react-router";
-import { useAskAi, useAskAiGeneral } from "../../hooks/useQueries/useAiQueries";
+import { useAskAi, useAskAiGeneral, useAskAiPurchases } from "../../hooks/useQueries/useAiQueries";
 import Loading from "../../utils/Loading";
 import { faRobot } from "@fortawesome/free-solid-svg-icons/faRobot";
 import type { IAskAiDetailsProps } from "../../types/IAi";
@@ -16,6 +16,7 @@ function AskAiDetails({ mode, setDisplay }: IAskAiDetailsProps) {
     const { id } = useParams();
     const { mutateAsync: askDetails, isPending } = useAskAi();
     const { mutateAsync: askGeneral, isPending: pendingGeneral } = useAskAiGeneral();
+    const { mutateAsync: askPurchases, isPending: pendingPurchases } = useAskAiPurchases();
 
 
     const handleAiQuestion = async (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -55,6 +56,22 @@ function AskAiDetails({ mode, setDisplay }: IAskAiDetailsProps) {
                     }
                 }
             );
+        } else if (mode === "purchases") {
+            if (pendingPurchases || question === "") return;
+            await askPurchases(
+                { userQuestion: question },
+                {
+                    onSuccess: (data) => {
+                        if (data && data.answer) {
+                            setResponse(data.answer);
+                            setQuestion("");
+                        }
+                    },
+                    onError: () => {
+                        setResponse("No answer as of this moment. Try later!");
+                    }
+                }
+            );
         }
         else {
             return;
@@ -79,9 +96,9 @@ function AskAiDetails({ mode, setDisplay }: IAskAiDetailsProps) {
             <form className="ai-form" onSubmit={handleAiQuestion}>
                 <input
                     required
-                    placeholder={isPending || pendingGeneral ? "Waiting for AI..." : "Ask AI about the product!"}
+                    placeholder={isPending || pendingGeneral || pendingPurchases ? "Waiting for AI..." : "Ask AI about the product!"}
                     type="text"
-                    disabled={isPending || pendingGeneral}
+                    disabled={isPending || pendingGeneral || pendingPurchases}
                     value={question}
                     onChange={(e) => setQuestion(e.target.value)}
                 />
@@ -89,7 +106,7 @@ function AskAiDetails({ mode, setDisplay }: IAskAiDetailsProps) {
                     className=""
                     type="submit"
                 >
-                    <FontAwesomeIcon icon={isPending || pendingGeneral ? faSpinner : faArrowRight} spin={isPending} />
+                    <FontAwesomeIcon icon={isPending || pendingGeneral || pendingPurchases ? faSpinner : faArrowRight} spin={isPending} />
                 </Button>
             </form>
             <FontAwesomeIcon

@@ -1,9 +1,9 @@
-using JesterTech.Server.Controllers;
 using JesterTech.Server.Data;
 using JesterTech.Server.Repositories;
 using JesterTech.Server.Services;
 using Microsoft.EntityFrameworkCore;
-using static System.Net.WebRequestMethods;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -15,7 +15,7 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
 
-builder.Services.AddHttpClient<AiController>(); 
+builder.Services.AddHttpClient<IAiService, GroqAiService>();
 builder.Services.AddControllersWithViews();
 
 

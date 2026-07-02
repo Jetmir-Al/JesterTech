@@ -17,3 +17,11 @@ export const AskAiGeneral = async (userQuestion: string) => {
         { credentials: "include" }
     );
 }
+
+export const AskAiPurchases = async (userQuestion: string) => {
+    return await api.post<IAskAI>("/Ai/ask-purchases", {
+        userQuestion
+    },
+        { credentials: "include" }
+    );
+}

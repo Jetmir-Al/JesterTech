@@ -71,7 +71,10 @@ const ProductDetails = () => {
                                 </Button>
 
                             </div>
+
                         </div>
+                        {//<AiDisplay mode="details" />
+                        }
                         {
                             toggleBuy ?
                                 <PurchaseForm
@@ -87,7 +90,6 @@ const ProductDetails = () => {
                     <Reviews />
                 </>
             }
-            <AiDisplay mode="details" />
         </div>
     );
 

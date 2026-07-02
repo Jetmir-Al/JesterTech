@@ -1,9 +1,9 @@
 ﻿using JesterTech.Server.DTO;
 using JesterTech.Server.Repositories;
+using JesterTech.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
-using System.Text.Json;
 
 namespace JesterTech.Server.Controllers
 {
@@ -13,107 +13,55 @@ namespace JesterTech.Server.Controllers
     public class AiController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
-        private readonly IConfiguration _configuration;
-        private readonly HttpClient _httpClient;
+        private readonly IPurchaseRepository _purchaseRepository;
+        private readonly IAiService _aiService;
 
-        public AiController(IProductRepository productRepository, IConfiguration configuration, HttpClient httpClient)
+        public AiController(IProductRepository productRepository, IPurchaseRepository purchaseRepository, IAiService aiService)
         {
             _productRepository = productRepository;
-            _configuration = configuration;
-            _httpClient = httpClient;
+            _purchaseRepository = purchaseRepository;
+            _aiService = aiService;
         }
-
 
         [HttpPost("ask")]
         public async Task<IActionResult> AskProductAi([FromBody] AiQuestionDTO dto)
         {
             var product = _productRepository.GetProductById(dto.ProductId);
-            if (product == null)
-            {
-                return NotFound(new { message = "Product not found." });
-            }
-
-            var apiKey = _configuration["AiSettings: ApiKey"];
-            if (string.IsNullOrEmpty(apiKey))
-            {
-                return StatusCode(500, "AI service configuration is missing.");
-            }
+            if (product == null) return NotFound(new { message = "Product not found." });
 
             var structuredPrompt = $@"
 You are an expert AI product assistant for the JesterTech e-commerce platform.
 Answer the customer's question using ONLY the system technical specifications provided below. 
-If the answer cannot be confidently inferred from the specifications, respond politely: 'I do not have that specific detail available for this item.'
+If the answer cannot be confidently inferred from the specifications, respond politely: 
+'I do not have that specific detail available for this item.'
 
-[PRODUCT SPECIFICATIONS]
+PRODUCT SPECIFICATIONS]
 Title: {product.Title}
 Brand: {product.Brand}
 {product.Specifications}
 [/PRODUCT SPECIFICATIONS]
 
-Customer Question: {dto.UserQuestion}
-";
-
-            var requestBody = new
-            {
-                model = "llama-3.3-70b-versatile",
-                messages = new[]
-                 {
-                    new { role = "user", content = structuredPrompt }
-                },
-                temperature = 0.2
-            };
-
-            var jsonPayload = JsonSerializer.Serialize(requestBody);
-            var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+Customer Question: {dto.UserQuestion}";
 
             try
             {
-                _httpClient.DefaultRequestHeaders.Clear();
-                _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
-
-                var response = await _httpClient.PostAsync(
-                    "https://api.groq.com/openai/v1/chat/completions",
-                    content
-                );
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    var groqErrorResponse = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine(groqErrorResponse);
-                    return StatusCode((int)response.StatusCode, "Error communicating with the upstream Groq AI provider.");
-                }
-
-                var responseString = await response.Content.ReadAsStringAsync();
-
-                using var doc = JsonDocument.Parse(responseString);
-                var aiResponseText = doc.RootElement
-                    .GetProperty("choices")[0]
-                    .GetProperty("message")
-                    .GetProperty("content")
-                    .GetString();
-
-                return Ok(new { answer = aiResponseText?.Trim() });
+                var answer = await _aiService.GetAiResponseAsync(structuredPrompt);
+                return Ok(new { answer });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server processing error: {ex.Message}");
+                return StatusCode(500, ex.Message);
             }
         }
-
 
         [HttpPost("ask-general")]
         public async Task<IActionResult> AskGlobalAi([FromBody] GeneralQuestionDTO dto)
         {
-            var apiKey = _configuration["AiSettings: ApiKey"];
-            var allProducts = _productRepository.GetAllProducts().ToList();
-
+            var allProducts = _productRepository.GetAllProducts();
             var catalogBuilder = new StringBuilder();
             foreach (var p in allProducts)
             {
-                catalogBuilder.AppendLine($"[PRODUCT: {p.Title}]");
-                catalogBuilder.AppendLine($"Brand: {p.Brand} | Price: ${p.Price}");
-                catalogBuilder.AppendLine(p.Specifications);
-                catalogBuilder.AppendLine("--------------------------------");
+                catalogBuilder.AppendLine($"[PRODUCT: {p.Title}] | Brand: {p.Brand} | Price: ${p.Price}\n{p.Specifications}\n---");
             }
 
             var globalPrompt = $@"
@@ -125,52 +73,73 @@ If they ask for something we do not sell, say: 'We do not carry that specific it
 {catalogBuilder}
 [/STORE INVENTORY CATALOG]
 
-Customer Question: {dto.UserQuestion}
-";
-            var requestBody = new
-            {
-                model = "llama-3.3-70b-versatile",
-                messages = new[]
-                 {
-                    new { role = "user", content = globalPrompt }
-                },
-                temperature = 0.2
-            };
-
-            var jsonPayload = JsonSerializer.Serialize(requestBody);
-            var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+Customer Question: {dto.UserQuestion}";
 
             try
             {
-                _httpClient.DefaultRequestHeaders.Clear();
-                _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {apiKey}");
-
-                var response = await _httpClient.PostAsync(
-                    "https://api.groq.com/openai/v1/chat/completions",
-                    content
-                );
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    var groqErrorResponse = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine(groqErrorResponse);
-                    return StatusCode((int)response.StatusCode, "Error communicating with the upstream Groq AI provider.");
-                }
-
-                var responseString = await response.Content.ReadAsStringAsync();
-
-                using var doc = JsonDocument.Parse(responseString);
-                var aiResponseText = doc.RootElement
-                    .GetProperty("choices")[0]
-                    .GetProperty("message")
-                    .GetProperty("content")
-                    .GetString();
-
-                return Ok(new { answer = aiResponseText?.Trim() });
+                var answer = await _aiService.GetAiResponseAsync(globalPrompt);
+                return Ok(new { answer });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server processing error: {ex.Message}");
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("ask-purchases")]
+        public async Task<IActionResult> AskPurchasesAi([FromBody] GeneralQuestionDTO dto)
+        {
+            var userIdClaim = User.FindFirst("Id") ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+                return Unauthorized(new { message = "User is not logged in" });
+
+            if (!int.TryParse(userIdClaim.Value, out int userId))
+            {
+                return BadRequest(new { message = "Invalid user identity format." });
+            }
+
+            var allPurchasesOfUser = _purchaseRepository.GetPurchasesByUserId(userId).Select(p => new PurchaseAiDTO
+            {
+                Id = p.Id,
+                UserName = p.User.Name,
+                ProductTitle = p.Product.Title,
+                Quantity = p.Quantity,
+                Total = p.Total,
+                Address = p.Address,
+                PurchaseDate = p.PurchaseDate,
+                CardholderName = p.CardholderName,
+                Specifications = p.Product.Specifications
+            }).ToList();
+
+            var catalogBuilder = new StringBuilder();
+            foreach (var p in allPurchasesOfUser)
+            {
+                catalogBuilder.AppendLine($"[PRODUCT: {p.ProductTitle}]");
+                catalogBuilder.AppendLine($"Total: {p.Total} | Quantity: {p.Quantity}");
+                catalogBuilder.AppendLine($"Date: {p.PurchaseDate} | Bank Name: {p.CardholderName}");
+                catalogBuilder.AppendLine($"Address: {p.Address}");
+                catalogBuilder.AppendLine(p.Specifications);
+                catalogBuilder.AppendLine("--------------------------------");
+            }
+
+            var globalPrompt = $@"
+You are a brilliant retail shopping assistant for the JesterTech tech store.
+Help the customer learn of the history of their purchases.
+If they ask for something they did not buy, say: 'You did not buy that specific item, but here are our best matching alternatives...'
+
+[PURCHASE CATALOG]
+{catalogBuilder}
+[/PURCHASE CATALOG]
+
+Customer Question: {dto.UserQuestion}";
+            try
+            {
+                var answer = await _aiService.GetAiResponseAsync(globalPrompt);
+                return Ok(new { answer });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
     }

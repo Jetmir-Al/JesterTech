@@ -9,6 +9,7 @@ import { useGetPurchases } from "../hooks/useQueries/usePurchaseQueries";
 import Loading from "../utils/Loading";
 import PurchaseCard from "../components/purchase/PurchaseCard";
 import type { IPurchase } from "../types/IPurchase";
+import AiDisplay from "../components/ai/AiDisplay";
 
 const Profile = () => {
     const { user, setUser, setAuth } = useAuthHook();
@@ -53,6 +54,7 @@ const Profile = () => {
                         Logout
                     </Button>
                 </div>
+                <AiDisplay mode="purchases" />
             </div>
 
             <div className="purchase-section">
@@ -78,7 +80,7 @@ const Profile = () => {
                                         purchaseDate={p.purchaseDate}
                                     />
                                 ))
-                        }
+                    }
                 </div>
             </div>
 
