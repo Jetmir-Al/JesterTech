@@ -9,7 +9,7 @@ namespace JesterTech.Server.Services
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
 
-        // Përdorim Typed HttpClient ku Injeksioni i Varësive menaxhon vetë izolimin e kërkesave
+        
         public GroqAiService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
