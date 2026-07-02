@@ -24,31 +24,35 @@ const Products = () => {
             <div className="productSearch-container">
                 <SearchBar />
                 <SortFilter />
-               
+
             </div>
-            <div className="productsDisplay-container">
-                {
-                    isLoading ? <Loading /> :
-                        products?.data.map((p: IProduct) => (
-                            <div onClick={() => navigate(`/products/${p.id}`)}
-                                className='productCard'
-                                key={p.id}>
-                                <Card
-                                    img={p.image}
-                                    name={p.title}
-                                    price={p.price}
-                                    rating={5}
-                                    cartItem={{
-                                        name: p.title,
-                                        price: p.price,
-                                        image: p.image,
-                                        quantity: p.quantity,
-                                        id: p.id,
-                                    }}
-                                />
-                            </div>
-                        ))
-                }
+            <div className="productsDisplay-wrapper">
+                <div className="productsDisplay-container">
+                    {
+                        isLoading ? <Loading /> :
+                            products?.data.map((p: IProduct) => (
+                                <div onClick={() => navigate(`/products/${p.id}`)}
+                                    className='productCard'
+                                    key={p.id}>
+                                    <Card
+                                        img={p.image}
+                                        name={p.title}
+                                        price={p.price}
+                                        rating={5}
+                                        cartItem={{
+                                            name: p.title,
+                                            price: p.price,
+                                            image: p.image,
+                                            quantity: p.quantity,
+                                            id: p.id,
+                                        }}
+                                    />
+                                </div>
+                            ))
+                    }
+                </div>
+
+                <AiDisplay mode="general" />
             </div>
             <div className="pageNumbers-container">
                 {
@@ -64,7 +68,6 @@ const Products = () => {
                     ))
                 }
             </div>
-            <AiDisplay mode="general" />
         </main>
     );
 }
