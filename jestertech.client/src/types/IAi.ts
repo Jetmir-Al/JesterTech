@@ -6,6 +6,7 @@ export interface IAskAI {
 export interface IAskAiParams {
     productId: number;
     userQuestion: string;
+    preference: string;
 }
 
 export interface IDisplayAi {

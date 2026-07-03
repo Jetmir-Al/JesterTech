@@ -92,7 +92,7 @@ namespace JesterTech.Server.Controllers
                     MaskedCardNumber = "**** **** **** " + p.CardNumber,
                     Image = p.Product.Image
                 })
-                .ToList();
+                .ToList().Take(5).OrderByDescending(p => p.PurchaseDate);
 
             return Ok(purchases);
         }

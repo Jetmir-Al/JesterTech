@@ -3,24 +3,26 @@ import { api } from "./api"
 
 
 
-export const AskAi = async (productId: number, UserQuestion: string) => {
+export const AskAi = async (productId: number, UserQuestion: string, preference: string) => {
     return await api.post <IAskAI>("/Ai/ask",
-        { productId, UserQuestion},
+        { productId, UserQuestion, preference},
         { credentials: 'include' }
     )
 }
 
-export const AskAiGeneral = async (userQuestion: string) => {
+export const AskAiGeneral = async (userQuestion: string, preference: string) => {
     return await api.post<IAskAI>("/Ai/ask-general", {
-        userQuestion
+        userQuestion,
+        preference  
     },
         { credentials: "include" }
     );
 }
 
-export const AskAiPurchases = async (userQuestion: string) => {
+export const AskAiPurchases = async (userQuestion: string, preference: string) => {
     return await api.post<IAskAI>("/Ai/ask-purchases", {
-        userQuestion
+        userQuestion,
+        preference
     },
         { credentials: "include" }
     );

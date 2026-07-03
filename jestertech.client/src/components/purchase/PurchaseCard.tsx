@@ -7,7 +7,7 @@ function PurchaseCard({ productTitle, purchaseDate, quantity, image, address, ca
         <div className="purchase-card">
             <img src={getImageUrl(image)} alt={productTitle} />
             <div className="purchase-content">
-                <h5>{productTitle} ~ {quantity}</h5>
+                <h5>{productTitle}</h5>
                 <address>{address}</address>
                 <p>{new Date(purchaseDate).toUTCString()}</p>
                 <p>Total: {total}€</p>

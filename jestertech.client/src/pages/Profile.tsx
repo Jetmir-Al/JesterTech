@@ -43,9 +43,6 @@ const Profile = () => {
                     <h2>
                         Email: {user && user.email}
                     </h2>
-                    <em>
-                        Number of products purchesed: {purchase?.length}
-                    </em>
 
                     <Button
                         className="logout-button"
@@ -54,7 +51,6 @@ const Profile = () => {
                         Logout
                     </Button>
                 </div>
-                <AiDisplay mode="purchases" />
             </div>
 
             <div className="purchase-section">
@@ -83,7 +79,7 @@ const Profile = () => {
                     }
                 </div>
             </div>
-
+            <AiDisplay mode="purchases" />
         </div>
     );
 };

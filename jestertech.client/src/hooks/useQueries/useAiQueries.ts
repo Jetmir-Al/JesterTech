@@ -4,24 +4,24 @@ import { AskAi, AskAiGeneral, AskAiPurchases } from "../../api/aiApi";
 
 export const useAskAi = () => {
     return useMutation({
-        mutationFn: async ({ productId, userQuestion }: IAskAiParams) => {
-            return await AskAi(productId, userQuestion);
+        mutationFn: async ({ productId, userQuestion, preference }: IAskAiParams) => {
+            return await AskAi(productId, userQuestion, preference);
         }
     });
 };
 
 export const useAskAiGeneral = () => {
     return useMutation({
-        mutationFn: async (params: { userQuestion: string }) => {
-            return await AskAiGeneral(params.userQuestion);
+        mutationFn: async (params: { userQuestion: string, preference: string }) => {
+            return await AskAiGeneral(params.userQuestion, params.preference);
         }
     });
 }
 
 export const useAskAiPurchases = () => {
     return useMutation({
-        mutationFn: async (params: { userQuestion: string }) => {
-            return await AskAiPurchases(params.userQuestion);
+        mutationFn: async (params: { userQuestion: string, preference: string }) => {
+            return await AskAiPurchases(params.userQuestion, params.preference);
         }
     });
 }

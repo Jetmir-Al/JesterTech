@@ -41,7 +41,8 @@ Brand: {product.Brand}
 {product.Specifications}
 [/PRODUCT SPECIFICATIONS]
 
-Customer Question: {dto.UserQuestion}";
+Customer Question: {dto.UserQuestion},
+Customer Answer preference: {dto.Preference}";
 
             try
             {
@@ -73,7 +74,8 @@ If they ask for something we do not sell, say: 'We do not carry that specific it
 {catalogBuilder}
 [/STORE INVENTORY CATALOG]
 
-Customer Question: {dto.UserQuestion}";
+Customer Question: {dto.UserQuestion}
+Customer Answer preference: {dto.Preference}";
 
             try
             {
@@ -131,7 +133,8 @@ If they ask for something they did not buy, say: 'You did not buy that specific 
 {catalogBuilder}
 [/PURCHASE CATALOG]
 
-Customer Question: {dto.UserQuestion}";
+Customer Question: {dto.UserQuestion}
+Customer Answer preference: {dto.Preference}";
             try
             {
                 var answer = await _aiService.GetAiResponseAsync(globalPrompt);
