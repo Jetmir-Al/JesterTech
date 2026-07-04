@@ -1,4 +1,5 @@
 ﻿using JesterTech.Server.DTO;
+using JesterTech.Server.Models;
 using JesterTech.Server.Repositories;
 using JesterTech.Server.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -148,29 +149,36 @@ Customer Answer preference: {dto.Preference}";
         [HttpPost("ask-AiCompare")]
         public async Task<IActionResult> AskCompareAi([FromBody] CompareAiQuestionDTO dto)
         {
-            var product1 = _productRepository.GetProductById(dto.ProductId1);
-            var product2 = _productRepository.GetProductById(dto.ProductId2);
-            if(product1 == null || product2 == null)
-            {
-                return NotFound(new { message = "One or both products not found." });
-            }
-            if (product1.Category != product2.Category)
-            {
-                return BadRequest(new { message = "Make sure to chose items in the same category!"});
-            }
-            var catalogBuilder = new StringBuilder();
 
-            catalogBuilder.AppendLine($"[PRODUCT: {product1.Title}] | Brand: {product1.Brand} | Price: ${product1.Price}\n{product1.Specifications}\n---");
-            catalogBuilder.AppendLine($"[PRODUCT: {product2.Title}] | Brand: {product2.Brand} | Price: ${product2.Price}\n{product2.Specifications}\n---");
+            if (dto.ProductIds == null || dto.ProductIds.Count < 2)
+            {
+                return BadRequest(new { message = "Chose at least two products for comparison." });
+            }
 
+            var productsToCompare = new List<Products>();
+            foreach (var id in dto.ProductIds)
+            {
+                var product = _productRepository.GetProductById(id);
+                if (product != null) productsToCompare.Add(product);
+            }
+
+            var comparisonBuilder = new StringBuilder();
+            foreach (var p in productsToCompare)
+            {
+                comparisonBuilder.AppendLine($"[PRODUCT: {p.Title}]");
+                comparisonBuilder.AppendLine($"Brand: {p.Brand} | Price: ${p.Price}");
+                comparisonBuilder.AppendLine($"Specifications: {p.Specifications}");
+                comparisonBuilder.AppendLine("--------------------------------");
+            }
             var globalPrompt = $@"
-You are a brilliant retail shopping assistant for the EcomTech tech store.
-Help the customer compare or chose one of the items using ONLY the strict inventory list provided below.
-If they ask for something they didnt select, say: 'Make sure to ask about the chosen options.'
+You are an expert tech reviewer for JesterTech. 
+Your job is to objectively compare the products provided in the catalog below.
+Provide a clear analysis of the pros and cons of each based *only* on their technical specifications.
+At the end, provide a final verdict on which model is better suited for specific user needs (e.g., best budget, best performance, best camera).
 
-[STORE INVENTORY CATALOG]
-{catalogBuilder}
-[/STORE INVENTORY CATALOG]
+[PRODUCTS TO COMPARE]
+{comparisonBuilder}
+[/PRODUCTS TO COMPARE
 
 Customer Question: {dto.UserQuestion}
 Customer Answer preference: {dto.Preference}";

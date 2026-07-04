@@ -4,14 +4,14 @@ import "./ai.css";
 import { faArrowRight, faSpinner, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { useParams } from "react-router";
-import { useAskAi, useAskAiGeneral, useAskAiPurchases } from "../../hooks/useQueries/useAiQueries";
+import { useAskAi, useAskAiCompare, useAskAiGeneral, useAskAiPurchases } from "../../hooks/useQueries/useAiQueries";
 import Loading from "../../utils/Loading";
 import { faRobot } from "@fortawesome/free-solid-svg-icons/faRobot";
 import type { IAskAiDetailsProps } from "../../types/IAi";
 import { faBars } from "@fortawesome/free-solid-svg-icons/faBars";
 
 
-function AskAiDetails({ mode, setDisplay }: IAskAiDetailsProps) {
+function AskAiDetails({ mode, setDisplay, ids }: IAskAiDetailsProps) {
     const [question, setQuestion] = useState<string>("");
     const [response, setResponse] = useState<string>("");
     const [displaySettings, setDisplaySettings] = useState<boolean>(false);
@@ -20,7 +20,7 @@ function AskAiDetails({ mode, setDisplay }: IAskAiDetailsProps) {
     const { mutateAsync: askDetails, isPending } = useAskAi();
     const { mutateAsync: askGeneral, isPending: pendingGeneral } = useAskAiGeneral();
     const { mutateAsync: askPurchases, isPending: pendingPurchases } = useAskAiPurchases();
-
+    const { mutateAsync: askCompare, isPending: pendingCompare } = useAskAiCompare();
 
     const handleAiQuestion = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -77,6 +77,22 @@ function AskAiDetails({ mode, setDisplay }: IAskAiDetailsProps) {
                     }
                 }
             );
+        } else if (mode === "compare") {
+            if (pendingCompare || question === "") return;
+            await askCompare(
+                { productIds:ids, userQuestion: question, preference },
+                {
+                    onSuccess: (data) => {
+                        if (data && data.answer) {
+                            setResponse(data.answer);
+                            setQuestion("");
+                        }
+                    },
+                    onError: () => {
+                        setResponse("No answer as of this moment. Try later!");
+                    }
+                }
+            );
         }
         else {
             return;
@@ -89,7 +105,7 @@ function AskAiDetails({ mode, setDisplay }: IAskAiDetailsProps) {
         <div className={`ai-container ${mode}`}>
             <div className="ai-response">
                 {
-                    isPending || pendingGeneral ? <Loading /> :
+                    isPending || pendingGeneral || pendingCompare || pendingPurchases ? <Loading /> :
                         <p>{response ||
                             "Ask anything about product's specifications!"}
                         </p>
@@ -132,9 +148,9 @@ function AskAiDetails({ mode, setDisplay }: IAskAiDetailsProps) {
                 }
                 <input
                     required
-                    placeholder={isPending || pendingGeneral || pendingPurchases ? "Waiting for AI..." : "Ask AI about the product!"}
+                    placeholder={isPending || pendingGeneral || pendingCompare || pendingPurchases ? "Waiting for AI..." : "Feel free to ask AI!"}
                     type="text"
-                    disabled={isPending || pendingGeneral || pendingPurchases}
+                    disabled={isPending || pendingGeneral || pendingCompare || pendingPurchases}
                     value={question}
                     onChange={(e) => setQuestion(e.target.value)}
                 />
@@ -142,7 +158,7 @@ function AskAiDetails({ mode, setDisplay }: IAskAiDetailsProps) {
                     className="aiSubmitBtn"
                     type="submit"
                 >
-                    <FontAwesomeIcon icon={isPending || pendingGeneral || pendingPurchases ? faSpinner : faArrowRight} spin={isPending} />
+                    <FontAwesomeIcon icon={isPending || pendingCompare || pendingGeneral || pendingPurchases ? faSpinner : faArrowRight} spin={isPending} />
                 </Button>
             </form>
             <FontAwesomeIcon

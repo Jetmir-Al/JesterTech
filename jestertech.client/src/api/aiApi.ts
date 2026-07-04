@@ -27,3 +27,12 @@ export const AskAiPurchases = async (userQuestion: string, preference: string) =
         { credentials: "include" }
     );
 }
+
+export const AskAiCompare = async (productIds: number[], userQuestion: string, preference: string) => {
+    return await api.post<IAskAI>("/Ai/ask-AiCompare", {
+        productIds,
+        userQuestion,
+        preference
+    },
+    );
+}

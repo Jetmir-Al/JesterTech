@@ -15,6 +15,7 @@ function AiDisplay({ mode }: IDisplayAi) {
                     <AskAiDetails
                         mode={mode}
                         setDisplay={() => setDisplayAi(false)}
+                        ids={[]}
                     />
                     :
                     <Button

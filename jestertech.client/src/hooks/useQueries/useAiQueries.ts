@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import type { IAskAiParams } from "../../types/IAi";
-import { AskAi, AskAiGeneral, AskAiPurchases } from "../../api/aiApi";
+import { AskAi, AskAiCompare, AskAiGeneral, AskAiPurchases } from "../../api/aiApi";
 
 export const useAskAi = () => {
     return useMutation({
@@ -22,6 +22,14 @@ export const useAskAiPurchases = () => {
     return useMutation({
         mutationFn: async (params: { userQuestion: string, preference: string }) => {
             return await AskAiPurchases(params.userQuestion, params.preference);
+        }
+    });
+}
+
+export const useAskAiCompare = () => {
+    return useMutation({
+        mutationFn: async (params: { productIds: number[], userQuestion: string, preference: string }) => {
+            return await AskAiCompare(params.productIds, params.userQuestion, params.preference);
         }
     });
 }

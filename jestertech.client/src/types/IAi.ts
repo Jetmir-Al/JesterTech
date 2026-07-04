@@ -10,9 +10,10 @@ export interface IAskAiParams {
 }
 
 export interface IDisplayAi {
-    mode: "details" | "general" | "purchases";
+    mode: "details" | "general" | "purchases" | "compare";
 }
 export interface IAskAiDetailsProps {
-    mode: "details" | "general" | "purchases";
+    mode: "details" | "general" | "purchases" | "compare";
     setDisplay: () => void;
+    ids: number[];
 }

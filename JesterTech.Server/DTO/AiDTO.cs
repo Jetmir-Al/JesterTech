@@ -15,8 +15,7 @@
 
     public class CompareAiQuestionDTO
     {
-        public int ProductId1 { get; set; }
-        public int ProductId2 { get; set; }
+       public List<int> ProductIds { get; set; }
         public string UserQuestion { get; set; } = string.Empty;
         public string Preference { get; set; } = string.Empty;
     }

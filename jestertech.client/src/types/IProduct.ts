@@ -19,6 +19,7 @@ export interface IProduct {
     category: string;
     image: string;
     quantity: number;
+    specifications: string;
 }
 
 export interface IProductAdvanced {
