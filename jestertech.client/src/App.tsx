@@ -12,6 +12,7 @@ import AlertBox from './components/ui/AlertBox';
 import { useToggleAlertHook } from './hooks/useToggle/useToggleAlert';
 import ProtectedRoutes from './routes/ProtectedRoutes';
 import Profile from './pages/Profile';
+import Compare from './pages/Compare';
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
                 <Route path="/products" element={<Products />} />
                 <Route path="/products/:id" element={<ProductDetails />} />
                 <Route path="/cart" element={<Cart />} />
+                <Route path="/compare" element={<Compare />} />
                 <Route element={<ProtectedRoutes />}>
                     <Route path="/profile" element={<Profile />} />
                 </Route>

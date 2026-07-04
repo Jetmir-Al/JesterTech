@@ -11,6 +11,7 @@ import { useNavigate } from "react-router";
 import SideBar from "./SideBar";
 import { useAuthHook } from "../../hooks/useAuthHook";
 import { faUserGear } from "@fortawesome/free-solid-svg-icons/faUserGear";
+import { faChartBar } from "@fortawesome/free-solid-svg-icons/faChartBar";
 
 const NavBar = () => {
     const { toggleMode, mode } = useToggleModeHook();
@@ -20,7 +21,7 @@ const NavBar = () => {
 
     return (
         <>
-        <nav className="navbar-container">
+            <nav className="navbar-container">
                 <div className="navbar-left">
                     <Button
                         type="button"
@@ -34,28 +35,37 @@ const NavBar = () => {
                         className="navbar-title"
                         type="button"
                         onClick={() => navigate("/")}                    >
-                        JESTER TECH
+                        ECOM TECH
                     </Button>
                 </div>
                 <div className="navbar-right">
-                
-                <Button
-                    type="button"
-                    className=""
-                    onClick={toggleMode}>
-                    {
-                        mode ?
-                            <FontAwesomeIcon icon={faSun} className="icons" /> :
-                            <FontAwesomeIcon icon={faMoon} className="icons" />
-                    }
-                </Button>
-                
-                <Button
-                    type="button"
+
+                    <Button
+                        type="button"
+                        className=""
+                        onClick={toggleMode}>
+                        {
+                            mode ?
+                                <FontAwesomeIcon icon={faSun} className="icons" /> :
+                                <FontAwesomeIcon icon={faMoon} className="icons" />
+                        }
+                    </Button>
+
+                    <Button
+                        type="button"
                         className=""
                         onClick={() => openSearchBarFunc()}>
-                    <FontAwesomeIcon icon={faMagnifyingGlass} className="icons" />
-                </Button>   
+                        <FontAwesomeIcon icon={faMagnifyingGlass} className="icons" />
+                    </Button>
+                    <Button
+                        className=""
+                        type="button"
+                        onClick={() => navigate("/compare")}
+                    >
+                        <FontAwesomeIcon
+                            icon={faChartBar}
+                            className="icons"/>
+                    </Button>
                     <Button
                         type="button"
                         className=""
@@ -76,35 +86,35 @@ const NavBar = () => {
                             <FontAwesomeIcon icon={faUser} className="icons" />
                         </Button>
                     }
-            </div>
+                </div>
             </nav>
             {
-                    toggleDisplayForm && (
-                        toggleForm ?
-                            <LogIn /> :
-                            <SignUp />
-                    )
-                }
+                toggleDisplayForm && (
+                    toggleForm ?
+                        <LogIn /> :
+                        <SignUp />
+                )
+            }
             {
                 openSearchBar &&
                 <form className="searchbar-container" onSubmit={
-                        (e: React.SubmitEvent<HTMLFormElement>) => {
-                            e.preventDefault();
-                            const formData = new FormData(e.currentTarget);
-                            navigate(`/products?search=${formData.get("search")}`);
-                            openSearchBarFunc();
-                        }
-                    }>
+                    (e: React.SubmitEvent<HTMLFormElement>) => {
+                        e.preventDefault();
+                        const formData = new FormData(e.currentTarget);
+                        navigate(`/products?search=${formData.get("search")}`);
+                        openSearchBarFunc();
+                    }
+                }>
                     <input
-                            type="text"
-                            name="search"
+                        type="text"
+                        name="search"
                         placeholder="Search for products, brands and more..."
                         className="searchbar-input" />
                     <FontAwesomeIcon
                         icon={faXmark}
                         className="ri-close-line signup__close"
                         onClick={() => openSearchBarFunc()}
-                    /> 
+                    />
                 </form>
             }
 

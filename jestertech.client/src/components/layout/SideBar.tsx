@@ -15,7 +15,7 @@ const SideBar = () => {
     return (
         <aside className="sidebar-container">
             <div className="sidebar-close">
-                <h4>JESTER TECH</h4>
+                <h4>ECOM TECH</h4>
                 <Button
                     type="button"
                     onClick={() => openSideBarFunc()}

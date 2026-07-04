@@ -9,7 +9,6 @@ namespace JesterTech.Server.Controllers
 {
     [ApiController]
     [Route("/api/[controller]")]
-    [Authorize]
     public class AiController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
@@ -30,7 +29,7 @@ namespace JesterTech.Server.Controllers
             if (product == null) return NotFound(new { message = "Product not found." });
 
             var structuredPrompt = $@"
-You are an expert AI product assistant for the JesterTech e-commerce platform.
+You are an expert AI product assistant for the EcomTech e-commerce platform.
 Answer the customer's question using ONLY the system technical specifications provided below. 
 If the answer cannot be confidently inferred from the specifications, respond politely: 
 'I do not have that specific detail available for this item.'
@@ -66,7 +65,7 @@ Customer Answer preference: {dto.Preference}";
             }
 
             var globalPrompt = $@"
-You are a brilliant retail shopping assistant for the JesterTech tech store.
+You are a brilliant retail shopping assistant for the EcomTech tech store.
 Help the customer choose or compare items using ONLY the strict inventory list provided below.
 If they ask for something we do not sell, say: 'We do not carry that specific item, but here are our best alternatives...'
 
@@ -87,7 +86,7 @@ Customer Answer preference: {dto.Preference}";
                 return StatusCode(500, ex.Message);
             }
         }
-
+        [Authorize]
         [HttpPost("ask-purchases")]
         public async Task<IActionResult> AskPurchasesAi([FromBody] GeneralQuestionDTO dto)
         {
@@ -125,9 +124,9 @@ Customer Answer preference: {dto.Preference}";
             }
 
             var globalPrompt = $@"
-You are a brilliant retail shopping assistant for the JesterTech tech store.
+You are a brilliant retail shopping assistant for the EcomTech tech store.
 Help the customer learn of the history of their purchases.
-If they ask for something they did not buy, say: 'You did not buy that specific item, but here are our best matching alternatives...'
+If they ask for something they did not buy, say: 'You did not buy that specific item, but here are other products you have bought...'
 
 [PURCHASE CATALOG]
 {catalogBuilder}
@@ -135,6 +134,48 @@ If they ask for something they did not buy, say: 'You did not buy that specific 
 
 Customer Question: {dto.UserQuestion}
 Customer Answer preference: {dto.Preference}";
+            try
+            {
+                var answer = await _aiService.GetAiResponseAsync(globalPrompt);
+                return Ok(new { answer });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("ask-AiCompare")]
+        public async Task<IActionResult> AskCompareAi([FromBody] CompareAiQuestionDTO dto)
+        {
+            var product1 = _productRepository.GetProductById(dto.ProductId1);
+            var product2 = _productRepository.GetProductById(dto.ProductId2);
+            if(product1 == null || product2 == null)
+            {
+                return NotFound(new { message = "One or both products not found." });
+            }
+            if (product1.Category != product2.Category)
+            {
+                return BadRequest(new { message = "Make sure to chose items in the same category!"});
+            }
+            var catalogBuilder = new StringBuilder();
+
+            catalogBuilder.AppendLine($"[PRODUCT: {product1.Title}] | Brand: {product1.Brand} | Price: ${product1.Price}\n{product1.Specifications}\n---");
+            catalogBuilder.AppendLine($"[PRODUCT: {product2.Title}] | Brand: {product2.Brand} | Price: ${product2.Price}\n{product2.Specifications}\n---");
+
+            var globalPrompt = $@"
+You are a brilliant retail shopping assistant for the EcomTech tech store.
+Help the customer compare or chose one of the items using ONLY the strict inventory list provided below.
+If they ask for something they didnt select, say: 'Make sure to ask about the chosen options.'
+
+[STORE INVENTORY CATALOG]
+{catalogBuilder}
+[/STORE INVENTORY CATALOG]
+
+Customer Question: {dto.UserQuestion}
+Customer Answer preference: {dto.Preference}";
+
+
             try
             {
                 var answer = await _aiService.GetAiResponseAsync(globalPrompt);

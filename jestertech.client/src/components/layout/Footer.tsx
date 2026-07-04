@@ -8,7 +8,7 @@ const Footer = () => {
             <div className="footer-content">
                 <div className="footer-info">
                     <h5>About us</h5>
-                    <p>info@jestertech-ks.com</p>
+                    <p>info@ecomTech-ks.com</p>
                 </div>
                 <div className="footer-info">
                     <h5>Help</h5>
@@ -26,7 +26,7 @@ const Footer = () => {
                 </div>
             </div>
             <hr />
-            <p className="footer-text">© {new Date().getFullYear()} JesterTech. All rights reserved.</p>
+            <p className="footer-text">© {new Date().getFullYear()} EcomTech. All rights reserved.</p>
         </footer>
     );
 
