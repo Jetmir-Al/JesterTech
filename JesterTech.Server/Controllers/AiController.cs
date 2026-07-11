@@ -112,6 +112,12 @@ Customer Answer preference: {dto.Preference}";
                 CardholderName = p.CardholderName,
                 Specifications = p.Product.Specifications
             }).ToList();
+            var allProducts = _productRepository.GetAllProducts();
+            var storeBuilder = new StringBuilder();
+            foreach (var p in allProducts)
+            {
+                storeBuilder.AppendLine($"[PRODUCT: {p.Title}] | Brand: {p.Brand} | Price: ${p.Price}\n{p.Specifications}\n---");
+            }
 
             var catalogBuilder = new StringBuilder();
             foreach (var p in allPurchasesOfUser)
@@ -126,12 +132,16 @@ Customer Answer preference: {dto.Preference}";
 
             var globalPrompt = $@"
 You are a brilliant retail shopping assistant for the EcomTech tech store.
-Help the customer learn of the history of their purchases.
-If they ask for something they did not buy, say: 'You did not buy that specific item, but here are other products you have bought...'
+Help the customer learn of the history of their purchases and offer recommendations based on their preferences and purchase history.
+If they ask for something they did not buy, say: 'You did not buy that specific item, but here are other products you have bought...' 
+or offer alternatives based on their purchase history.
 
 [PURCHASE CATALOG]
 {catalogBuilder}
 [/PURCHASE CATALOG]
+[STORE INVENTORY CATALOG]
+{storeBuilder}
+[/STORE INVENTORY CATALOG]
 
 Customer Question: {dto.UserQuestion}
 Customer Answer preference: {dto.Preference}";
