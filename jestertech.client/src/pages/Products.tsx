@@ -11,7 +11,7 @@ import AiDisplay from "../components/ai/AiDisplay";
 
 
 const Products = () => {
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
 
     const { data: products, isLoading } = useGetProductsAdvanced({
@@ -61,7 +61,7 @@ const Products = () => {
                             key={index}
                             type="button"
                             className={`pageLink`}
-                            onClick={() => { }}
+                            onClick={() => setSearchParams(prev => ({ ...prev, page: (index + 1).toString() }))}
                         >
                             {index + 1}
                         </Button>

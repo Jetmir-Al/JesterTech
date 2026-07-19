@@ -68,7 +68,9 @@ namespace JesterTech.Server.Controllers
 
 
         [HttpGet("user")]
-        public IActionResult GetPurchasesByUser()
+        public IActionResult GetPurchasesByUser(
+            int page = 1,
+            int pageSize = 5)
         {
             var userIdClaim = User.FindFirst("Id") ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
             if (userIdClaim == null)
@@ -78,23 +80,42 @@ namespace JesterTech.Server.Controllers
             {
                 return BadRequest(new { message = "Invalid user identity format." });
             }
-            var purchases = _purchaseRepository.GetPurchasesByUserId(userId)
-                .Select(p => new PurchaseDTO
-                {
-                    Id = p.Id,
-                    UserName = p.User.Name,
-                    ProductTitle = p.Product.Title,
-                    Quantity = p.Quantity,
-                    Total = p.Total,
-                    Address = p.Address,
-                    PurchaseDate = p.PurchaseDate,
-                    CardholderName = p.CardholderName,
-                    MaskedCardNumber = "**** **** **** " + p.CardNumber,
-                    Image = p.Product.Image
-                })
-                .ToList().Take(5).OrderByDescending(p => p.PurchaseDate);
+            try
+            {
 
-            return Ok(purchases);
+                var purchases = _purchaseRepository.GetPurchasesByUserId(userId)
+                    .Select(p => new PurchaseDTO
+                    {
+                        Id = p.Id,
+                        UserName = p.User.Name,
+                        ProductTitle = p.Product.Title,
+                        Quantity = p.Quantity,
+                        Total = p.Total,
+                        Address = p.Address,
+                        PurchaseDate = p.PurchaseDate,
+                        CardholderName = p.CardholderName,
+                        MaskedCardNumber = "**** **** **** " + p.CardNumber,
+                        Image = p.Product.Image
+                    }).AsQueryable();
+
+                var purchaseCount = purchases.Count();
+
+                var purchasesAdvanced = purchases
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize).OrderBy(p => p.Id).OrderDescending().ToList();
+
+                return Ok(new
+                {
+                    data = purchasesAdvanced,
+                    page = page,
+                    totalPurchases = purchaseCount,
+                    totalPages = (int)Math.Ceiling(purchaseCount / (double)pageSize)
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while retrieving purchases.", error = ex.Message });
+            }
         }
     }
 }

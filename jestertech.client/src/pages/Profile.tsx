@@ -10,11 +10,13 @@ import Loading from "../utils/Loading";
 import PurchaseCard from "../components/purchase/PurchaseCard";
 import type { IPurchase } from "../types/IPurchase";
 import AiDisplay from "../components/ai/AiDisplay";
+import { useSearchParams } from "react-router";
 
 const Profile = () => {
     const { user, setUser, setAuth } = useAuthHook();
     const { setMessage, setShowAlert, setType } = useToggleAlertHook();
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const handleLogout = async () => {
         try {
@@ -30,7 +32,11 @@ const Profile = () => {
         }
     }
 
-    const { isLoading, data: purchase } = useGetPurchases();
+    const { isLoading, data: purchase } = useGetPurchases({
+        params: Object.fromEntries(searchParams)
+    });
+    console.log("purchase data", purchase);
+
 
     return (
         <div className="userPage-container">
@@ -43,7 +49,7 @@ const Profile = () => {
                     <h2>
                         Email: {user && user.email}
                     </h2>
-
+                    <i>Nr. of purchases: {purchase?.totalPurchases}</i>
                     <Button
                         className="logout-button"
                         onClick={() => handleLogout()}
@@ -58,10 +64,10 @@ const Profile = () => {
                 <div className="purchase-container">
                     {
                         isLoading ? <Loading /> :
-                            purchase?.length === 0 ?
+                            purchase?.data.length === 0 ?
                                 < NoInfo noInfo="No purchase information available." />
                                 :
-                                purchase?.map((p: IPurchase) => (
+                                purchase?.data.map((p: IPurchase) => (
                                     <PurchaseCard
                                         key={p.id}
                                         productTitle={p.productTitle}
@@ -77,6 +83,20 @@ const Profile = () => {
                                     />
                                 ))
                     }
+                    <div className="pageNumbers-container">
+                        {
+                            Array.from({ length: purchase?.totalPages || 1 }, (_, index) => (
+                                <Button
+                                    key={index}
+                                    type="button"
+                                    className={`pageLink`}
+                                    onClick={() => setSearchParams(prev => ({ ...prev, page: (index + 1).toString() }))}
+                                >
+                                    {index + 1}
+                                </Button>
+                            ))
+                        }
+                    </div>
                 </div>
             </div>
             <AiDisplay mode="purchases" />

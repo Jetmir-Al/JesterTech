@@ -1,5 +1,5 @@
 import type { IAPIMessage } from "../types/apiTypes";
-import type { IPurchase } from "../types/IPurchase";
+import type { IPurchaseAdvanced, IPurchaseParams } from "../types/IPurchase";
 import { api } from "./api";
 
 
@@ -11,8 +11,11 @@ export const CreatePurchase = async (productId: number, CardholderName: string, 
     return response;
 }
 
-export const GetPurchases = async () => {
-    const response = await api.get<IPurchase[]>(`/Purchase/user`,
+export const GetPurchases = async ({ params }: IPurchaseParams) => {
+    const searchParams = new URLSearchParams();
+    if (params.page) searchParams.append("page", params.page);
+    if (params.pageSize) searchParams.append("pageSize", params.pageSize);
+    const response = await api.get<IPurchaseAdvanced>(`/Purchase/user`,
         { credentials: 'include' }
     );
     return response;

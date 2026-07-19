@@ -11,3 +11,17 @@ export interface IPurchase {
     image: string;
     address: string;
 }
+
+export interface IPurchaseAdvanced {
+    data: IPurchase[];
+    page: number;
+    totalPurchases: number;
+    totalPages: number;
+}
+
+export interface IPurchaseParams {
+    params: {
+        page?: string;
+        pageSize?: string;
+    }
+}

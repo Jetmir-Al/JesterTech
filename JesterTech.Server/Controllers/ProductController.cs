@@ -26,7 +26,7 @@ namespace JesterTech.Server.Controllers
             {
 
                 var products = _productRepository.GetAllProducts().ToList();
-                if (!products.Any())
+                if (products.Count == 0)
                 {
                     return NotFound(new { message = "No products found." });
                 }

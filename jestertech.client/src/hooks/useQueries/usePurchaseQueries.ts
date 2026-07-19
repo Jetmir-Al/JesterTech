@@ -1,11 +1,12 @@
 import { useQuery , useMutation, useQueryClient} from "@tanstack/react-query"
 import { CreatePurchase, GetPurchases } from "../../api/purchaseApi";
+import type { IPurchaseParams } from "../../types/IPurchase";
 
 
-export const useGetPurchases = () => {
+export const useGetPurchases = ({ params }: IPurchaseParams) => {
     return useQuery({
-        queryKey: ["purchases"],
-        queryFn: () => GetPurchases()
+        queryKey: ["purchases", params],
+        queryFn: () => GetPurchases({ params })
     });
 };  
 

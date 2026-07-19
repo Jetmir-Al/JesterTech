@@ -57,6 +57,7 @@
     border-radius: 8px;
     display: flex;
     gap: 0.5rem;
+    justify-content: space-between;
     align-items: center;
     position: relative;
 }
@@ -67,7 +68,7 @@
         outline: none;
         background: transparent;
     }
-.ai-form .aiSubmitBtn {
+.ai-form .aiSubmitBtn, .aiSubmitBtn {
     background-color: var(--color-title);
     color: var(--color-text-inverse);
     border-radius: 50%;
@@ -82,16 +83,17 @@
     top: 50%;
     transform: translateY(-50%);
 }
-    .ai-form .toggleAiPreference {
-        position: absolute;
-        color: var(--color-title);
-        border: none;
-        background-color: transparent;
-        top: 0;
-        left: 0;
-        width: 32px;
-        height: 32px;
-    }
+.toggleAiPreference, .ai-form .toggleAiPreference {
+    position: absolute;
+    color: var(--color-title);
+    border: none;
+    background-color: transparent;
+    top: 20%;
+    align-self: center;
+    left: 0;
+    width: 32px;
+    height: 32px;
+}
 .ai-settings {
     position: absolute;
     background-color: var(--color-surface-alt);
