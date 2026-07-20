@@ -101,8 +101,10 @@ namespace JesterTech.Server.Controllers
                 var purchaseCount = purchases.Count();
 
                 var purchasesAdvanced = purchases
+                    .OrderByDescending(p => p.Id)
                     .Skip((page - 1) * pageSize)
-                    .Take(pageSize).OrderBy(p => p.Id).OrderDescending().ToList();
+                    .Take(pageSize)
+                    .ToList();
 
                 return Ok(new
                 {

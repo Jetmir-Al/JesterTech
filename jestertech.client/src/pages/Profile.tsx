@@ -35,7 +35,6 @@ const Profile = () => {
     const { isLoading, data: purchase } = useGetPurchases({
         params: Object.fromEntries(searchParams)
     });
-    console.log("purchase data", purchase);
 
 
     return (

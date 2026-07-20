@@ -15,7 +15,9 @@ export const GetPurchases = async ({ params }: IPurchaseParams) => {
     const searchParams = new URLSearchParams();
     if (params.page) searchParams.append("page", params.page);
     if (params.pageSize) searchParams.append("pageSize", params.pageSize);
-    const response = await api.get<IPurchaseAdvanced>(`/Purchase/user`,
+    const queryString = searchParams.toString();
+
+    const response = await api.get<IPurchaseAdvanced>(`/Purchase/user?${queryString}`,
         { credentials: 'include' }
     );
     return response;
