@@ -33,6 +33,7 @@ namespace JesterTech.Server.Repositories
             return _context.Reviews
                 .Include(r => r.User)
                 .Where(r => r.ProductId == productId)
+                .AsNoTracking()
                 .ToList();
         }
 

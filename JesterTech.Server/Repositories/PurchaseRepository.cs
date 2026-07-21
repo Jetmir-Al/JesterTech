@@ -29,7 +29,7 @@ namespace JesterTech.Server.Repositories
 
         public List<Purchases> GetAll()
         {
-           return _context.Purchases.ToList();
+           return _context.Purchases.AsNoTracking().ToList();
         }
         public void UpdatePurchase(Purchases purchases)
         {
@@ -48,6 +48,7 @@ namespace JesterTech.Server.Repositories
                 .Include(p => p.User)
                 .Include(p => p.Product)
                 .Where(p => p.UserId == userId)
+                .AsNoTracking()
                 .ToList();
         }
     }

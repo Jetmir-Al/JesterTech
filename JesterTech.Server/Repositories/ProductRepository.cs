@@ -29,7 +29,7 @@ namespace JesterTech.Server.Repositories
         {
             try
             {
-                return _context.Products.AsQueryable();
+                return _context.Products.AsQueryable().AsNoTracking();
             }
             catch (Exception ex)
             {
