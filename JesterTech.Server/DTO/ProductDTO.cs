@@ -25,6 +25,7 @@ namespace JesterTech.Server.DTO
         public decimal Price { get; set; }
         public int Quantity { get; set; }
         public string Category { get; set; }
+        public string Specifications { get; set; }
         public IFormFile? ImgFile { get; set; }
     }
 }

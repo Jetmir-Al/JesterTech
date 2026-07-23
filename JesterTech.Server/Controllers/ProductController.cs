@@ -150,6 +150,7 @@ namespace JesterTech.Server.Controllers
                 Price = productDto.Price,
                 Quantity = productDto.Quantity,
                 Category = productDto.Category,
+                Specifications = productDto.Specifications,
             };
 
             if (productDto.ImgFile != null && productDto.ImgFile.Length > 0)
