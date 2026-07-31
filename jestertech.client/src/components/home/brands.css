@@ -29,3 +29,8 @@
         background-color: transparent;
         border: none;
     }
+    .brand-item:hover {
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
+        transition: all 0.2s ease-in-out;
+    }

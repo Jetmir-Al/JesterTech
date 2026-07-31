@@ -135,8 +135,38 @@ namespace JesterTech.Server.Controllers
         [HttpGet("topProducts")]
         public IActionResult GetTopProducts()
         {
-            var products = _productRepository.GetAllProducts().Where(x => x.Category == "Smartphone").Take(3).ToList();
+            var products = _productRepository.GetAllProducts().Where(x => x.Category == "Smartphones").Take(3).ToList();
             return Ok(products);
+        }
+        [HttpPost("UpdateProduct")]
+        public async Task<IActionResult> UpdateProduct(int id, [FromForm] UpdateProductDTO productDto)
+        {
+            var product = _productRepository.GetProductById(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            if (productDto.ImgFile != null && productDto.ImgFile.Length > 0)
+            {
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                Directory.CreateDirectory(uploadsFolder);
+
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + productDto.ImgFile.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    productDto.ImgFile.CopyTo(fileStream);
+                }
+
+                product.Image = "/images/" + uniqueFileName;
+            }
+
+            _productRepository.UpdateProduct(product);
+            _productRepository.Save();
+
+            return Ok(product);
         }
 
         [HttpPost("InsertProduct")]

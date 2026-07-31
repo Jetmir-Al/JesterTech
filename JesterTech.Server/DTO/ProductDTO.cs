@@ -28,4 +28,9 @@ namespace JesterTech.Server.DTO
         public string Specifications { get; set; }
         public IFormFile? ImgFile { get; set; }
     }
+
+    public class UpdateProductDTO
+    {
+        public IFormFile? ImgFile { get; set; }
+    }
 }

@@ -21,34 +21,52 @@ const Home = () => {
 
     return (
         <div className="home-container">
-            <div className="hero-section">
-                <div className="hero-content">
-                    <h1>Welcome to JesterTech</h1>
-                    <p>
-                        Your one-stop solution for all your tech needs.
-                    </p>
-                    <Button
-                        className="hero-btn"
-                        type="button"
-                        onClick={() => navigate('/products') }>
-                        Shop Now
-                    </Button>
-                </div>
-                <div className="hero-imgs">
-                    {
-                        isLoading ? <Loading /> :
-                            top?.map((t) => (
-                                <div className="img-container" key={t.id}>
-                                    <img
-                                        src={getImageUrl(t.image)}
-                                        alt={t.title}
-                                        className="hero-image" />
-                                </div>
+            <section className="hero-section">
+                <div className="hero-container">
+                    <div className="hero-content">
+                        <div className="hero-badge">
+                            ✨ Powered by Next-Gen AI
+                        </div>
 
-                            ))
-                    }
+                        <h1 className="hero-title">
+                            Next-Gen Tech, <br />
+                            <span className="hero-title-gradient">
+                                Intelligently Compared.
+                            </span>
+                        </h1>
+
+                        <p className="hero-description">
+                            Explore premium devices and let our AI assistant analyze technical specs to find your exact match in seconds.
+                        </p>
+
+                        <div className="hero-buttons">
+                            <Button className="btn-primary"
+                                type="button"
+                                onClick={() => navigate("/products")}
+                            >
+                                Shop Products
+                            </Button>
+                        </div>
+                    </div>
+
+                    <div className="hero-visual">
+                        <div className="hero-glow"></div>
+
+                        <div className="product-stack">
+                            {
+                                isLoading ? <Loading /> : top?.map((product, index) => (
+                                    <img
+                                        src={getImageUrl(product.image)}
+                                        alt={product.title}
+                                        className={`product-img product-${index === 0 ? 'left' : index === 1 ? 'center' : 'right'}`}
+                                    />
+                                ))
+                            }
+                        </div>
+                    </div>
+
                 </div>
-            </div>
+            </section>
 
             <Services />
             <Featured />
