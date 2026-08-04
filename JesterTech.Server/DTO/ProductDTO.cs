@@ -17,6 +17,21 @@ namespace JesterTech.Server.DTO
         public string? Image { get; set; }
     }
 
+    public class ProductsDTO
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Brand { get; set; }
+        public int Garantee { get; set; }
+        public decimal Price { get; set; }
+        public int Quantity { get; set; }
+        public string Category { get; set; }
+        public string Specifications { get; set; }
+        public string? Image { get; set; }
+
+        public double AverageRating { get; set; } = 0;
+    }
+
     public class InsertProductDTO
     {
         public string Title { get; set; }

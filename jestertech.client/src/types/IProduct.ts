@@ -20,6 +20,7 @@ export interface IProduct {
     image: string;
     quantity: number;
     specifications: string;
+    averageRating: number;
 }
 
 export interface IProductAdvanced {

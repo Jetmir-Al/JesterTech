@@ -25,7 +25,7 @@ const Home = () => {
                 <div className="hero-container">
                     <div className="hero-content">
                         <div className="hero-badge">
-                            ✨ Powered by Next-Gen AI
+                            Powered by Next-Gen AI
                         </div>
 
                         <h1 className="hero-title">

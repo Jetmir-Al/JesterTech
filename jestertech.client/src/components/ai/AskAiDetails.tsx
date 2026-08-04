@@ -106,9 +106,10 @@ function AskAiDetails({ mode, setDisplay, ids }: IAskAiDetailsProps) {
             <div className="ai-response">
                 {
                     isPending || pendingGeneral || pendingCompare || pendingPurchases ? <Loading /> :
-                        <p>{response ||
-                            "Ask anything about product's specifications!"}
-                        </p>
+                        <pre className="ai-response-text">
+                            {response ||
+                                "Ask anything about product's specifications!"}
+                        </pre>
                 }
                 <p className="ai-icon">
                     <FontAwesomeIcon icon={faRobot} />

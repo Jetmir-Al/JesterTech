@@ -38,7 +38,7 @@ const Products = () => {
                                         img={p.image}
                                         name={p.title}
                                         price={p.price}
-                                        rating={5}
+                                        rating={p.averageRating}
                                         cartItem={{
                                             name: p.title,
                                             price: p.price,

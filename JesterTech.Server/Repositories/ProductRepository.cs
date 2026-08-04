@@ -1,4 +1,5 @@
 ﻿using JesterTech.Server.Data;
+using JesterTech.Server.DTO;
 using JesterTech.Server.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,16 +26,32 @@ namespace JesterTech.Server.Repositories
             }
         }
 
-        public IQueryable<Products> GetAllProducts()
+        public IQueryable<ProductsDTO> GetAllProducts()
         {
             try
             {
-                return _context.Products.AsQueryable().AsNoTracking();
+                return _context.Products.Select(p => new ProductsDTO
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    Specifications = p.Specifications,
+                    Brand = p.Brand,
+                    Garantee = p.Garantee,
+                    Price = p.Price,
+                    Quantity = p.Quantity,
+                    Category = p.Category,
+                    Image = p.Image,
+
+                    AverageRating = _context.Reviews.Where(r => r.ProductId == p.Id).Any()
+                ? _context.Reviews.Where(r => r.ProductId == p.Id).Average(r => r.Rating)
+                : 0
+
+                }).AsQueryable();
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error occurred while fetching products: " + ex.Message);
-                return new List<Products>().AsQueryable();
+                return new List<ProductsDTO>().AsQueryable();
             }
             
         }
