@@ -64,7 +64,7 @@ const NavBar = () => {
                     >
                         <FontAwesomeIcon
                             icon={faChartBar}
-                            className="icons"/>
+                            className="icons" />
                     </Button>
                     <Button
                         type="button"
@@ -110,6 +110,10 @@ const NavBar = () => {
                         name="search"
                         placeholder="Search for products, brands and more..."
                         className="searchbar-input" />
+                    <FontAwesomeIcon
+                        icon={faMagnifyingGlass}
+                        className="searchbar-icon"
+                    />
                     <FontAwesomeIcon
                         icon={faXmark}
                         className="ri-close-line signup__close"

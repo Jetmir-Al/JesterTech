@@ -18,6 +18,9 @@ const Card = ({ img, price, name, rating, cartItem }: ICard) => {
                 {Array.from({ length: rating }).map((_, index) => (
                     <FontAwesomeIcon key={index} icon={faStar} className="starIcons" />
                 ))}
+                {Array.from({length: 5 - rating }).map((_, index) => (
+                    <FontAwesomeIcon key={index} icon={faStar} />
+                ))}
                 <p className="price">{price}€</p>
             </div>
             <Button

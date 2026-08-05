@@ -65,3 +65,9 @@
     min-width: 500px;
     border-radius: 8px;
 }
+
+.searchbar-icon {
+    position: absolute;
+    font: var(--h3);
+    right: 3.2rem;
+}
