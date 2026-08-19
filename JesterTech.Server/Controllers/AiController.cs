@@ -15,10 +15,12 @@ namespace JesterTech.Server.Controllers
         private readonly IProductRepository _productRepository;
         private readonly IPurchaseRepository _purchaseRepository;
         private readonly IAiService _aiService;
+        private readonly IReviewRepository _reviewRepository;
 
-        public AiController(IProductRepository productRepository, IPurchaseRepository purchaseRepository, IAiService aiService)
+        public AiController(IProductRepository productRepository, IReviewRepository reviewRepository, IPurchaseRepository purchaseRepository, IAiService aiService)
         {
             _productRepository = productRepository;
+            _reviewRepository = reviewRepository;
             _purchaseRepository = purchaseRepository;
             _aiService = aiService;
         }
@@ -27,18 +29,26 @@ namespace JesterTech.Server.Controllers
         public async Task<IActionResult> AskProductAi([FromBody] AiQuestionDTO dto)
         {
             var product = _productRepository.GetProductById(dto.ProductId);
+            var reviews = _reviewRepository.GetReviewsByProductId(dto.ProductId);
             if (product == null) return NotFound(new { message = "Product not found." });
+            var catalogBuilder = new StringBuilder();
+            foreach (var r in reviews)
+            {
+                catalogBuilder.AppendLine($"[REVIEW] Rating: {r.Rating}, Comment: {r.Comment}");
+            }
 
             var structuredPrompt = $@"
 You are an expert AI product assistant for the EcomTech e-commerce platform.
-Answer the customer's question using ONLY the system technical specifications provided below. 
-If the answer cannot be confidently inferred from the specifications, respond politely: 
+Answer the customer's question using ONLY the system technical specifications and the reviews provided below. 
+If the answer cannot be confidently inferred from the specifications or reviews or product information, respond politely: 
 'I do not have that specific detail available for this item.'
 
 PRODUCT SPECIFICATIONS]
 Title: {product.Title}
 Brand: {product.Brand}
 {product.Specifications}
+Reviews:
+{catalogBuilder}
 [/PRODUCT SPECIFICATIONS]
 
 Customer Question: {dto.UserQuestion},
@@ -58,7 +68,13 @@ Customer Answer preference: {dto.Preference}";
         [HttpPost("ask-general")]
         public async Task<IActionResult> AskGlobalAi([FromBody] GeneralQuestionDTO dto)
         {
-            var allProducts = _productRepository.GetAllProducts();
+            var keywords = dto.UserQuestion.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            var allProducts = _productRepository.GetAllProducts().OrderByDescending(p => keywords.Count(kw =>
+            p.Title.ToLower().Contains(kw) ||
+            p.Brand.ToLower().Contains(kw) ||
+            p.Category.ToLower().Contains(kw)))
+            .Take(10)
+            .ToList();
             var catalogBuilder = new StringBuilder();
             foreach (var p in allProducts)
             {
@@ -99,12 +115,13 @@ Customer Answer preference: {dto.Preference}";
             {
                 return BadRequest(new { message = "Invalid user identity format." });
             }
-
+            var keywords = dto.UserQuestion.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries);
             var allPurchasesOfUser = _purchaseRepository.GetPurchasesByUserId(userId).Select(p => new PurchaseAiDTO
             {
                 Id = p.Id,
                 UserName = p.User.Name,
                 ProductTitle = p.Product.Title,
+                Categories = p.Product.Category,
                 Quantity = p.Quantity,
                 Total = p.Total,
                 Address = p.Address,
@@ -112,7 +129,12 @@ Customer Answer preference: {dto.Preference}";
                 CardholderName = p.CardholderName,
                 Specifications = p.Product.Specifications
             }).ToList();
-            var allProducts = _productRepository.GetAllProducts();
+            var allProducts = _productRepository.GetAllProducts().OrderByDescending(p => keywords.Count(kw =>
+            p.Title.ToLower().Contains(kw) ||
+            p.Brand.ToLower().Contains(kw) ||
+            p.Category.ToLower().Contains(kw)))
+        .Take(10)
+        .ToList();
             var storeBuilder = new StringBuilder();
             foreach (var p in allProducts)
             {

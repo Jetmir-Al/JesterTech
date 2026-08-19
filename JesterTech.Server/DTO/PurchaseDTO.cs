@@ -26,6 +26,7 @@ namespace JesterTech.Server.DTO
         public DateTime PurchaseDate { get; set; }
         public string CardholderName { get; set; }
         public string Specifications { get; set; }
+        public string Categories { get; set; }
     }
     public class CreatePurchaseDto
     {

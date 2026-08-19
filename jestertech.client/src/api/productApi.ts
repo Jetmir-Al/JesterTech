@@ -34,8 +34,17 @@ export const GetProductsAdvanced = async ({ params }: IProductParams) => {
     if (params.page) searchParams.append("page", params.page);
     if (params.pageSize) searchParams.append("pageSize", params.pageSize);
     if (params.search) searchParams.append("search", params.search);
-    if (params.categories) searchParams.append("categories", params.categories);
     if (params.sort) searchParams.append("sort", params.sort);
+
+    if (params.categories) {
+        if (Array.isArray(params.categories)) {
+            params.categories.forEach(category => {
+                searchParams.append("categories", category);
+            });
+        } else {
+            searchParams.append("categories", params.categories);
+        }
+    }
 
     const queryString = searchParams.toString();
 

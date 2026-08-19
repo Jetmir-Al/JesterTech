@@ -24,7 +24,7 @@ namespace JesterTech.Server.Services
 
             var requestBody = new
             {
-                model = "llama-3.3-70b-versatile",
+                model = "openai/gpt-oss-120b",
                 messages = new[] { new { role = "user", content = prompt } },
                 temperature = 0.2
             };
