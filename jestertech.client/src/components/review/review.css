@@ -48,21 +48,86 @@
     outline: none;
     background-color: var(--color-surface-alt);
 }
-
-.reviews{
-    min-width:300px;
+.review-card.tech-theme-review {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
     display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    gap: 1rem;
     flex-direction: column;
-    border: 2px solid var(--color-border);
-    padding: 1rem
+    gap: 1rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    max-width: 500px;
+    margin: 0 auto;
 }
-.reviews-user{
-    border-bottom: 1px solid var(--color-border); 
-    align-self: flex-start;
-    width: 100%;
+
+    .review-card.tech-theme-review:hover {
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+
+.review-card .review-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.review-card .reviewer-avatar {
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.review-card .reviewer-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.review-card .reviews-user {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-title);
+    margin: 0;
+}
+
+.review-card .review-badge {
+    font-size: 0.7rem;
+    color: #10b981;
+    font-weight: 500;
+    background-color: rgba(16, 185, 129, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    width: fit-content;
+}
+
+.review-card .review-stars {
+    display: flex;
+    gap: 3px;
+}
+
+.review-card .starIcons {
+    color: #f59e0b;
+    font-size: 0.85rem;
+}
+
+.review-card .reviews-comment {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--color-text);
+    margin: 0;
+}width: 100%;
 }
 
 .productReviewBtns {

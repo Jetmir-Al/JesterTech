@@ -102,7 +102,20 @@ function AskAiDetails({ mode, setDisplay, ids }: IAskAiDetailsProps) {
 
 
     return (
-        <div className={`ai-container ${mode}`}>
+        <div className={`ai-container tech-theme ${mode}`}>
+            <div className="ai-card-header">
+                <div className="ai-brand-info">
+                    <span className="ai-pulse-dot"></span>
+                    <FontAwesomeIcon icon={faRobot} />
+                    <span>Ecom Tech AI</span>
+                </div>
+                <FontAwesomeIcon
+                    icon={faXmark}
+                    className="ri-close-line closeAi"
+                    onClick={() => setDisplay()}
+                />
+            </div>
+
             <div className="ai-response">
                 {
                     isPending || pendingGeneral || pendingCompare || pendingPurchases ? <Loading /> :
@@ -115,6 +128,7 @@ function AskAiDetails({ mode, setDisplay, ids }: IAskAiDetailsProps) {
                     <FontAwesomeIcon icon={faRobot} />
                 </p>
             </div>
+
             <form className="ai-form" onSubmit={handleAiQuestion}>
                 <Button
                     type="button"
@@ -126,23 +140,24 @@ function AskAiDetails({ mode, setDisplay, ids }: IAskAiDetailsProps) {
                 {
                     displaySettings && (
                         <div className="ai-settings">
+                            <span className="ai-settings-label-title">Preference</span>
                             <label htmlFor="short-answer">
-                            Short answer!
-                            <input type="radio"
+                                Short answer!
+                                <input type="radio"
                                     name="preference"
                                     id="short-answer"
-                                value="Short answer!"
-                                checked={preference === "Short answer!"}
-                                onChange={() => setPreference("Short answer!")} />
+                                    value="Short answer!"
+                                    checked={preference === "Short answer!"}
+                                    onChange={() => setPreference("Short answer!")} />
                             </label>
                             <label htmlFor="detailed-answer">
-                            Detailed answer!
-                            <input type="radio"
-                                name="preference"
-                                id="detailed-answer"
-                                value="Detailed answer!"
-                                checked={preference === "Detailed answer!"}
-                                onChange={() => setPreference("Detailed answer!")} />
+                                Detailed answer!
+                                <input type="radio"
+                                    name="preference"
+                                    id="detailed-answer"
+                                    value="Detailed answer!"
+                                    checked={preference === "Detailed answer!"}
+                                    onChange={() => setPreference("Detailed answer!")} />
                             </label>
                         </div>
                     )
@@ -162,11 +177,6 @@ function AskAiDetails({ mode, setDisplay, ids }: IAskAiDetailsProps) {
                     <FontAwesomeIcon icon={isPending || pendingCompare || pendingGeneral || pendingPurchases ? faSpinner : faArrowRight} spin={isPending} />
                 </Button>
             </form>
-            <FontAwesomeIcon
-                icon={faXmark}
-                className="ri-close-line closeAi"
-                onClick={() => setDisplay()}
-            />
         </div>
     );
 }

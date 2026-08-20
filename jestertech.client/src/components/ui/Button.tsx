@@ -8,6 +8,7 @@ function Button({ children, onClick, type, className }: IButtonProps) {
             type={type}
             onClick={onClick}
             className={className}
+            title={className === "toggleAiPreference" ? "Answer Preferences" : ""}
         >
             {children}
         </button>

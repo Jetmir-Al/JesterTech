@@ -25,16 +25,25 @@ function Reviews() {
                       reviews?.length === 0 ?
                           <NoInfo noInfo="No reviews on this product!" /> :
                           reviews?.map((rev: IReview, index: number) => (
-                              <div className='reviews' key={index}>
-                                  <h2 className='reviews-user'>{rev.user.name}</h2>
+                              <div className="review-card tech-theme-review"
+                                   key={index}>
+                                  <div className="review-header">
+                                      <div className="reviewer-avatar">
+                                          {rev.user.name.charAt(0).toUpperCase()}
+                                      </div>
+                                      <div className="reviewer-info">
+                                          <h2 className='reviews-user'>{rev.user.name}</h2>
+                                          <span className="review-badge">Verified Buyer</span>
+                                      </div>
+                                      <div className='review-stars'>
+                                          {Array.from({ length: rev.rating }).map((_, index) => (
+                                              <FontAwesomeIcon key={index} icon={faStar} className="starIcons" />
+                                          ))}
+                                      </div>
+                                  </div>
                                   <p className='reviews-comment'>
                                       {rev.comment}
                                   </p>
-                                  <div className=''>
-                                      {Array.from({ length: rev.rating }).map((_, index) => (
-                                          <FontAwesomeIcon key={index} icon={faStar} className="starIcons" />
-                                      ))}
-                                  </div>
                               </div>
                           ))
               }
