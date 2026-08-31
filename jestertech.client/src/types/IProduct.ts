@@ -5,7 +5,7 @@ export interface IProductParams {
         page?: string;
         pageSize?: string;
         search?: string;
-        categories?: string;
+        categories?: string[];
         sort?: string;
     }
 }

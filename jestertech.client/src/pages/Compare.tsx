@@ -99,7 +99,7 @@ function Compare() {
                                     <h4>Technical Specifications Matrix</h4>
                                     <button
                                         className="ask-ai-compare-btn"
-                                        onClick={() => setAskAi(true)}
+                                        onClick={() => setAskAi(a => !a)}
                                     >
                                        Ask AI to Analyze Comparison
                                     </button>

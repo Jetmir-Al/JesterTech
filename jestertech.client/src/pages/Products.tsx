@@ -14,8 +14,16 @@ const Products = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
 
+    const params = {
+        page: searchParams.get("page") || undefined,
+        pageSize: searchParams.get("pageSize") || undefined,
+        search: searchParams.get("search") || undefined,
+        sort: searchParams.get("sort") || undefined,
+        categories: searchParams.getAll("categories"), // <-- This gets all selected categories as an array
+    };
+
     const { data: products, isLoading } = useGetProductsAdvanced({
-        params: Object.fromEntries(searchParams)
+        params: params
     });
 
 

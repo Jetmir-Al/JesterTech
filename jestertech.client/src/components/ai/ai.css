@@ -151,6 +151,21 @@
     word-wrap: break-word;
 }
 
+.ai-brand-info {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 1rem;
+}
+
+.ai-pulse-dot {
+    background-color: var(--color-success);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--color-success);
+}
+
 @media screen and (max-width: 1024px) {
 
 

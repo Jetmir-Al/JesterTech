@@ -1,4 +1,4 @@
-import type { IProductParams, IProduct, IProductAdvanced } from "../types/IProduct";
+import type { IProduct, IProductAdvanced } from "../types/IProduct";
 import { api } from "./api";
 
 
@@ -28,27 +28,9 @@ export const GetProductBrands = async () => {
     return response;
 }
 
-export const GetProductsAdvanced = async ({ params }: IProductParams) => {
-    const searchParams = new URLSearchParams();
-
-    if (params.page) searchParams.append("page", params.page);
-    if (params.pageSize) searchParams.append("pageSize", params.pageSize);
-    if (params.search) searchParams.append("search", params.search);
-    if (params.sort) searchParams.append("sort", params.sort);
-
-    if (params.categories) {
-        if (Array.isArray(params.categories)) {
-            params.categories.forEach(category => {
-                searchParams.append("categories", category);
-            });
-        } else {
-            searchParams.append("categories", params.categories);
-        }
-    }
-
-    const queryString = searchParams.toString();
-
-    const response = await api.get<IProductAdvanced>(`/Product/advanced?${queryString}`);
+export const GetProductsAdvanced = async (params: string) => {
+   
+    const response = await api.get<IProductAdvanced>(`/Product/advanced?${params}`);
     if (response !== null) {
         return response;
     }

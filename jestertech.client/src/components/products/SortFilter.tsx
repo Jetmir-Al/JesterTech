@@ -12,12 +12,12 @@ function SortFilter() {
     const { data: Categories } = useGetProductCategories();
     const sort = ["name", "price", "new", "old"]
     const currentCategories = searchParams.getAll("categories");
-    const dropdownRef = useRef<HTMLDivElement | null>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
                 setToggleSortFilter(false);
             }
         };
@@ -46,7 +46,6 @@ function SortFilter() {
 
             params.delete("categories");
             selectedCategories.forEach(c => params.append("categories", c.toString()));
-
             return params;
         });
         setToggleSortFilter(false);

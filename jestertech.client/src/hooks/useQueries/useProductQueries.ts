@@ -18,9 +18,32 @@ export const useGetProductById = (id: number) => {
 
 export const useGetProductsAdvanced = ({ params }: IProductParams) => {
     return useQuery({
-        queryKey: ["products-advanced", params],
+        queryKey: ["products-advanced", params.page,
+            params.pageSize,
+            params.search,
+            params.sort,
+            ...(params.categories || [])],
         queryFn: async () => {
-            const response = await GetProductsAdvanced({ params });
+            const searchParams = new URLSearchParams();
+
+            if (params.page) searchParams.append("page", params.page);
+            if (params.pageSize) searchParams.append("pageSize", params.pageSize);
+            if (params.search) searchParams.append("search", params.search);
+            if (params.sort) searchParams.append("sort", params.sort);
+            if (params.categories) {
+                if (Array.isArray(params.categories)) {
+                    params.categories.forEach(category => {
+                        searchParams.append("categories", category);
+                    });
+                } else {
+                    searchParams.append("categories", params.categories);
+                }
+            }
+
+
+            const queryString = searchParams.toString();
+
+            const response = await GetProductsAdvanced(queryString);
             return response;
         },
     });
