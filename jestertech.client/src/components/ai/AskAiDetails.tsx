@@ -120,8 +120,9 @@ function AskAiDetails({ mode, setDisplay, ids }: IAskAiDetailsProps) {
                 {
                     isPending || pendingGeneral || pendingCompare || pendingPurchases ? <Loading /> :
                         <pre className="ai-response-text">
-                            {response ||
-                                "Ask anything about product's specifications!"}
+                            {
+                                response.split("*").join("") || "Ask anything about product's specifications!"
+                            }
                         </pre>
                 }
                 <p className="ai-icon">

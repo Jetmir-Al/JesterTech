@@ -84,8 +84,8 @@ namespace JesterTech.Server.Controllers
             int page = 1,
             int pageSize = 20,
             string? search = null,
-            string? categories = null,
-            string? sort = null)
+            [FromQuery] List<string>? categories = null,
+            string? sort = "new")
         {
             var query = _productRepository.GetAllProducts().AsQueryable();
 
@@ -98,10 +98,9 @@ namespace JesterTech.Server.Controllers
             }
 
 
-            if (!string.IsNullOrEmpty(categories))
+            if (categories != null && categories.Any())
             {
-                var list = categories.Split(',').ToList();
-                query = query.Where(b => list.Contains(b.Category));
+                query = query.Where(b => categories.Contains(b.Category));
             }
 
 
@@ -119,7 +118,6 @@ namespace JesterTech.Server.Controllers
 
 
             var products = query
-                .OrderByDescending(b => b.Id)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
