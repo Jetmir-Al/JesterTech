@@ -18,6 +18,8 @@ function SearchBar() {
             return params;
         });
     };
+
+
     return (
         <form className="productSearch-form" onSubmit={handleSubmit}>
             <FontAwesomeIcon

@@ -6,14 +6,33 @@ import Button from "../ui/Button";
 import { useGetProductCategories } from "../../hooks/useQueries/useProductQueries";
 import Loading from "../../utils/Loading";
 import { useNavigate } from "react-router";
+import { useRef, useEffect } from "react";
 
 
 const SideBar = () => {
-    const { openSideBarFunc } = useToggleNavbarUtilsHook();
-    const navigate = useNavigate();
+    const { openSideBarFunc, openSideBar } = useToggleNavbarUtilsHook();
     const { data: Categories, isLoading } = useGetProductCategories();
+    const navigate = useNavigate();
+    const sideBarRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (sideBarRef.current && !sideBarRef.current.contains(event.target as Node)) {
+                openSideBarFunc();
+            }
+        };
+
+        if (openSideBar) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [openSideBarFunc, openSideBar]);
+
     return (
-        <aside className="sidebar-container">
+        <div className="sidebar-container" ref={sideBarRef}>
             <div className="sidebar-close">
                 <h4>ECOM TECH</h4>
                 <Button
@@ -41,7 +60,7 @@ const SideBar = () => {
                         ))
                 }
             </div>
-        </aside>
+        </div>
     );
 }
 

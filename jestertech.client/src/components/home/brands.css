@@ -28,6 +28,7 @@
     .brand-item button {
         background-color: transparent;
         border: none;
+        color: var(--color-text);
     }
     .brand-item:hover {
         box-shadow: var(--shadow-md);

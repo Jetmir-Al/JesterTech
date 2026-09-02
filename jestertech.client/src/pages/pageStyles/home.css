@@ -10,7 +10,7 @@
 .hero-section {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(to bottom, #f9fafb, #ffffff);
+    background: linear-gradient(to bottom, var(--color-surface), var(--color-surface-alt));
     padding: 4rem 2rem;
     min-height: 85vh;
     display: flex;
@@ -48,15 +48,15 @@
     border-radius: 9999px;
     font-size: 0.75rem;
     font-weight: 600;
-    background-color: #fef2f2;
-    color: #dc2626;
-    border: 1px solid #fee2e2;
+    background-color: var(--color-primary-light);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary-hover);
 }
 
 .hero-title {
     font-size: 2.5rem;
     font-weight: 800;
-    color: #111827;
+    color: var(--color-title);
     line-height: 1.15;
     letter-spacing: -0.025em;
 }
@@ -75,7 +75,7 @@
 
 .hero-description {
     font-size: 1.125rem;
-    color: #4b5563;
+    color: var(--color-text);
     max-width: 32rem;
     line-height: 1.6;
 }
@@ -90,8 +90,8 @@
 
 .btn-primary {
     padding: 0.75rem 1.5rem;
-    background-color: #dc2626;
-    color: #ffffff;
+    background-color: var(--color-primary);
+    color: white;
     font-weight: 500;
     border-radius: 0.75rem;
     border: none;
@@ -101,26 +101,10 @@
 }
 
     .btn-primary:hover {
-        background-color: #b91c1c;
+        background-color: var(--color-primary-hover);
         transform: translateY(-1px);
     }
 
-.btn-secondary {
-    padding: 0.75rem 1.5rem;
-    background-color: #ffffff;
-    color: #1f2937;
-    font-weight: 500;
-    border-radius: 0.75rem;
-    border: 1px solid #e5e7eb;
-    cursor: pointer;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    transition: all 0.2s ease-in-out;
-}
-
-    .btn-secondary:hover {
-        background-color: #f9fafb;
-        transform: translateY(-1px);
-    }
 
 /* Right Visual Styles */
 .hero-visual {
@@ -135,7 +119,7 @@
     position: absolute;
     width: 18rem;
     height: 18rem;
-    background-color: rgba(254, 202, 202, 0.5);
+    background-color: var(--color-primary-light);
     border-radius: 9999px;
     filter: blur(48px);
     z-index: 0;

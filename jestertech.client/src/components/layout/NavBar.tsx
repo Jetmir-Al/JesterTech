@@ -12,12 +12,30 @@ import SideBar from "./SideBar";
 import { useAuthHook } from "../../hooks/useAuthHook";
 import { faUserGear } from "@fortawesome/free-solid-svg-icons/faUserGear";
 import { faChartBar } from "@fortawesome/free-solid-svg-icons/faChartBar";
+import { useEffect, useRef } from "react";
 
 const NavBar = () => {
     const { toggleMode, mode } = useToggleModeHook();
     const { user, authenticated } = useAuthHook();
     const { toggleDisplayForm, openSideBar, openSideBarFunc, openSearchBarFunc, openSearchBar, toggleDisplayFormFunc, toggleForm } = useToggleNavbarUtilsHook();
     const navigate = useNavigate();
+
+    const searchRef = useRef<HTMLFormElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+                openSearchBarFunc();
+            }
+        };
+        if (openSearchBar) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [openSearchBarFunc, openSearchBar]);
 
     return (
         <>
@@ -97,14 +115,16 @@ const NavBar = () => {
             }
             {
                 openSearchBar &&
-                <form className="searchbar-container" onSubmit={
-                    (e: React.SubmitEvent<HTMLFormElement>) => {
-                        e.preventDefault();
-                        const formData = new FormData(e.currentTarget);
-                        navigate(`/products?search=${formData.get("search")}`);
-                        openSearchBarFunc();
-                    }
-                }>
+                <form className="searchbar-container"
+                    ref={searchRef}
+                    onSubmit={
+                        (e: React.SubmitEvent<HTMLFormElement>) => {
+                            e.preventDefault();
+                            const formData = new FormData(e.currentTarget);
+                            navigate(`/products?search=${formData.get("search")}`);
+                            openSearchBarFunc();
+                        }
+                    }>
                     <input
                         type="text"
                         name="search"
