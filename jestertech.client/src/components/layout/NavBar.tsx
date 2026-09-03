@@ -125,15 +125,17 @@ const NavBar = () => {
                             openSearchBarFunc();
                         }
                     }>
-                    <input
-                        type="text"
-                        name="search"
-                        placeholder="Search for products, brands and more..."
-                        className="searchbar-input" />
-                    <FontAwesomeIcon
-                        icon={faMagnifyingGlass}
-                        className="searchbar-icon"
-                    />
+                    <label className="searchbar-label">
+                        <input
+                            type="text"
+                            name="search"
+                            placeholder="Search for products, brands and more..."
+                            className="searchbar-input" />
+                        <FontAwesomeIcon
+                            icon={faMagnifyingGlass}
+                            className="searchbar-icon"
+                        />
+                    </label>
                     <FontAwesomeIcon
                         icon={faXmark}
                         className="ri-close-line signup__close"

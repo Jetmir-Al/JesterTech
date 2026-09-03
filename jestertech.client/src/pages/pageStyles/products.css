@@ -63,6 +63,10 @@
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     }
 
+.loadingProducts {
+    grid-column: auto / span 5;
+}
+
 .productCard {
     max-width: 250px;
     max-height: 400px;
@@ -80,30 +84,91 @@
 
 
 
-/* Products page number */
+/* Products page number container */
 .pageNumbers-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
     width: 100%;
-    color: var(--color-text);
-    background-color: var(--color-border);
-    padding: 1rem 0.7rem;
-    margin: 5rem 0;
+    margin: 4rem 0;
+    padding: 10px;
+    background-color: var(--color-surface-alt);
 }
 
+/* Inner pill bar */
+.pageNumbers {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: 0.5rem 0.75rem;
+    border-radius: 14px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+/* Base Page Link Button */
 .pageLink {
-    padding: 0.5rem;
-    border: 2px solid var(--color-border);
-    background-color: white;
+    min-width: 38px;
+    height: 38px;
+    padding: 0.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.active {
-    border: 2px solid var(--color-border);
-    background-color: var(--color-primary);
-    color: white;
+    .pageLink:hover {
+        border-color: var(--color-title);
+        background-color: var(--color-surface-alt);
+    }
+
+    /* Active Page Style */
+    .pageLink.active {
+        background-color: var(--color-title);
+        color: var(--color-text-inverse);
+        border-color: var(--color-title);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+/* Arrow Navigation Buttons */
+.arrowBtn {
+    min-width: 38px;
+    height: 38px;
+    padding: 0.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
+
+    .arrowBtn:hover:not(:disabled) {
+        border-color: var(--color-title);
+        background-color: var(--color-surface-alt);
+        color: var(--color-title);
+    }
+
+    .arrowBtn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        background-color: var(--color-surface-alt);
+    }
+
+
 /* Container positioning */
 .sortFilter-Container {
     position: relative;

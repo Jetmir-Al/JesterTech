@@ -8,6 +8,8 @@ import { useNavigate, useSearchParams } from "react-router";
 import SearchBar from "../components/products/SearchBar";
 import SortFilter from "../components/products/SortFilter";
 import AiDisplay from "../components/ai/AiDisplay";
+import { faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 const Products = () => {
@@ -19,7 +21,7 @@ const Products = () => {
         pageSize: searchParams.get("pageSize") || undefined,
         search: searchParams.get("search") || undefined,
         sort: searchParams.get("sort") || undefined,
-        categories: searchParams.getAll("categories"), // <-- This gets all selected categories as an array
+        categories: searchParams.getAll("categories"),
     };
 
     const { data: products, isLoading } = useGetProductsAdvanced({
@@ -37,7 +39,11 @@ const Products = () => {
             <div className="productsDisplay-wrapper">
                 <div className="productsDisplay-container">
                     {
-                        isLoading ? <Loading /> :
+                        isLoading ?
+                            <div className="loadingProducts"> 
+                                <Loading />
+                            </div>
+                            :
                             products?.data.map((p: IProduct) => (
                                 <div onClick={() => navigate(`/products/${p.id}`)}
                                     className='productCard'
@@ -63,18 +69,54 @@ const Products = () => {
                 <AiDisplay mode="general" />
             </div>
             <div className="pageNumbers-container">
-                {
-                    Array.from({ length: products?.totalPages || 1 }, (_, index) => (
-                        <Button
-                            key={index}
-                            type="button"
-                            className={`pageLink`}
-                            onClick={() => setSearchParams(prev => ({ ...prev, page: (index + 1).toString() }))}
-                        >
-                            {index + 1}
-                        </Button>
-                    ))
-                }
+                <div className="pageNumbers">
+                    <Button
+                        type="button"
+                        className="arrowBtn"
+                        disabled={parseInt(params.page || "1") <= 1}
+                        onClick={() => {
+                            setSearchParams(prev => {
+                                const params = new URLSearchParams(prev);
+                                params.set("page", (parseInt(params.get("page") || "1") - 1).toString());
+                                return params;
+                            });
+                        }}
+                    >
+                        <FontAwesomeIcon icon={faCaretLeft} />
+                    </Button>
+                    {
+                        Array.from({ length: products?.totalPages || 1 }, (_, index) => (
+                            <Button
+                                key={index}
+                                type="button"
+                                className={`pageLink ${parseInt(params.page || "1") === index + 1 ? 'active' : ''}`}
+                                onClick={() => {
+                                    setSearchParams(prev => {
+                                        const params = new URLSearchParams(prev);
+                                        params.set("page", (index + 1).toString());
+                                        return params;
+                                    });
+                                }}
+                            >
+                                {index + 1}
+                            </Button>
+                        ))
+                    }
+                    <Button
+                        type="button"
+                        className="arrowBtn"
+                        disabled={parseInt(params.page || "1") >= (products?.totalPages || 1)}
+                        onClick={() => {
+                            setSearchParams(prev => {
+                                const params = new URLSearchParams(prev);
+                                params.set("page", (parseInt(params.get("page") || "1") + 1).toString());
+                                return params;
+                            });
+                        }}
+                    >
+                        <FontAwesomeIcon icon={faCaretRight} />
+                    </Button>
+                </div>
             </div>
         </main>
     );

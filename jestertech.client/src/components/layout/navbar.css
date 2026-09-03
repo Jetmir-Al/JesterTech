@@ -56,6 +56,13 @@
     z-index: 9999;
 }
 
+.searchbar-label {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .searchbar-input {
     background-color: var(--color-surface);
     padding: 2rem 1.5rem;
@@ -69,5 +76,7 @@
 .searchbar-icon {
     position: absolute;
     font: var(--h3);
-    right: 3.2rem;
+    right: 1rem;
+    top: 1.8rem;
+    align-self: center;
 }
