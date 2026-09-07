@@ -11,6 +11,8 @@ import PurchaseCard from "../components/purchase/PurchaseCard";
 import type { IPurchase } from "../types/IPurchase";
 import AiDisplay from "../components/ai/AiDisplay";
 import { useSearchParams } from "react-router";
+import { faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Profile = () => {
     const { user, setUser, setAuth } = useAuthHook();
@@ -83,18 +85,40 @@ const Profile = () => {
                                 ))
                     }
                     <div className="pageNumbers-container">
-                        {
-                            Array.from({ length: purchase?.totalPages || 1 }, (_, index) => (
-                                <Button
-                                    key={index}
-                                    type="button"
-                                    className={`pageLink`}
-                                    onClick={() => setSearchParams(prev => ({ ...prev, page: (index + 1).toString() }))}
-                                >
-                                    {index + 1}
-                                </Button>
-                            ))
-                        }
+                        <Button
+                            type="button"
+                            className="arrowBtn"
+                            disabled={parseInt(searchParams.get("page") || "1") <= 1}
+                            onClick={() => {
+                                setSearchParams(prev => {
+                                    const params = new URLSearchParams(prev);
+                                    params.set("page", (parseInt(params.get("page") || "1") - 1).toString());
+                                    return params;
+                                });
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faCaretLeft} />
+                        </Button>
+
+
+                        <p>
+                            Page {parseInt(searchParams.get("page") || "1")} of {purchase?.totalPages || 1}
+                        </p>
+
+                        <Button
+                            type="button"
+                            className="arrowBtn"
+                            disabled={parseInt(searchParams.get("page") || "1") >= (purchase?.totalPages || 1)}
+                            onClick={() => {
+                                setSearchParams(prev => {
+                                    const params = new URLSearchParams(prev);
+                                    params.set("page", (parseInt(params.get("page") || "1") + 1).toString());
+                                    return params;
+                                });
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faCaretRight} />
+                        </Button>
                     </div>
                 </div>
             </div>
