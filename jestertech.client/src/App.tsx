@@ -13,6 +13,7 @@ import { useToggleAlertHook } from './hooks/useToggle/useToggleAlert';
 import ProtectedRoutes from './routes/ProtectedRoutes';
 import Profile from './pages/Profile';
 import Compare from './pages/Compare';
+import Dashboard from './pages/Dashboard';
 
 
 function App() {
@@ -38,6 +39,9 @@ function App() {
                 <Route path="/compare" element={<Compare />} />
                 <Route element={<ProtectedRoutes />}>
                     <Route path="/profile" element={<Profile />} />
+                </Route>
+                <Route element={<ProtectedRoutes />}>
+                    <Route path="/dashboard" element={<Dashboard />} />
                 </Route>
 
             </Routes>

@@ -1,6 +1,7 @@
 ﻿using JesterTech.Server.DTO;
 using JesterTech.Server.Models;
 using JesterTech.Server.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,7 @@ namespace JesterTech.Server.Controllers
         }
 
         [HttpGet("products")]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetProducts()
         {
             try
@@ -137,6 +139,7 @@ namespace JesterTech.Server.Controllers
             return Ok(products);
         }
         [HttpPost("UpdateProduct")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateProduct(int id, [FromForm] UpdateProductDTO productDto)
         {
             var product = _productRepository.GetProductById(id);
@@ -168,6 +171,7 @@ namespace JesterTech.Server.Controllers
         }
 
         [HttpPost("InsertProduct")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> InsertProduct([FromForm] InsertProductDTO productDto)
         {
             var product = new Products

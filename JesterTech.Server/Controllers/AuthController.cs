@@ -16,7 +16,7 @@ namespace JesterTech.Server.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthRepository _authRepository;
-        private readonly IPasswordHasher<Users> _passwordHasher;
+        private readonly PasswordHasher<Users> _passwordHasher;
         private readonly IConfiguration _configuration; 
 
         public AuthController(IAuthRepository authRepository, IConfiguration configuration)
@@ -133,8 +133,9 @@ namespace JesterTech.Server.Controllers
             var userId = User.FindFirst("Id")?.Value;
             var name = User.FindFirst(ClaimTypes.Name)?.Value;
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
 
-            if (userId == null || name == null || email == null)
+            if (userId == null || name == null || email == null || role == null)
             {
                 return Unauthorized(new { message = "User is not authenticated." });
             }
@@ -144,7 +145,8 @@ namespace JesterTech.Server.Controllers
                 message = "User is authenticated.",
                 Id = userId,
                 Name = name,
-                Email = email
+                Email = email,
+                Role = role
             });
         }
 
