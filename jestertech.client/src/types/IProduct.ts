@@ -23,6 +23,18 @@ export interface IProduct {
     averageRating: number;
 }
 
+export interface IProductUpload {
+    title: string;
+    brand: string;
+    garantee: number;
+    price: number;
+    category: string;
+    image: string;
+    quantity: number;
+    specifications: string;
+    imgFile: File | null;
+}
+
 export interface IProductAdvanced {
     data: IProduct[];
     page: number;

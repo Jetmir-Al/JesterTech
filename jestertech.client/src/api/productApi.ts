@@ -1,4 +1,4 @@
-import type { IProduct, IProductAdvanced } from "../types/IProduct";
+import type { IProduct, IProductAdvanced, IProductUpload } from "../types/IProduct";
 import { api } from "./api";
 
 
@@ -45,4 +45,23 @@ export const getImageUrl = (filename: string) => {
     return `${import.meta.env.VITE_IMG_API_URL}/${filename}`;
 }
 
+export const InsertProduct = async (product: IProductUpload) => {
+    const response = await api.post('/Product/InsertProduct',
+        {
+            product
+        },
+        { credentials: 'include' });
+    return response;
+}
+export const UpdateProduct = async (img: File | null, id: number) => {
+    const response = await api.post(`/Product/UpdateProduct/${id}`,
+        { img },
+        { credentials: 'include' });
+    return response;
+}
 
+export const DeleteProduct = async (id: number) => {
+    const response = await api.delete(`/Product/DeleteProduct/${id}`,
+        { credentials: 'include' });
+    return response;
+}

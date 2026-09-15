@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-import { GetProductById, GetProductCategories, GetProductsAdvanced } from "../../api/productApi";
-import type { IProductParams } from "../../types/IProduct";
+import { QueryClient, queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { DeleteProduct, GetProductById, GetProductCategories, GetProductsAdvanced, InsertProduct, UpdateProduct } from "../../api/productApi";
+import type { IProductParams, IProductUpload } from "../../types/IProduct";
 
 export const useGetProductById = (id: number) => {
     return useQuery({
@@ -59,3 +59,40 @@ export const useGetProductCategories = () => {
 }
 
 
+export const useDeleteProduct = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (id: number) => {
+            return await DeleteProduct(id);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["products-advanced"] });
+        }
+    });
+}
+
+
+export const useUpdateProduct = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async({id, img}: {id: number, img: File | null}) => {
+            return await UpdateProduct(img, id);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["products-advanced"] });
+        }
+    });
+}
+
+export const useCreateProduct = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async (product: IProductUpload) => {
+            return await InsertProduct(product);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["products-advanced"] });
+        }
+    });
+}

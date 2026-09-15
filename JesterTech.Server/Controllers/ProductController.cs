@@ -207,5 +207,21 @@ namespace JesterTech.Server.Controllers
 
             return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
         }
+
+        [HttpDelete("DeleteProduct/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            var product = _productRepository.GetProductById(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            _productRepository.DeleteProduct(product);
+            _productRepository.Save();
+
+            return Ok(product);
+        }
     }
 }
