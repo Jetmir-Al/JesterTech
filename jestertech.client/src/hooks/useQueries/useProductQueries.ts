@@ -1,6 +1,6 @@
-import { QueryClient, queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { DeleteProduct, GetProductById, GetProductCategories, GetProductsAdvanced, InsertProduct, UpdateProduct } from "../../api/productApi";
-import type { IProductParams, IProductUpload } from "../../types/IProduct";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { DeleteProduct, GetProductById, GetProductCategories, GetProductsAdvanced, InsertProduct, UpdateProductImg } from "../../api/productApi";
+import type { IProductParams } from "../../types/IProduct";
 
 export const useGetProductById = (id: number) => {
     return useQuery({
@@ -76,7 +76,7 @@ export const useUpdateProduct = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async({id, img}: {id: number, img: File | null}) => {
-            return await UpdateProduct(img, id);
+            return await UpdateProductImg(img, id);
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["products-advanced"] });

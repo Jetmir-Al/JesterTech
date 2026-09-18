@@ -1,4 +1,4 @@
-import type { IProduct, IProductAdvanced, IProductUpload } from "../types/IProduct";
+import type { IProduct, IProductAdvanced } from "../types/IProduct";
 import { api } from "./api";
 
 
@@ -51,7 +51,7 @@ export const InsertProduct = async (product: FormData) => {
         { credentials: 'include' });
     return response;
 }
-export const UpdateProduct = async (img: File | null, id: number) => {
+export const UpdateProductImg = async (img: File | null, id: number) => {
     const response = await api.post(`/Product/UpdateProduct/${id}`,
         { img },
         { credentials: 'include' });
