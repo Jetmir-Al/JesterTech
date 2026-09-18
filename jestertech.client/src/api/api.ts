@@ -2,11 +2,14 @@ import type { RequestOptions, RequestParams } from '../types/apiTypes';
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
+
 const request = async <T>({ endpoint, options = {} }: RequestParams): Promise<T | null> => {
+    const isFormData = options.body instanceof FormData;
+
     const config: RequestInit = {
         ...options,
         headers: {
-            'Content-Type': 'application/json',
+            ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
             ...(options.headers as Record<string, string>),
         },
         credentials: options.credentials || 'include',
@@ -30,17 +33,24 @@ export const api = {
     get: <T>(endpoint: string, options?: RequestOptions) =>
         request<T>({ endpoint, options }),
 
-    post: <T>(endpoint: string, body?: Record<string, unknown>, options?: RequestOptions) =>
+    post: <T>(endpoint: string, body?: Record<string, unknown> | FormData, options?: RequestOptions) =>
         request<T>({
             endpoint,
-            options: { ...options, method: 'POST', body: JSON.stringify(body) },
+            options: { 
+                ...options, 
+                method: 'POST', 
+                body: body instanceof FormData ? body : JSON.stringify(body) 
+            },
         }),
 
-    put: <T>(endpoint: string, body?: Record<string, unknown>, options?: RequestOptions) =>
+    put: <T>(endpoint: string, body?: Record<string, unknown> | FormData, options?: RequestOptions) =>
         request<T>({
             endpoint,
-            options: { ...options, method: 'PUT', body: JSON.stringify(body) }
-
+            options: { 
+                ...options, 
+                method: 'PUT', 
+                body: body instanceof FormData ? body : JSON.stringify(body) 
+            }
         }),
 
     delete: <T>(endpoint: string, options?: RequestOptions) =>

@@ -64,7 +64,6 @@ function CreateProduct({ setShowCreateProduct }: { setShowCreateProduct: () => v
             data.append("quantity", formData.quantity.toString());
             data.append("specifications", formData.specifications);
 
-            // Append the file only if the user selected one
             if (formData.imgFile) {
                 data.append("imgFile", formData.imgFile);
             }

@@ -1,7 +1,7 @@
 
 export interface RequestOptions extends Omit<RequestInit, 'body'> {
     headers?: HeadersInit;
-    body?: Record<string, unknown> | string | null | undefined;
+    body?: Record<string, unknown> | string | FormData | null | undefined;
     credentials?: RequestCredentials; 
 }
 

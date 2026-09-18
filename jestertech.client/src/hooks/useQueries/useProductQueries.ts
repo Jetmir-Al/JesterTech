@@ -88,7 +88,7 @@ export const useCreateProduct = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (product: IProductUpload) => {
+        mutationFn: async (product: FormData) => {
             return await InsertProduct(product);
         },
         onSuccess: () => {

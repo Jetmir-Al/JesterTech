@@ -29,7 +29,6 @@ export interface IProductUpload {
     garantee: number;
     price: number;
     category: string;
-    image: string;
     quantity: number;
     specifications: string;
     imgFile: File | null;

@@ -45,11 +45,9 @@ export const getImageUrl = (filename: string) => {
     return `${import.meta.env.VITE_IMG_API_URL}/${filename}`;
 }
 
-export const InsertProduct = async (product: IProductUpload) => {
+export const InsertProduct = async (product: FormData) => {
     const response = await api.post('/Product/InsertProduct',
-        {
-            product
-        },
+        product,
         { credentials: 'include' });
     return response;
 }
