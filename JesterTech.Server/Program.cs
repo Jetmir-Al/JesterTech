@@ -1,6 +1,8 @@
 using JesterTech.Server.Data;
 using JesterTech.Server.Repositories;
 using JesterTech.Server.Services;
+using JesterTech.Server.Services.Interfaces;
+using JesterTech.Server.Services.Service;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -9,13 +11,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
+// Repository registrations
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
-
+// Service registrations
 builder.Services.AddHttpClient<IAiService, GroqAiService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IPurchaseService, PurchaseService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
+
+
 builder.Services.AddControllersWithViews();
 
 

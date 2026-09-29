@@ -36,4 +36,12 @@ namespace JesterTech.Server.DTO
         public string CardNumber { get; set; }
         public DateTime PurchaseDate { get; set; } = DateTime.Now;
     }
+
+    public class PurchasePaginationDTO
+    {
+        public int TotalCount { get; set; }
+        public int Page { get; set; }
+        public int PageSize { get; set; }
+        public List<PurchaseDTO> Purchases { get; set; } = new List<PurchaseDTO>();
+    }
 }

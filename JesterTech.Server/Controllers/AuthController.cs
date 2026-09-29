@@ -1,13 +1,11 @@
 ﻿using JesterTech.Server.DTO;
 using JesterTech.Server.Models;
 using JesterTech.Server.Repositories;
+using JesterTech.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
 namespace JesterTech.Server.Controllers
 {
@@ -17,13 +15,16 @@ namespace JesterTech.Server.Controllers
     {
         private readonly IAuthRepository _authRepository;
         private readonly PasswordHasher<Users> _passwordHasher;
-        private readonly IConfiguration _configuration; 
+        private readonly IConfiguration _configuration;
+        private readonly IAuthService _authService;
 
-        public AuthController(IAuthRepository authRepository, IConfiguration configuration)
+
+        public AuthController(IAuthRepository authRepository, IConfiguration configuration, IAuthService authService)
         {
             _authRepository = authRepository;
             _configuration = configuration;
             _passwordHasher = new PasswordHasher<Users>();
+            _authService = authService;
         }
 
         [HttpPost("register")]
@@ -64,66 +65,14 @@ namespace JesterTech.Server.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
         {
-            if (loginDTO == null)
+            var result = await _authService.Login(loginDTO);
+            if (result == null)
             {
-                return BadRequest(new { message = "User data is null." });
+                return Unauthorized(new { message = "Invalid credentials." });
             }
 
-            var user = _authRepository.GetUserByEmail(loginDTO.Email);
-            if (user == null)
-            {
-                return Unauthorized(new { message = "Email or password incorrect." });
-            }
-
-            var res = _passwordHasher.VerifyHashedPassword(user, user.Password, loginDTO.Password);
-            if (res == PasswordVerificationResult.Failed)
-            {
-                return Unauthorized(new { message = "Email or password incorrect." });
-            }
-
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.Name),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim("Id", user.Id.ToString()),
-                new Claim(ClaimTypes.Role, user.Role)
-            };
-
-            var jwtSettings = _configuration.GetSection("JwtSettings");
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["SecretKey"] ?? "fallback_key_for_local_dev_only"));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddDays(6), 
-                Issuer = jwtSettings["Issuer"],
-                Audience = jwtSettings["Audience"],
-                SigningCredentials = creds
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
-
-            var cookieOptions = new CookieOptions
-            {
-                HttpOnly = true,             
-                Secure = true,               
-                SameSite = SameSiteMode.None, 
-                Expires = DateTimeOffset.UtcNow.AddDays(6)
-            };
-
-            Response.Cookies.Append("JesterTechToken", tokenString, cookieOptions);
-
-            return Ok(new
-            {
-                message = "Login successful.",
-                Id = user.Id,
-                Name = user.Name,
-                Email = user.Email,
-                CreatedAt = user.CreatedAt,
-            });
+            SetAuthCookie(result.Token);
+            return Ok(result);
         }
 
         [Authorize]
@@ -163,6 +112,19 @@ namespace JesterTech.Server.Controllers
 
             Response.Cookies.Append("JesterTechToken", "", cookieOptions);
             return Ok(new { message = "Logout successful." });
+        }
+
+        private void SetAuthCookie(string token)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTimeOffset.UtcNow.AddDays(6)
+            };
+
+            Response.Cookies.Append("JesterTechToken", token, cookieOptions);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using JesterTech.Server.DTO;
 using JesterTech.Server.Models;
 using JesterTech.Server.Repositories;
-using JesterTech.Server.Services;
+using JesterTech.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;

@@ -18,4 +18,12 @@ namespace JesterTech.Server.DTO
         [Required]
         public string Comment { get; set; }
     }
+
+    public class ReviewPaginationDTO
+    {
+        public int TotalCount { get; set; }
+        public int Page { get; set; }
+        public int PageSize { get; set; }
+        public List<ReviewDTO> Reviews { get; set; } = new List<ReviewDTO>();
+    }
 }

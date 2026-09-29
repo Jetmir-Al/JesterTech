@@ -48,4 +48,12 @@ namespace JesterTech.Server.DTO
     {
         public IFormFile? ImgFile { get; set; }
     }
+
+    public class ProductPaginationDTO
+    {
+        public int TotalCount { get; set; }
+        public int Page { get; set; }
+        public int PageSize { get; set; }
+        public List<ProductsDTO> Products { get; set; } = new List<ProductsDTO>();
+    }
 }
