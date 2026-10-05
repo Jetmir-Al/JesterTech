@@ -13,40 +13,44 @@ namespace JesterTech.Server.Repositories
             _context = context;
         }
 
-        public async Task CreatePurchase(Purchases purchases)
+        public async Task CreatePurchase(Purchases purchases, CancellationToken cancellationToken)
         {
-            _context.Add(purchases);
-            await SaveAsync();
+            await _context.AddAsync(purchases, cancellationToken);
+            await SaveAsync(cancellationToken);
         }
 
-        public async Task DeletePurchase(Purchases purchases)
+        public async Task DeletePurchase(Purchases purchases, CancellationToken cancellationToken)
         {
             if (purchases != null)
             {
                 _context.Remove(purchases);
-                await SaveAsync();
+                await SaveAsync(cancellationToken);
             }
         }
 
-        public async Task<List<Purchases>> GetAllAsync()
+        public async Task<List<Purchases>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _context.Purchases.AsNoTracking().ToListAsync();
+            return await _context.Purchases.AsNoTracking().ToListAsync(cancellationToken);
         }
 
-        public async Task UpdatePurchase(Purchases purchases)
+        public async Task UpdatePurchase(Purchases purchases, CancellationToken cancellationToken)
         {
             _context.Update(purchases);
-            await SaveAsync();
+            await SaveAsync(cancellationToken);
         }
 
-        public async Task SaveAsync()
+        public async Task SaveAsync(CancellationToken cancellationToken)
         {
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<List<PurchaseDTO>> GetPurchasesByUserIdAsync(int page, int pageSize, int userId)
+        public async Task<(List<PurchaseDTO>, int TotalCount)> GetPurchasesByUserIdAsync(int page, int pageSize, int userId, CancellationToken cancellationToken)
         {
-            return await _context.Purchases
+            var total = await _context.Purchases
+                .Where(p => p.UserId == userId)
+                .CountAsync(cancellationToken);
+
+            var purchases = await _context.Purchases
                 .Include(p => p.User)
                 .Include(p => p.Product)
                 .Where(p => p.UserId == userId)
@@ -66,7 +70,9 @@ namespace JesterTech.Server.Repositories
                 })
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
+
+            return (purchases, total);
         }
     }
 }

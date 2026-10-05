@@ -1,6 +1,4 @@
 ﻿using JesterTech.Server.DTO;
-using JesterTech.Server.Models;
-using JesterTech.Server.Repositories;
 using JesterTech.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +11,7 @@ namespace JesterTech.Server.Controllers
 
         [Authorize]
         [HttpPost("add/{productId}")]
-        public async Task<IActionResult> CreateReview(int productId, [FromBody] CreateReviewDto dto)
+        public async Task<IActionResult> CreateReview(int productId, [FromBody] CreateReviewDto dto, CancellationToken cancellationToken)
         {
 
             var userIdClaim = User.FindFirst("Id") ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
@@ -25,15 +23,15 @@ namespace JesterTech.Server.Controllers
                 return BadRequest();
             }
 
-            await _reviewService.CreateReview(productId, dto, userId);
+            await _reviewService.CreateReview(productId, dto, userId, cancellationToken);
 
             return Ok();
         }
 
         [HttpGet("product/{productId}")]
-        public async Task<IActionResult> GetReviewsForProduct(int productId, int pageNumber, int pageSize)
+        public async Task<IActionResult> GetReviewsForProduct(int productId, int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
-            var reviews = await _reviewService.GetReviewsForProduct(productId, pageNumber, pageSize);
+            var reviews = await _reviewService.GetReviewsForProduct(productId, pageNumber, pageSize, cancellationToken);
             return Ok(reviews);
         }
     }

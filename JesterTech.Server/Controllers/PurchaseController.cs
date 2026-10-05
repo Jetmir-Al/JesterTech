@@ -1,6 +1,4 @@
 ﻿using JesterTech.Server.DTO;
-using JesterTech.Server.Models;
-using JesterTech.Server.Repositories;
 using JesterTech.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +15,7 @@ namespace JesterTech.Server.Controllers
     {
 
         [HttpPost("create/{productId}")]
-        public async Task<IActionResult> CreatePurchase(int productId, [FromBody] CreatePurchaseDto dto)
+        public async Task<IActionResult> CreatePurchase(int productId, [FromBody] CreatePurchaseDto dto, CancellationToken cancellationToken)
         {
             var userIdClaim = User.FindFirst("Id");
             if (userIdClaim == null)
@@ -25,7 +23,7 @@ namespace JesterTech.Server.Controllers
 
             int userId = int.Parse(userIdClaim.Value);
 
-            var product = await _productService.GetProductById(productId);
+            var product = await _productService.GetProductById(productId, cancellationToken);
             if ( product == null)
                 return BadRequest(new { message = "Product not found" });
 
@@ -33,7 +31,7 @@ namespace JesterTech.Server.Controllers
             if (product.Quantity < dto.Quantity)
                 return BadRequest(new { message = "Nuk ka sasi të mjaftueshme!" });
 
-            await _purchaseService.CreatePurchaseById(productId, dto, userId);
+            await _purchaseService.CreatePurchaseById(productId, dto, userId, cancellationToken);
 
             return Ok();
 
@@ -43,8 +41,9 @@ namespace JesterTech.Server.Controllers
 
         [HttpGet("user")]
         public async Task<IActionResult> GetPurchasesByUser(
-            int page = 1,
-            int pageSize = 5)
+            CancellationToken cancellationToken,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 5)
         {
             var userIdClaim = User.FindFirst("Id") ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
             if (userIdClaim == null)
@@ -55,7 +54,7 @@ namespace JesterTech.Server.Controllers
                 return BadRequest(new { message = "Invalid user identity format." });
             }
             
-            var result = await _purchaseService.GetPurchasesAsync(page, pageSize, userId);
+            var result = await _purchaseService.GetPurchasesAsync(page, pageSize, userId, cancellationToken);
 
             return Ok(result);
         }

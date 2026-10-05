@@ -10,9 +10,9 @@ namespace JesterTech.Server.Services.Service
         IProductRepository _productRepository
         ) : IReviewService
     {
-        public async Task CreateReview(int productId, CreateReviewDto createReviewDto, int userId)
+        public async Task CreateReview(int productId, CreateReviewDto createReviewDto, int userId, CancellationToken cancellationToken)
         {
-            var product = await _productRepository.GetProductById(productId);
+            var product = await _productRepository.GetProductById(productId, cancellationToken);
 
             if(product == null)
             {
@@ -27,16 +27,16 @@ namespace JesterTech.Server.Services.Service
                 Comment = createReviewDto.Comment,
             };
 
-            await _reviewRepository.CreateReview(review);
+            await _reviewRepository.CreateReview(review, cancellationToken);
         }
 
-        public async Task<ReviewPaginationDTO> GetReviewsForProduct(int productId, int pageNumber, int pageSize)
+        public async Task<ReviewPaginationDTO> GetReviewsForProduct(int productId, int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
-            var reviews = await _reviewRepository.GetReviewsByProductId(productId);
+            var (reviews, totalCount) = await _reviewRepository.GetReviewsByProductId(productId, cancellationToken);
 
             return new ReviewPaginationDTO
             {
-                TotalCount = reviews.Count(),
+                TotalCount = totalCount,
                 Page = pageNumber,
                 PageSize = pageSize,
                 Reviews = reviews.Select(r => new ReviewDTO

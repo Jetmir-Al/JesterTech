@@ -22,14 +22,14 @@ namespace JesterTech.Server.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] AuthDTO authDTO)
+        public async Task<IActionResult> Register([FromBody] AuthDTO authDTO, CancellationToken cancellationToken)
         {
             if (authDTO == null || authDTO.Email == null || authDTO.Password == null)
             {
                 return BadRequest();
             }
 
-            var result = await _authService.Register(authDTO);
+            var result = await _authService.Register(authDTO, cancellationToken);
             if(result == null || result == "Invalid Credentials")
             {
                 return BadRequest();
@@ -39,9 +39,9 @@ namespace JesterTech.Server.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO)
+        public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO, CancellationToken cancellationToken)
         {
-            var result = await _authService.Login(loginDTO);
+            var result = await _authService.Login(loginDTO, cancellationToken);
             if (result == null)
             {
                 return Unauthorized(new { message = "Invalid credentials." });

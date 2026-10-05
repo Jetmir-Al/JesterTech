@@ -13,33 +13,39 @@ namespace JesterTech.Server.Repositories
             _context = context;
         }
 
-        public async Task CreateReview(Reviews review)
+        public async Task CreateReview(Reviews review, CancellationToken cancellationToken)
         {
-            _context.Reviews.Add(review);
-            await SaveAsync();
+            await _context.Reviews.AddAsync(review, cancellationToken);
+            await SaveAsync(cancellationToken);
         }
 
-        public async Task DeleteReview(Reviews review)
+        public async Task DeleteReview(Reviews review, CancellationToken cancellationToken)
         {
             if (review != null)
             {
                 _context.Reviews.Remove(review);
-                await SaveAsync();
+                await SaveAsync(cancellationToken);
             }
         }
 
-        public async Task<List<Reviews>> GetReviewsByProductId(int productId)
+        public async Task<(List<Reviews>, int TotalCount)> GetReviewsByProductId(int productId, CancellationToken cancellationToken)
         {
-            return await _context.Reviews
+            var reviews = await _context.Reviews
                 .Include(r => r.User)
                 .Where(r => r.ProductId == productId)
                 .AsNoTracking()
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
+
+            var totalCount = await _context.Reviews
+                .Where(r => r.ProductId == productId)
+                .CountAsync(cancellationToken);
+
+            return (reviews, totalCount);
         }
 
-        public async Task SaveAsync()
+        public async Task SaveAsync(CancellationToken cancellationToken)
         {
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }

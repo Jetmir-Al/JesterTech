@@ -9,9 +9,9 @@ namespace JesterTech.Server.Services.Service
         IPurchaseRepository _purchaseRepository, 
         IProductRepository _productRepository) : IPurchaseService
     {
-        public async Task CreatePurchaseById(int productId, CreatePurchaseDto createPurchaseDto, int userId)
+        public async Task CreatePurchaseById(int productId, CreatePurchaseDto createPurchaseDto, int userId, CancellationToken cancellationToken)
         {
-            var product = await _productRepository.GetProductById(productId);
+            var product = await _productRepository.GetProductById(productId, cancellationToken);
             if (product == null)
                 return;
 
@@ -19,7 +19,7 @@ namespace JesterTech.Server.Services.Service
                 return;
 
             product.Quantity -= createPurchaseDto.Quantity;
-            await _productRepository.SaveAsync();
+            await _productRepository.SaveAsync(cancellationToken);
 
             var purchase = new Purchases
             {
@@ -31,16 +31,16 @@ namespace JesterTech.Server.Services.Service
                 CardNumber = createPurchaseDto.CardNumber.Length >= 4 ? createPurchaseDto.CardNumber[^4..] : createPurchaseDto.CardNumber,
                 PurchaseDate = createPurchaseDto.PurchaseDate
             };
-            await _purchaseRepository.CreatePurchase(purchase);
+            await _purchaseRepository.CreatePurchase(purchase, cancellationToken);
         }
 
-        public async Task<PurchasePaginationDTO> GetPurchasesAsync(int pageNumber, int pageSize, int userId)
+        public async Task<PurchasePaginationDTO> GetPurchasesAsync(int pageNumber, int pageSize, int userId, CancellationToken cancellationToken)
         {
-            var purchases = await _purchaseRepository.GetPurchasesByUserIdAsync(pageNumber, pageSize, userId);
+            var (purchases, totalCount) = await _purchaseRepository.GetPurchasesByUserIdAsync(pageNumber, pageSize, userId, cancellationToken);
 
             return new PurchasePaginationDTO
             {
-                TotalCount = purchases.Count(),
+                TotalCount = totalCount,
                 Page = pageNumber,
                 PageSize = pageSize,
                 Purchases = purchases

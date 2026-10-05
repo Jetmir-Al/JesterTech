@@ -14,9 +14,9 @@ namespace JesterTech.Server.Services.Service
     {
         private readonly PasswordHasher<Users> _passwordHasher;
 
-        public async Task<AuthResultDTO> Login(LoginDTO loginDto)
+        public async Task<AuthResultDTO> Login(LoginDTO loginDto, CancellationToken cancellationToken)
         {
-            var user = await _authRepository.GetUserByEmail(loginDto.Email);
+            var user = await _authRepository.GetUserByEmail(loginDto.Email, cancellationToken);
 
             var res = _passwordHasher.VerifyHashedPassword(user, user.Password, loginDto.Password);
             
@@ -40,9 +40,9 @@ namespace JesterTech.Server.Services.Service
             };
         }
         
-        public async Task<string> Register(AuthDTO authDto)
+        public async Task<string> Register(AuthDTO authDto, CancellationToken cancellationToken)
         {
-            var userEmail = await _authRepository.GetUserByEmail(authDto.Email);
+            var userEmail = await _authRepository.GetUserByEmail(authDto.Email, cancellationToken);
 
             if (userEmail != null)
                 return "Invalid Credentials";
@@ -56,7 +56,7 @@ namespace JesterTech.Server.Services.Service
             };
 
             user.Password = _passwordHasher.HashPassword(user, authDto.Password);
-            await _authRepository.CreateUser(user);
+            await _authRepository.CreateUser(user, cancellationToken);
             return "User registered successfully.";
         }
     }

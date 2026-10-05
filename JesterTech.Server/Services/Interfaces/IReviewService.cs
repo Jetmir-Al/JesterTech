@@ -9,16 +9,18 @@ namespace JesterTech.Server.Services.Interfaces
         /// </summary>
         /// <param name="productId"></param>
         /// <param name="createReviewDto"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task CreateReview(int productId, CreateReviewDto createReviewDto, int userId);
+        Task CreateReview(int productId, CreateReviewDto createReviewDto, int userId, CancellationToken cancellationToken);
         /// <summary>
         /// Gets reviews for a specific product with pagination.
         /// </summary>
         /// <param name="productId"></param>
         /// <param name="pageNumber"></param>
         /// <param name="pageSize"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<ReviewPaginationDTO> GetReviewsForProduct(int productId, int pageNumber, int pageSize);
+        Task<ReviewPaginationDTO> GetReviewsForProduct(int productId, int pageNumber, int pageSize, CancellationToken cancellationToken);
 
     }
 }
