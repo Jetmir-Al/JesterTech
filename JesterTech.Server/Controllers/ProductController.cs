@@ -1,37 +1,24 @@
 ﻿using JesterTech.Server.DTO;
-using JesterTech.Server.Models;
-using JesterTech.Server.Repositories;
+using JesterTech.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace JesterTech.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class ProductController(
+        IProductService _productService
+        ) : ControllerBase
     {
-        private readonly IProductRepository _productRepository;
-        private readonly IWebHostEnvironment _webHostEnvironment;
-
-        public ProductController(IProductRepository productRepository, IWebHostEnvironment webHostEnvironment)
-        {
-            _productRepository = productRepository;
-            _webHostEnvironment = webHostEnvironment;
-        }
 
         [HttpGet("products")]
         [Authorize(Roles = "Admin")]
-        public IActionResult GetProducts()
+        public async Task<IActionResult> GetProducts(CancellationToken cancellationToken)
         {
             try
             {
-
-                var products = _productRepository.GetAllProducts().ToList();
-                if (products.Count == 0)
-                {
-                    return NotFound(new { message = "No products found." });
-                }
+                var products = await _productService.GetAllProducts(cancellationToken);
                 return Ok(products);
             }
             catch (Exception ex)
@@ -41,187 +28,76 @@ namespace JesterTech.Server.Controllers
         }
 
         [HttpGet("categories")]
-        public IActionResult GetCategories()
+        public async Task<IActionResult> GetCategories(CancellationToken cancellationToken)
         {
-            var categories = _productRepository.GetAllProducts()
-                .Select(p => p.Category)
-                .Distinct()
-                .ToList();
+            var categories = await _productService.GetProductCategories(cancellationToken);
             return Ok(categories);
         }
+
         [HttpGet("brands")]
-        public IActionResult GetBrands()
+        public async Task<IActionResult> GetBrands(CancellationToken cancellationToken)
         {
-            var brands = _productRepository.GetAllProducts()
-                .Select(p => p.Brand)
-                .Distinct()
-                .ToList();
+            var brands = await _productService.GetProductBrands(cancellationToken);
             return Ok(brands);
         }
 
-
         [HttpGet("{id}")]
-        public IActionResult GetProduct(int id)
+        public async Task<IActionResult> GetProduct([FromRoute] int id, CancellationToken cancellationToken)
         {
-            var product = _productRepository.GetProductById(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
+            var product = await _productService.GetProductById(id, cancellationToken);
             return Ok(product);
         }
 
         [HttpGet("featured")]
-        public IActionResult GetFeaturedProducts()
+        public async Task<IActionResult> GetFeaturedProducts(CancellationToken cancellationToken)
         {
-            var products = _productRepository.GetAllProducts()
-                .Distinct().Take(8)
-                .ToList();
-
+            var products = await _productService.GetFeaturedProducts(cancellationToken);
             return Ok(products);
         }
 
         [HttpGet("advanced")]
-        public IActionResult GetProductsAdvanced(
-            int page = 1,
-            int pageSize = 20,
-            string? search = null,
+        public async Task<IActionResult> GetProductsAdvanced(
+            CancellationToken cancellationToken,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 20,
+            [FromQuery] string? search = null,
             [FromQuery] List<string>? categories = null,
-            string? sort = "new")
+            [FromQuery] string? sort = "new")
         {
-            var query = _productRepository.GetAllProducts().AsQueryable();
-
-
-            if (!string.IsNullOrEmpty(search))
-            {
-                query = query.Where(b =>
-                    b.Title.Contains(search) ||
-                    b.Brand.Contains(search));
-            }
-
-
-            if (categories != null && categories.Any())
-            {
-                query = query.Where(b => categories.Contains(b.Category));
-            }
-
-
-            query = sort switch
-            {
-                "name" => query.OrderBy(b => b.Title),
-                "price" => query.OrderBy(b => b.Price),
-                "new" => query.OrderByDescending(b => b.Id),
-                "old" => query.OrderBy(b => b.Id),
-                _ => query.OrderBy(b => b.Id)
-            };
-
-
-            var productCount = query.Count();
-
-
-            var products = query
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-
-            return Ok(new
-            {
-                data = products,
-                page = page,
-                totalProducts = productCount,
-                totalPages = (int)Math.Ceiling(productCount / (double)pageSize)
-            });
-        }
-        [HttpGet("topProducts")]
-        public IActionResult GetTopProducts()
-        {
-            var products = _productRepository.GetAllProducts().Where(x => x.Category == "Smartphones").Take(3).ToList();
+            var products = await _productService.GetProductsPagination(page, pageSize, search, categories, sort, cancellationToken);
             return Ok(products);
         }
+
+        [HttpGet("topProducts")]
+        public async Task<IActionResult> GetTopProducts(CancellationToken cancellationToken)
+        {
+            var products = await _productService.GetTopProducts(cancellationToken);
+            return Ok(products);
+        }
+
         [HttpPost("UpdateProduct")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UpdateProduct(int id, [FromForm] UpdateProductDTO productDto)
+        public async Task<IActionResult> UpdateProduct(int id, [FromForm] UpdateProductDTO productDto, CancellationToken cancellationToken)
         {
-            var product = _productRepository.GetProductById(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            if (productDto.ImgFile != null && productDto.ImgFile.Length > 0)
-            {
-                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-                Directory.CreateDirectory(uploadsFolder);
-
-                string uniqueFileName = Guid.NewGuid().ToString() + "_" + productDto.ImgFile.FileName;
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    productDto.ImgFile.CopyTo(fileStream);
-                }
-
-                product.Image = "/images/" + uniqueFileName;
-            }
-
-            _productRepository.UpdateProduct(product);
-            _productRepository.Save();
-
-            return Ok(product);
+            await _productService.UpdateProductImg(id, productDto, cancellationToken);
+            return Ok();
         }
 
         [HttpPost("InsertProduct")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> InsertProduct([FromForm] InsertProductDTO productDto)
+        public async Task<IActionResult> InsertProduct([FromForm] InsertProductDTO productDto, CancellationToken cancellationToken)
         {
-            var product = new Products
-            {
-                Title = productDto.Title,
-                Brand = productDto.Brand,
-                Garantee = productDto.Garantee,
-                Price = productDto.Price,
-                Quantity = productDto.Quantity,
-                Category = productDto.Category,
-                Specifications = productDto.Specifications,
-            };
-
-            if (productDto.ImgFile != null && productDto.ImgFile.Length > 0)
-            {
-                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-                Directory.CreateDirectory(uploadsFolder);
-
-                string uniqueFileName = Guid.NewGuid().ToString() + "_" + productDto.ImgFile.FileName;
-                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    productDto.ImgFile.CopyTo(fileStream);
-                }
-
-
-                product.Image = "/images/" + uniqueFileName;
-            }
-
-            _productRepository.CreateProduct(product);
-            _productRepository.Save();
-
-            return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
+            await _productService.CreateProduct(productDto, cancellationToken);
+            return Ok();
         }
 
         [HttpDelete("DeleteProduct/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteProduct(int id)
+        public async Task<IActionResult> DeleteProduct([FromRoute] int id, CancellationToken cancellationToken)
         {
-            var product = _productRepository.GetProductById(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
+            await _productService.DeleteProductById(id, cancellationToken);
 
-            _productRepository.DeleteProduct(product);
-            _productRepository.Save();
-
-            return Ok(product);
+            return Ok();
         }
     }
 }

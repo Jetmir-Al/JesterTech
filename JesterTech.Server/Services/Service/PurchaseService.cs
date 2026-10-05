@@ -1,18 +1,50 @@
 ﻿using JesterTech.Server.DTO;
+using JesterTech.Server.Models;
+using JesterTech.Server.Repositories;
 using JesterTech.Server.Services.Interfaces;
 
 namespace JesterTech.Server.Services.Service
 {
-    public class PurchaseService : IPurchaseService
+    public class PurchaseService(
+        IPurchaseRepository _purchaseRepository, 
+        IProductRepository _productRepository) : IPurchaseService
     {
-        public Task CreateProductById(int productId, CreatePurchaseDto createPurchaseDto)
+        public async Task CreatePurchaseById(int productId, CreatePurchaseDto createPurchaseDto, int userId)
         {
-            throw new NotImplementedException();
+            var product = await _productRepository.GetProductById(productId);
+            if (product == null)
+                return;
+
+            if (product.Quantity < createPurchaseDto.Quantity)
+                return;
+
+            product.Quantity -= createPurchaseDto.Quantity;
+            await _productRepository.SaveAsync();
+
+            var purchase = new Purchases
+            {
+                ProductId = productId,
+                UserId = userId,
+                Quantity = createPurchaseDto.Quantity,
+                Address = createPurchaseDto.Address,
+                CardholderName = createPurchaseDto.CardholderName,
+                CardNumber = createPurchaseDto.CardNumber.Length >= 4 ? createPurchaseDto.CardNumber[^4..] : createPurchaseDto.CardNumber,
+                PurchaseDate = createPurchaseDto.PurchaseDate
+            };
+            await _purchaseRepository.CreatePurchase(purchase);
         }
 
-        public Task<PurchasePaginationDTO> GetPurchasesAsync(int pageNumber, int pageSize)
+        public async Task<PurchasePaginationDTO> GetPurchasesAsync(int pageNumber, int pageSize, int userId)
         {
-            throw new NotImplementedException();
+            var purchases = await _purchaseRepository.GetPurchasesByUserIdAsync(pageNumber, pageSize, userId);
+
+            return new PurchasePaginationDTO
+            {
+                TotalCount = purchases.Count(),
+                Page = pageNumber,
+                PageSize = pageSize,
+                Purchases = purchases
+            };
         }
     }
 }

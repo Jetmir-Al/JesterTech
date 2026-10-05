@@ -3,10 +3,7 @@ using JesterTech.Server.Models;
 using JesterTech.Server.Repositories;
 using JesterTech.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+
 
 namespace JesterTech.Server.Services.Service
 {
@@ -19,7 +16,7 @@ namespace JesterTech.Server.Services.Service
 
         public async Task<AuthResultDTO> Login(LoginDTO loginDto)
         {
-            var user = _authRepository.GetUserByEmail(loginDto.Email);
+            var user = await _authRepository.GetUserByEmail(loginDto.Email);
 
             var res = _passwordHasher.VerifyHashedPassword(user, user.Password, loginDto.Password);
             
@@ -42,20 +39,25 @@ namespace JesterTech.Server.Services.Service
                 }
             };
         }
-
-        public Task Logout()
+        
+        public async Task<string> Register(AuthDTO authDto)
         {
-            throw new NotImplementedException();
-        }
+            var userEmail = await _authRepository.GetUserByEmail(authDto.Email);
 
-        public Task<LoginResponseDTO> RefreshToken()
-        {
-            throw new NotImplementedException();
-        }
+            if (userEmail != null)
+                return "Invalid Credentials";
 
-        public Task<string> Register(AuthDTO authDto)
-        {
-            throw new NotImplementedException();
+            var user = new Users
+            {
+                Name = authDto.Name,
+                Email = authDto.Email,
+                Role = authDto.Role,
+                CreatedAt = DateTime.UtcNow,
+            };
+
+            user.Password = _passwordHasher.HashPassword(user, authDto.Password);
+            await _authRepository.CreateUser(user);
+            return "User registered successfully.";
         }
     }
 }

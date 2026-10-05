@@ -13,45 +13,45 @@ namespace JesterTech.Server.Repositories
             _context = context;
         }
 
-        public void CreateUser(Users user)
+        public async Task CreateUser(Users user)
         {
-            _context.Users.Add(user);
-            Save();
+            await _context.Users.AddAsync(user);
+            await Save();
         }
 
-        public void DeleteUser(Users user)
+        public async Task DeleteUser(Users user)
         {
             if (user != null)
             {
                 _context.Users.Remove(user);
-                Save();
+                await Save();
             }
         }
 
-        public Users GetUserByEmail(string email)
+        public async Task<Users> GetUserByEmail(string email)
         {
-            return _context.Users
+            return await _context.Users
                 .Include(u => u.Purchases)
                 .Include(u => u.Reviews)
-                .FirstOrDefault(u => u.Email == email);
+                .FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public Users GetUserById(int id)
+        public async Task<Users> GetUserById(int id)
         {
-            return _context.Users
+            return await _context.Users
                  .Include(u => u.Purchases)
                  .Include(u => u.Reviews)
-                 .FirstOrDefault(u => u.Id == id);
+                 .FirstOrDefaultAsync(u => u.Id == id);
         }
-        public void UpdateUser(Users user)
+        public async Task UpdateUser(Users user)
         {
             _context.Users.Update(user);
-            Save();
+            await Save();
         }
 
-        public void Save()
+        public async Task Save()
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
     }

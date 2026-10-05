@@ -1,14 +1,15 @@
-﻿using JesterTech.Server.Models;
+﻿using JesterTech.Server.DTO;
+using JesterTech.Server.Models;
 
 namespace JesterTech.Server.Repositories
 {
     public interface IPurchaseRepository
     {
-        List<Purchases> GetAll();  
-        void CreatePurchase(Purchases purchases);
-        List<Purchases> GetPurchasesByUserId(int userId);
-        void UpdatePurchase(Purchases purchases);
-        void DeletePurchase(Purchases purchases);
-        void Save();
+        Task<List<Purchases>> GetAllAsync();  
+        Task CreatePurchase(Purchases purchases);
+        Task<List<PurchaseDTO>> GetPurchasesByUserIdAsync(int page, int pageSize, int userId);
+        Task UpdatePurchase(Purchases purchases);
+        Task DeletePurchase(Purchases purchases);
+        Task SaveAsync();
     }
 }

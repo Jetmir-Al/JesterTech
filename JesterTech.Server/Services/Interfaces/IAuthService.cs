@@ -17,15 +17,5 @@ namespace JesterTech.Server.Services.Interfaces
         /// <param name="loginDto"></param>
         /// <returns></returns>
         Task<AuthResultDTO> Login(LoginDTO loginDto);
-        /// <summary>
-        /// Refreshes the JWT token for the currently authenticated user and returns a new token if successful.
-        /// </summary>
-        /// <returns></returns>
-        Task<LoginResponseDTO> RefreshToken();
-        /// <summary>
-        /// Logs out the currently authenticated user by invalidating their JWT token.
-        /// </summary>
-        /// <returns></returns>
-        Task Logout();
     }
 }

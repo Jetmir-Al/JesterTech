@@ -13,33 +13,33 @@ namespace JesterTech.Server.Repositories
             _context = context;
         }
 
-        public void CreateReview(Reviews review)
+        public async Task CreateReview(Reviews review)
         {
             _context.Reviews.Add(review);
-            Save();
+            await SaveAsync();
         }
 
-        public void DeleteReview(Reviews review)
+        public async Task DeleteReview(Reviews review)
         {
             if (review != null)
             {
                 _context.Reviews.Remove(review);
-                Save();
+                await SaveAsync();
             }
         }
 
-        public List<Reviews> GetReviewsByProductId(int productId)
+        public async Task<List<Reviews>> GetReviewsByProductId(int productId)
         {
-            return _context.Reviews
+            return await _context.Reviews
                 .Include(r => r.User)
                 .Where(r => r.ProductId == productId)
                 .AsNoTracking()
-                .ToList();
+                .ToListAsync();
         }
 
-        public void Save()
+        public async Task SaveAsync()
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

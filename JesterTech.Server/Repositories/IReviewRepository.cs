@@ -4,9 +4,9 @@ namespace JesterTech.Server.Repositories
 {
     public interface IReviewRepository
     {
-        List<Reviews> GetReviewsByProductId(int productId);
-        void CreateReview(Reviews review);
-        void DeleteReview(Reviews review);
-        void Save();
+        Task<List<Reviews>> GetReviewsByProductId(int productId);
+        Task CreateReview(Reviews review);
+        Task DeleteReview(Reviews review);
+        Task SaveAsync();
     }
 }

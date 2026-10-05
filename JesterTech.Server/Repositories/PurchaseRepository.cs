@@ -1,4 +1,5 @@
 ﻿using JesterTech.Server.Data;
+using JesterTech.Server.DTO;
 using JesterTech.Server.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,44 +13,60 @@ namespace JesterTech.Server.Repositories
             _context = context;
         }
 
-        public void CreatePurchase(Purchases purchases)
+        public async Task CreatePurchase(Purchases purchases)
         {
             _context.Add(purchases);
-            Save();
+            await SaveAsync();
         }
 
-        public void DeletePurchase(Purchases purchases)
+        public async Task DeletePurchase(Purchases purchases)
         {
             if (purchases != null)
             {
                 _context.Remove(purchases);
-                Save();
+                await SaveAsync();
             }
         }
 
-        public List<Purchases> GetAll()
+        public async Task<List<Purchases>> GetAllAsync()
         {
-           return _context.Purchases.AsNoTracking().ToList();
-        }
-        public void UpdatePurchase(Purchases purchases)
-        {
-            _context.Update(purchases);
-            Save();
+            return await _context.Purchases.AsNoTracking().ToListAsync();
         }
 
-        public void Save()
+        public async Task UpdatePurchase(Purchases purchases)
         {
-            _context.SaveChanges();
+            _context.Update(purchases);
+            await SaveAsync();
         }
-            
-        public List<Purchases> GetPurchasesByUserId(int userId)
+
+        public async Task SaveAsync()
         {
-            return _context.Purchases
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<PurchaseDTO>> GetPurchasesByUserIdAsync(int page, int pageSize, int userId)
+        {
+            return await _context.Purchases
                 .Include(p => p.User)
                 .Include(p => p.Product)
                 .Where(p => p.UserId == userId)
                 .AsNoTracking()
-                .ToList();
+                .Select(p => new PurchaseDTO
+                {
+                    Id = p.Id,
+                    UserName = p.User.Name,
+                    ProductTitle = p.Product.Title,
+                    Quantity = p.Quantity,
+                    Total = p.Total,
+                    Address = p.Address,
+                    PurchaseDate = p.PurchaseDate,
+                    CardholderName = p.CardholderName,
+                    MaskedCardNumber = "**** **** **** " + p.CardNumber,
+                    Image = p.Product.Image
+                })
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
     }
 }

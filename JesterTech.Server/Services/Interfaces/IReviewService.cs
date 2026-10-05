@@ -10,7 +10,7 @@ namespace JesterTech.Server.Services.Interfaces
         /// <param name="productId"></param>
         /// <param name="createReviewDto"></param>
         /// <returns></returns>
-        Task CreateReview(int productId, CreateReviewDto createReviewDto);
+        Task CreateReview(int productId, CreateReviewDto createReviewDto, int userId);
         /// <summary>
         /// Gets reviews for a specific product with pagination.
         /// </summary>
