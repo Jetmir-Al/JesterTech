@@ -7,13 +7,12 @@ namespace JesterTech.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController(
-        IProductService _productService
-        ) : ControllerBase
+    public class ProductController(IProductService _productService) : ControllerBase
     {
 
         [HttpGet("products")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(List<ProductDTO>), 200)]
         public async Task<IActionResult> GetProducts(CancellationToken cancellationToken)
         {
             try
@@ -28,6 +27,7 @@ namespace JesterTech.Server.Controllers
         }
 
         [HttpGet("categories")]
+        [ProducesResponseType(typeof(List<string>), 200)]
         public async Task<IActionResult> GetCategories(CancellationToken cancellationToken)
         {
             var categories = await _productService.GetProductCategories(cancellationToken);
@@ -35,6 +35,7 @@ namespace JesterTech.Server.Controllers
         }
 
         [HttpGet("brands")]
+        [ProducesResponseType(typeof(List<string>), 200)]
         public async Task<IActionResult> GetBrands(CancellationToken cancellationToken)
         {
             var brands = await _productService.GetProductBrands(cancellationToken);
@@ -42,6 +43,7 @@ namespace JesterTech.Server.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(ProductDTO), 200)]
         public async Task<IActionResult> GetProduct([FromRoute] int id, CancellationToken cancellationToken)
         {
             var product = await _productService.GetProductById(id, cancellationToken);
@@ -49,6 +51,7 @@ namespace JesterTech.Server.Controllers
         }
 
         [HttpGet("featured")]
+        [ProducesResponseType(typeof(List<ProductDTO>), 200)]
         public async Task<IActionResult> GetFeaturedProducts(CancellationToken cancellationToken)
         {
             var products = await _productService.GetFeaturedProducts(cancellationToken);
@@ -56,6 +59,7 @@ namespace JesterTech.Server.Controllers
         }
 
         [HttpGet("advanced")]
+        [ProducesResponseType(typeof(ProductPaginationDTO), 200)]
         public async Task<IActionResult> GetProductsAdvanced(
             CancellationToken cancellationToken,
             [FromQuery] int page = 1,
@@ -69,6 +73,7 @@ namespace JesterTech.Server.Controllers
         }
 
         [HttpGet("topProducts")]
+        [ProducesResponseType(typeof(List<ProductDTO>), 200)]
         public async Task<IActionResult> GetTopProducts(CancellationToken cancellationToken)
         {
             var products = await _productService.GetTopProducts(cancellationToken);
@@ -77,6 +82,7 @@ namespace JesterTech.Server.Controllers
 
         [HttpPost("UpdateProduct")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(void), 200)]
         public async Task<IActionResult> UpdateProduct(int id, [FromForm] UpdateProductDTO productDto, CancellationToken cancellationToken)
         {
             await _productService.UpdateProductImg(id, productDto, cancellationToken);
@@ -85,6 +91,7 @@ namespace JesterTech.Server.Controllers
 
         [HttpPost("InsertProduct")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(void), 200)]
         public async Task<IActionResult> InsertProduct([FromForm] InsertProductDTO productDto, CancellationToken cancellationToken)
         {
             await _productService.CreateProduct(productDto, cancellationToken);
@@ -93,10 +100,10 @@ namespace JesterTech.Server.Controllers
 
         [HttpDelete("DeleteProduct/{id}")]
         [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(void), 200)]
         public async Task<IActionResult> DeleteProduct([FromRoute] int id, CancellationToken cancellationToken)
         {
             await _productService.DeleteProductById(id, cancellationToken);
-
             return Ok();
         }
     }

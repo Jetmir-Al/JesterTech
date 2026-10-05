@@ -15,6 +15,7 @@ namespace JesterTech.Server.Controllers
     {
 
         [HttpPost("create/{productId}")]
+        [ProducesResponseType(typeof(void), 200)]
         public async Task<IActionResult> CreatePurchase(int productId, [FromBody] CreatePurchaseDto dto, CancellationToken cancellationToken)
         {
             var userIdClaim = User.FindFirst("Id");
@@ -37,9 +38,8 @@ namespace JesterTech.Server.Controllers
 
         }
 
-
-
         [HttpGet("user")]
+        [ProducesResponseType(typeof(PurchasePaginationDTO), 200)]
         public async Task<IActionResult> GetPurchasesByUser(
             CancellationToken cancellationToken,
             [FromQuery] int page = 1,

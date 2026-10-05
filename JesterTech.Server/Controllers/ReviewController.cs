@@ -11,6 +11,7 @@ namespace JesterTech.Server.Controllers
 
         [Authorize]
         [HttpPost("add/{productId}")]
+        [ProducesResponseType(typeof(void), 200)]
         public async Task<IActionResult> CreateReview(int productId, [FromBody] CreateReviewDto dto, CancellationToken cancellationToken)
         {
 
@@ -29,6 +30,7 @@ namespace JesterTech.Server.Controllers
         }
 
         [HttpGet("product/{productId}")]
+        [ProducesResponseType(typeof(ReviewPaginationDTO), 200)]
         public async Task<IActionResult> GetReviewsForProduct(int productId, int pageNumber, int pageSize, CancellationToken cancellationToken)
         {
             var reviews = await _reviewService.GetReviewsForProduct(productId, pageNumber, pageSize, cancellationToken);

@@ -22,6 +22,7 @@ namespace JesterTech.Server.Controllers
         }
 
         [HttpPost("register")]
+        [ProducesResponseType(typeof(void), 200)]
         public async Task<IActionResult> Register([FromBody] AuthDTO authDTO, CancellationToken cancellationToken)
         {
             if (authDTO == null || authDTO.Email == null || authDTO.Password == null)
@@ -35,10 +36,11 @@ namespace JesterTech.Server.Controllers
                 return BadRequest();
             }
 
-            return Ok(new { message = result });
+            return Ok();
         }
 
         [HttpPost("login")]
+        [ProducesResponseType(typeof(AuthResultDTO), 200)]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO, CancellationToken cancellationToken)
         {
             var result = await _authService.Login(loginDTO, cancellationToken);
@@ -53,6 +55,7 @@ namespace JesterTech.Server.Controllers
 
         [Authorize]
         [HttpGet("status")]
+        [ProducesResponseType(typeof(LoginResponseDTO), 200)]
         public IActionResult CheckStatus()
         {
             var userId = User.FindFirst("Id")?.Value;
@@ -76,6 +79,7 @@ namespace JesterTech.Server.Controllers
         }
 
         [HttpPost("logout")]
+        [ProducesResponseType(typeof(void), 200)]
         public IActionResult Logout()
         {
             if(!Request.Cookies.ContainsKey("JesterTechToken"))
@@ -84,7 +88,7 @@ namespace JesterTech.Server.Controllers
             }
 
             ClearAuthCookie();
-            return Ok(new { message = "Logout successful." });
+            return Ok();
         }
 
         private void SetAuthCookie(string token)
