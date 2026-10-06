@@ -1,6 +1,5 @@
 ﻿using JesterTech.Server.DTO;
 using JesterTech.Server.Models;
-using JesterTech.Server.Repositories;
 using JesterTech.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,29 +9,21 @@ namespace JesterTech.Server.Controllers
 {
     [ApiController]
     [Route("/api/[controller]")]
-    public class AiController : ControllerBase
+    public class AiController(IProductService productService,
+            IPurchaseService purchaseService,
+            IAiService _aiService,
+            IReviewService reviewService) : ControllerBase
     {
-        private readonly IProductRepository _productRepository;
-        private readonly IPurchaseRepository _purchaseRepository;
-        private readonly IAiService _aiService;
-        private readonly IReviewRepository _reviewRepository;
 
-        public AiController(IProductRepository productRepository, IReviewRepository reviewRepository, IPurchaseRepository purchaseRepository, IAiService aiService)
-        {
-            _productRepository = productRepository;
-            _reviewRepository = reviewRepository;
-            _purchaseRepository = purchaseRepository;
-            _aiService = aiService;
-        }
 
         [HttpPost("ask")]
-        public async Task<IActionResult> AskProductAi([FromBody] AiQuestionDTO dto)
+        public async Task<IActionResult> AskProductAi([FromBody] AiQuestionDTO dto, CancellationToken cancellationToken)
         {
-            var product = _productRepository.GetProductById(dto.ProductId);
-            var reviews = _reviewRepository.GetReviewsByProductId(dto.ProductId);
+            var product = await productService.GetProductByIdForAi(dto.ProductId, cancellationToken);
+            var reviews = await reviewService.GetReviewsForProduct(dto.ProductId, 1, 10, cancellationToken);
             if (product == null) return NotFound(new { message = "Product not found." });
             var catalogBuilder = new StringBuilder();
-            foreach (var r in reviews)
+            foreach (var r in reviews.Reviews)
             {
                 catalogBuilder.AppendLine($"[REVIEW] Rating: {r.Rating}, Comment: {r.Comment}");
             }
@@ -66,10 +57,11 @@ Customer Answer preference: {dto.Preference}";
         }
 
         [HttpPost("ask-general")]
-        public async Task<IActionResult> AskGlobalAi([FromBody] GeneralQuestionDTO dto)
+        public async Task<IActionResult> AskGlobalAi([FromBody] GeneralQuestionDTO dto, CancellationToken cancellationToken)
         {
             var keywords = dto.UserQuestion.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            var allProducts = _productRepository.GetAllProducts().OrderByDescending(p => keywords.Count(kw =>
+            var allProducts = await productService.GetAllProducts(cancellationToken);
+            allProducts = allProducts.OrderByDescending(p => keywords.Count(kw =>
             p.Title.ToLower().Contains(kw) ||
             p.Brand.ToLower().Contains(kw) ||
             p.Category.ToLower().Contains(kw)))
@@ -105,7 +97,7 @@ Customer Answer preference: {dto.Preference}";
         }
         [Authorize]
         [HttpPost("ask-purchases")]
-        public async Task<IActionResult> AskPurchasesAi([FromBody] GeneralQuestionDTO dto)
+        public async Task<IActionResult> AskPurchasesAi([FromBody] GeneralQuestionDTO dto, CancellationToken cancellationToken)
         {
             var userIdClaim = User.FindFirst("Id") ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
             if (userIdClaim == null)
@@ -116,20 +108,9 @@ Customer Answer preference: {dto.Preference}";
                 return BadRequest(new { message = "Invalid user identity format." });
             }
             var keywords = dto.UserQuestion.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries);
-            var allPurchasesOfUser = _purchaseRepository.GetPurchasesByUserId(userId).Select(p => new PurchaseAiDTO
-            {
-                Id = p.Id,
-                UserName = p.User.Name,
-                ProductTitle = p.Product.Title,
-                Categories = p.Product.Category,
-                Quantity = p.Quantity,
-                Total = p.Total,
-                Address = p.Address,
-                PurchaseDate = p.PurchaseDate,
-                CardholderName = p.CardholderName,
-                Specifications = p.Product.Specifications
-            }).ToList();
-            var allProducts = _productRepository.GetAllProducts().OrderByDescending(p => keywords.Count(kw =>
+            var allPurchasesOfUser = await purchaseService.GetPurchaseAiAsync(userId, cancellationToken);
+            var allProducts = await productService.GetAllProducts(cancellationToken);
+            allProducts = allProducts.OrderByDescending(p => keywords.Count(kw =>
             p.Title.ToLower().Contains(kw) ||
             p.Brand.ToLower().Contains(kw) ||
             p.Category.ToLower().Contains(kw)))
@@ -179,7 +160,7 @@ Customer Answer preference: {dto.Preference}";
         }
 
         [HttpPost("ask-AiCompare")]
-        public async Task<IActionResult> AskCompareAi([FromBody] CompareAiQuestionDTO dto)
+        public async Task<IActionResult> AskCompareAi([FromBody] CompareAiQuestionDTO dto, CancellationToken cancellationToken)
         {
 
             if (dto.ProductIds == null || dto.ProductIds.Count < 2)
@@ -190,7 +171,7 @@ Customer Answer preference: {dto.Preference}";
             var productsToCompare = new List<Products>();
             foreach (var id in dto.ProductIds)
             {
-                var product = _productRepository.GetProductById(id);
+                var product = await productService.GetProductByIdForAi(id, cancellationToken);
                 if (product != null) productsToCompare.Add(product);
             }
 
@@ -210,7 +191,7 @@ At the end, provide a final verdict on which model is better suited for specific
 
 [PRODUCTS TO COMPARE]
 {comparisonBuilder}
-[/PRODUCTS TO COMPARE
+[/PRODUCTS TO COMPARE]
 
 Customer Question: {dto.UserQuestion}
 Customer Answer preference: {dto.Preference}";

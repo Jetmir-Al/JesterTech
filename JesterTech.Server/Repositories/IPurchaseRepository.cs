@@ -42,6 +42,13 @@ namespace JesterTech.Server.Repositories
         /// <returns></returns>
         Task DeletePurchase(Purchases purchases, CancellationToken cancellationToken);
         /// <summary>
+        /// Gets a purchase by user ID asynchronously for AI purposes.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<List<PurchaseAiDTO>> GetPurchaseAiByUserIdAsync(int userId, CancellationToken cancellationToken);
+        /// <summary>
         /// Saves changes to the database asynchronously.
         /// </summary>
         /// <param name="cancellationToken"></param>

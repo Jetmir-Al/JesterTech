@@ -189,5 +189,10 @@ namespace JesterTech.Server.Repositories
                 .Where(p => p.Id == id)
                 .ExecuteUpdateAsync(p => p.SetProperty(p => p.Image, ImgFile), cancellationToken);
         }
+
+        public async Task<Products> GetProductByIdForAi(int productId, CancellationToken cancellationToken)
+        {
+            return await _context.Products.FirstOrDefaultAsync(p => p.Id == productId, cancellationToken);
+        }
     }
 }

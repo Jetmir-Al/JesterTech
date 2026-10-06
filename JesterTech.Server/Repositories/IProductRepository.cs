@@ -1,7 +1,6 @@
 ﻿using JesterTech.Server.DTO;
 using JesterTech.Server.Models;
 using LinqKit;
-using System.Linq.Expressions;
 
 namespace JesterTech.Server.Repositories
 {
@@ -25,6 +24,13 @@ namespace JesterTech.Server.Repositories
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<List<string>> GetAllBrands(CancellationToken cancellationToken);
+        /// <summary>
+        /// Gets a product by its ID from the database for AI purposes.
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<Products> GetProductByIdForAi(int productId, CancellationToken cancellationToken);
         /// <summary>
         /// Gets the top products from the database.
         /// </summary>

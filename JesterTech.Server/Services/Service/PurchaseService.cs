@@ -34,6 +34,12 @@ namespace JesterTech.Server.Services.Service
             await _purchaseRepository.CreatePurchase(purchase, cancellationToken);
         }
 
+        public Task<List<PurchaseAiDTO>> GetPurchaseAiAsync(int userId, CancellationToken cancellationToken)
+        {
+            var result = _purchaseRepository.GetPurchaseAiByUserIdAsync(userId, cancellationToken);
+            return result;
+        }
+
         public async Task<PurchasePaginationDTO> GetPurchasesAsync(int pageNumber, int pageSize, int userId, CancellationToken cancellationToken)
         {
             var (purchases, totalCount) = await _purchaseRepository.GetPurchasesByUserIdAsync(pageNumber, pageSize, userId, cancellationToken);

@@ -22,5 +22,13 @@ namespace JesterTech.Server.Services.Interfaces
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<PurchasePaginationDTO> GetPurchasesAsync(int pageNumber, int pageSize, int userId, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets a purchase by userId.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<List<PurchaseAiDTO>> GetPurchaseAiAsync(int userId, CancellationToken cancellationToken);
     }
 }

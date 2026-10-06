@@ -120,5 +120,10 @@ namespace JesterTech.Server.Services.Service
                 await _productRepository.UpdateProductImg(Id, "/images/" + uniqueFileName, cancellationToken);
             }
         }
+
+        public async Task<Products> GetProductByIdForAi(int productId, CancellationToken cancellationToken)
+        {
+            return await _productRepository.GetProductByIdForAi(productId, cancellationToken);
+        }
     }
 }

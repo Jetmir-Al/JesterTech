@@ -74,5 +74,36 @@ namespace JesterTech.Server.Repositories
 
             return (purchases, total);
         }
+
+        public async Task<List<PurchaseAiDTO>> GetPurchaseAiByUserIdAsync(int userId, CancellationToken cancellationToken)
+        {
+            var purchases = await _context.Purchases
+                .Include(p => p.User)
+                .Include(p => p.Product)
+                .Where(p => p.UserId == userId)
+                .AsNoTracking()
+                .Take(12)
+                .OrderByDescending(p => p.PurchaseDate)
+                .ToListAsync(cancellationToken);
+
+            if (purchases == null)
+            {
+                throw new InvalidOperationException("Purchase not found");
+            }
+
+            return purchases.Select(p => new PurchaseAiDTO
+            {
+                Id = p.Id,
+                UserName = p.User.Name,
+                ProductTitle = p.Product.Title,
+                Categories = p.Product.Category,
+                Quantity = p.Quantity,
+                Total = p.Total,
+                Address = p.Address,
+                PurchaseDate = p.PurchaseDate,
+                CardholderName = p.CardholderName,
+                Specifications = p.Product.Specifications
+            }).ToList();
+        }
     }
 }

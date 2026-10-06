@@ -1,4 +1,5 @@
 ﻿using JesterTech.Server.DTO;
+using JesterTech.Server.Models;
 
 namespace JesterTech.Server.Services.Interfaces
 {
@@ -30,6 +31,13 @@ namespace JesterTech.Server.Services.Interfaces
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<ProductsDTO> GetProductById(int productId, CancellationToken cancellationToken);
+        /// <summary>
+        /// Gets a product by its ID for AI purposes.
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<Products> GetProductByIdForAi(int productId, CancellationToken cancellationToken);
         /// <summary>
         /// Gets a list of featured products.
         /// </summary>
