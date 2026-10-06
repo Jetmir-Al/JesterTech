@@ -23,6 +23,12 @@ export interface IProduct {
     averageRating: number;
 }
 
+
+
+export interface ITopProduct {
+    img: string;
+}
+
 export interface IProductUpload {
     title: string;
     brand: string;
@@ -35,8 +41,8 @@ export interface IProductUpload {
 }
 
 export interface IProductAdvanced {
-    data: IProduct[];
+    totalCount: number;
     page: number;
-    totalProducts: number;
-    totalPages: number;
+    pageSize: number;
+    products: IProduct[];
 }

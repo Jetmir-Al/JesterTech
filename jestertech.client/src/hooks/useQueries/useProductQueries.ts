@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { DeleteProduct, GetProductById, GetProductCategories, GetProductsAdvanced, InsertProduct, UpdateProductImg } from "../../api/productApi";
+import { DeleteProduct, GetProductByCategory, GetProductById, GetProductCategories, GetProductsAdvanced, InsertProduct, UpdateProductImg } from "../../api/productApi";
 import type { IProductParams } from "../../types/IProduct";
 
 export const useGetProductById = (id: number) => {
@@ -58,6 +58,21 @@ export const useGetProductCategories = () => {
     });
 }
 
+
+
+export const useGetProductsByCategory = (category: string | null) => {
+    return useQuery({
+        queryKey: ["productsByCategory", category],
+        queryFn: async () => {
+
+            if(!category) {
+                return [];
+            }   
+            return await GetProductByCategory(category);
+        },
+        enabled: !!category
+    });
+}
 
 export const useDeleteProduct = () => {
     const queryClient = useQueryClient();

@@ -29,6 +29,8 @@ const Products = () => {
     });
 
 
+
+
     return (
         <main className="products-container">
             <div className="productSearch-container">
@@ -44,7 +46,7 @@ const Products = () => {
                                 <Loading />
                             </div>
                             :
-                            products?.data.map((p: IProduct) => (
+                            products?.products.map((p: IProduct) => (
                                 <div onClick={() => navigate(`/products/${p.id}`)}
                                     className='productCard'
                                     key={p.id}>
@@ -85,7 +87,7 @@ const Products = () => {
                         <FontAwesomeIcon icon={faCaretLeft} />
                     </Button>
                     {
-                        Array.from({ length: products?.totalPages || 1 }, (_, index) => (
+                        Array.from({ length: Math.ceil((products?.totalCount || 1) / (products?.pageSize || 1)) }, (_, index) => (
                             <Button
                                 key={index}
                                 type="button"
@@ -105,7 +107,7 @@ const Products = () => {
                     <Button
                         type="button"
                         className="arrowBtn"
-                        disabled={parseInt(params.page || "1") >= (products?.totalPages || 1)}
+                        disabled={parseInt(params.page || "1") >= (products?.pageSize || 1)}
                         onClick={() => {
                             setSearchParams(prev => {
                                 const params = new URLSearchParams(prev);

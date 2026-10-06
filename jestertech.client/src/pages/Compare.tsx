@@ -1,26 +1,20 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import "./pageStyles/compare.css";
-import { GetAllProducts, getImageUrl } from "../api/productApi";
+import { getImageUrl } from "../api/productApi";
 import Loading from "../utils/Loading";
 import NoInfo from "../utils/NoInfo";
-import { useGetProductCategories } from "../hooks/useQueries/useProductQueries";
+import { useGetProductCategories, useGetProductsByCategory } from "../hooks/useQueries/useProductQueries";
 import type { IProduct } from "../types/IProduct";
 import AskAiDetails from "../components/ai/AskAiDetails";
 import { useToggleAlertHook } from "../hooks/useToggle/useToggleAlert";
 
 function Compare() {
-    const { data: products, isLoading, isLoadingError } = useQuery({
-        queryKey: ["allProducts"],
-        queryFn: async () => {
-            return await GetAllProducts();
-        }
-    });
     const { data: categories } = useGetProductCategories();
     const { setMessage, setShowAlert, setType } = useToggleAlertHook();
-    const [selectedCategory, setSelectedCategory] = useState<string>("");
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
     const [selectedProducts, setSelectedProducts] = useState<IProduct[]>([]);
     const [askAi, setAskAi] = useState<boolean>(false);
+    const { data: products, isLoading, isLoadingError } = useGetProductsByCategory(selectedCategory);
 
     const filteredProducts = products?.filter((p: IProduct) => p.category === selectedCategory) || [];
 

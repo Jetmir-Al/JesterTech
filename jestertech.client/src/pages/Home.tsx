@@ -56,9 +56,9 @@ const Home = () => {
                             {
                                 isLoading ? <Loading /> : top?.map((product, index) => (
                                     <img
-                                        key={product.id}
-                                        src={getImageUrl(product.image)}
-                                        alt={product.title}
+                                        key={index}
+                                        src={getImageUrl(product.img)}
+                                        alt="Product Image"
                                         className={`product-img product-${index === 0 ? 'left' : index === 1 ? 'center' : 'right'}`}
                                     />
                                 ))

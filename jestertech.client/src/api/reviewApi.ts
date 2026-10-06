@@ -1,5 +1,5 @@
 import { type IAPIMessage } from "../types/apiTypes";
-import type { IReview } from "../types/IReview";
+import type { IReview, IReviewPagination } from "../types/IReview";
 import { api } from "./api";
 
 
@@ -12,7 +12,7 @@ export const AddReview = async (rating: number, comment: string, productId: numb
 }
 
 export const GetReviews = async (productId: number) => {
-    const response = await api.get<IReview[]>(`/Review/product/${productId}`,
+    const response = await api.get<IReviewPagination>(`/Review/product/${productId}`,
         { credentials: 'include' }
     );
     return response;

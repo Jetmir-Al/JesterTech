@@ -12,6 +12,13 @@ namespace JesterTech.Server.Services.Interfaces
         /// <returns></returns>
         Task<List<ProductsDTO>> GetAllProducts(CancellationToken cancellationToken);
         /// <summary>
+        /// Gets a list of products filtered by the specified category.
+        /// </summary>
+        /// <param name="category"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<List<ProductsDTO>> GetProductsByCategory(string category, CancellationToken cancellationToken);)
+        /// <summary>
         /// Gets a list of all product categories.
         /// </summary>
         /// <param name="cancellationToken"></param>
@@ -61,7 +68,7 @@ namespace JesterTech.Server.Services.Interfaces
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<List<ProductDTO>> GetTopProducts(CancellationToken cancellationToken);
+        Task<List<TopProducts>> GetTopProducts(CancellationToken cancellationToken);
 
         /// <summary>
         /// Creates a new product based on the provided InsertProductDTO.

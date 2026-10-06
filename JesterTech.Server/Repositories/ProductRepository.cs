@@ -110,6 +110,8 @@ namespace JesterTech.Server.Repositories
         {
             return await _context.Products
                 .AsNoTracking()
+                .GroupBy(p => p.Category)
+                .Select(p => p.OrderByDescending(p => p.Id)
                 .Select(p => new ProductsDTO
                 {
                     Id = p.Id,
@@ -121,8 +123,8 @@ namespace JesterTech.Server.Repositories
                     Category = p.Category,
                     Image = p.Image
                 })
+                .FirstOrDefault())
                 .Take(8)
-                .DistinctBy(p => p.Category)
                 .ToListAsync(cancellationToken);
         }
 
@@ -164,21 +166,12 @@ namespace JesterTech.Server.Repositories
             return (products, total);
         }
 
-        public async Task<List<ProductDTO>> GetTopProducts(CancellationToken cancellationToken)
+        public async Task<List<TopProducts>> GetTopProducts(CancellationToken cancellationToken)
         {
             return await _context.Products
                 .AsNoTracking()
-                .Select(p => new ProductDTO
-                {
-                    Id = p.Id,
-                    Title = p.Title,
-                    Brand = p.Brand,
-                    Garantee = p.Garantee,
-                    Price = p.Price,
-                    Quantity = p.Quantity,
-                    Category = p.Category,
-                    Image = p.Image
-                })
+                .Where(p => p.Category == "Smartphones")
+                .Select(p => new TopProducts(p.Image))
                 .Take(3)
                 .ToListAsync(cancellationToken);
         }
@@ -193,6 +186,25 @@ namespace JesterTech.Server.Repositories
         public async Task<Products> GetProductByIdForAi(int productId, CancellationToken cancellationToken)
         {
             return await _context.Products.FirstOrDefaultAsync(p => p.Id == productId, cancellationToken);
+        }
+
+        public async Task<List<ProductsDTO>> GetProductsByCategory(string category, CancellationToken cancellationToken)
+        {
+            return await _context.Products
+                .AsNoTracking()
+                .Where(p => p.Category == category)
+                .Select(p => new ProductsDTO
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    Brand = p.Brand,
+                    Garantee = p.Garantee,
+                    Price = p.Price,
+                    Quantity = p.Quantity,
+                    Category = p.Category,
+                    Image = p.Image
+                })
+                .ToListAsync(cancellationToken);
         }
     }
 }

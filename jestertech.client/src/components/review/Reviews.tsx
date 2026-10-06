@@ -22,9 +22,9 @@ function Reviews() {
 
               {
                   isLoading ? <Loading /> :
-                      reviews?.length === 0 ?
+                      reviews?.totalCount === 0 ?
                           <NoInfo noInfo="No reviews on this product!" /> :
-                          reviews?.map((rev: IReview, index: number) => (
+                          reviews?.reviews.map((rev: IReview, index: number) => (
                               <div className="review-card tech-theme-review"
                                    key={index}>
                                   <div className="review-header">

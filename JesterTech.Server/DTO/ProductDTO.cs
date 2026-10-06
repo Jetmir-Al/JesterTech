@@ -17,6 +17,8 @@ namespace JesterTech.Server.DTO
         public string? Image { get; set; }
     }
 
+    public record TopProducts(string Img);
+
     public class ProductsDTO
     {
         public int Id { get; set; }

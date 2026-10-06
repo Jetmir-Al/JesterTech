@@ -73,10 +73,18 @@ namespace JesterTech.Server.Controllers
         }
 
         [HttpGet("topProducts")]
-        [ProducesResponseType(typeof(List<ProductDTO>), 200)]
+        [ProducesResponseType(typeof(List<TopProducts>), 200)]
         public async Task<IActionResult> GetTopProducts(CancellationToken cancellationToken)
         {
             var products = await _productService.GetTopProducts(cancellationToken);
+            return Ok(products);
+        }
+
+        [HttpGet("productsByCategory")]
+        [ProducesResponseType(typeof(List<ProductDTO>), 200)]
+        public async Task<IActionResult> GetProductsByCategory([FromQuery] string category, CancellationToken cancellationToken)
+        {
+            var products = await _productService.GetProductsByCategory(category, cancellationToken);
             return Ok(products);
         }
 
@@ -106,5 +114,6 @@ namespace JesterTech.Server.Controllers
             await _productService.DeleteProductById(id, cancellationToken);
             return Ok();
         }
+
     }
 }

@@ -60,8 +60,8 @@ function Dashboard() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {productData?.data && productData.data.length > 0 ? (
-                                            productData.data.map((product) => (
+                                        {productData?.products && productData.products.length > 0 ? (
+                                            productData.products.map((product) => (
                                                 <tr key={product.id}>
                                                     <td className="product-id">#{product.id}</td>
                                                     <td>
@@ -128,7 +128,7 @@ function Dashboard() {
                                 <FontAwesomeIcon icon={faCaretLeft} />
                             </Button>
                             {
-                                Array.from({ length: productData?.totalPages || 1 }, (_, index) => (
+                                Array.from({ length: productData?.pageSize || 1 }, (_, index) => (
                                     <Button
                                         key={index}
                                         type="button"
@@ -142,8 +142,8 @@ function Dashboard() {
                             <Button
                                 type="button"
                                 className="arrowBtn"
-                                disabled={page >= (productData?.totalPages || 1)}
-                                onClick={() => setPage(prev => Math.min(prev + 1, productData?.totalPages || 1))}
+                                disabled={page >= (productData?.pageSize || 1)}
+                                onClick={() => setPage(prev => Math.min(prev + 1, productData?.pageSize || 1))}
                             >
                                 <FontAwesomeIcon icon={faCaretRight} />
                             </Button>

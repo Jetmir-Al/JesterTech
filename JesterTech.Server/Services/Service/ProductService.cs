@@ -81,10 +81,7 @@ namespace JesterTech.Server.Services.Service
 
             filter.AddFilter(data => data.Title.Contains(search) || data.Brand.Contains(search), !string.IsNullOrEmpty(search));
             filter.AddFilter(data => categories.Contains(data.Category), categories != null && categories.Count > 0);
-            filter.AddFilter(data => sort == "price" ? data.Price >= 0 : data.Price <= 0, !string.IsNullOrEmpty(sort));
-            filter.AddFilter(data => sort == "name" ? data.Price >= 0 : data.Price <= 0, !string.IsNullOrEmpty(sort));
-            filter.AddFilter(data => sort == "new" ? data.Price >= 0 : data.Price <= 0, !string.IsNullOrEmpty(sort));
-            filter.AddFilter(data => sort == "old" ? data.Id >= 0 : data.Price <= 0, !string.IsNullOrEmpty(sort));
+           
 
             var predicate = filter.Build();
             var (products, totalCount) = await _productRepository.GetProductsPagination(page, pageSize, predicate, sort, cancellationToken);
@@ -97,7 +94,7 @@ namespace JesterTech.Server.Services.Service
             };    
         }
 
-        public async Task<List<ProductDTO>> GetTopProducts(CancellationToken cancellationToken)
+        public async Task<List<TopProducts>> GetTopProducts(CancellationToken cancellationToken)
         {
             return await _productRepository.GetTopProducts(cancellationToken);
         }
@@ -124,6 +121,11 @@ namespace JesterTech.Server.Services.Service
         public async Task<Products> GetProductByIdForAi(int productId, CancellationToken cancellationToken)
         {
             return await _productRepository.GetProductByIdForAi(productId, cancellationToken);
+        }
+
+        public async Task<List<ProductsDTO>> GetProductsByCategory(string category, CancellationToken cancellationToken)
+        {
+            return await _productRepository.GetProductsByCategory(category, cancellationToken);
         }
     }
 }

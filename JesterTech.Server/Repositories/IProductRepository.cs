@@ -36,7 +36,7 @@ namespace JesterTech.Server.Repositories
         /// </summary>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<List<ProductDTO>> GetTopProducts(CancellationToken cancellationToken);
+        Task<List<TopProducts>> GetTopProducts(CancellationToken cancellationToken);
         /// <summary>
         /// Gets the featured products from the database.
         /// </summary>
@@ -53,6 +53,13 @@ namespace JesterTech.Server.Repositories
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<(List<ProductsDTO>, int TotalCount)> GetProductsPagination(int page, int pageSize, ExpressionStarter<Products> predicate, string? sort, CancellationToken cancellationToken);
+        /// <summary>
+        /// Gets products by category from the database.
+        /// </summary>
+        /// <param name="category"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<List<ProductsDTO>> GetProductsByCategory(string category, CancellationToken cancellationToken);
         /// <summary>
         /// Gets a product by its ID from the database.
         /// </summary>
