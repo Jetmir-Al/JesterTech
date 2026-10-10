@@ -18,15 +18,22 @@ const AddReview = ({ setReview }: { setReview: () => void }) => {
 
     const handleReviewSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
-        console.log(rating, comment, Number(id));
         try {
+
             setType("info");
             setMessage("Processing your review...!");
             setShowAlert(true);
-            await createReview({ rating, comment, productId: Number(id) });
-            setType("success");
-            setMessage("Your review has been submited!");
-            setShowAlert(true);
+            await createReview(
+                { rating, comment, productId: Number(id) },
+                {
+                    onSuccess: () => {
+                        setType("success");
+                        setMessage("Your review has been submited!");
+                        setShowAlert(true);
+                        setReview();
+                    },
+                }
+            );
 
         } catch {
             setType("error");

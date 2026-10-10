@@ -53,7 +53,7 @@ function Compare() {
                             <select
                                 name="category"
                                 id="category"
-                                value={selectedCategory}
+                                value={String(selectedCategory)}
                                 onChange={handleCategoryChange}
                             >
                                 <option value="" disabled>Select Category</option>

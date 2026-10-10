@@ -1,5 +1,5 @@
 import { type IAPIMessage } from "../types/apiTypes";
-import type { IReview, IReviewPagination } from "../types/IReview";
+import type { IReviewPagination } from "../types/IReview";
 import { api } from "./api";
 
 

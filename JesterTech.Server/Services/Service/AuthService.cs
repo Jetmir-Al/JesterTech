@@ -12,7 +12,7 @@ namespace JesterTech.Server.Services.Service
         IJwtService _jwtService
         ) : IAuthService
     {
-        private readonly PasswordHasher<Users> _passwordHasher;
+        private readonly PasswordHasher<Users> _passwordHasher = new();
 
         public async Task<AuthResultDTO> Login(LoginDTO loginDto, CancellationToken cancellationToken)
         {
@@ -21,7 +21,7 @@ namespace JesterTech.Server.Services.Service
             var res = _passwordHasher.VerifyHashedPassword(user, user.Password, loginDto.Password);
             
             if (res == PasswordVerificationResult.Failed) 
-                return null;
+                throw new InvalidOperationException("Invalid credentials.");
 
             var token = _jwtService.GenerateToken(user);
 
@@ -35,6 +35,7 @@ namespace JesterTech.Server.Services.Service
                     Id = user.Id,
                     Name = user.Name,
                     Email = user.Email,
+                    Role = user.Role,
                     CreatedAt = user.CreatedAt,
                 }
             };

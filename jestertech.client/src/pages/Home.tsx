@@ -24,15 +24,10 @@ const Home = () => {
             <section className="hero-section">
                 <div className="hero-container">
                     <div className="hero-content">
-                        <div className="hero-badge">
-                            Powered by Next-Gen AI
-                        </div>
 
                         <h1 className="hero-title">
                             Next-Gen Tech, <br />
-                            <span className="hero-title-gradient">
                                 Intelligently Compared.
-                            </span>
                         </h1>
 
                         <p className="hero-description">

@@ -122,12 +122,18 @@
     font-size: 0.85rem;
 }
 
+.review-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 .review-card .reviews-comment {
     font-size: 0.95rem;
     line-height: 1.5;
     color: var(--color-text);
     margin: 0;
-}width: 100%;
+    width: 100%;
 }
 
 .productReviewBtns {

@@ -67,11 +67,6 @@
     }
 }
 
-.hero-title-gradient {
-    background: linear-gradient(to right, #dc2626, #4f46e5);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
 
 .hero-description {
     font-size: 1.125rem;
@@ -119,7 +114,7 @@
     position: absolute;
     width: 18rem;
     height: 18rem;
-    background-color: var(--color-primary-light);
+    background-color: var(--color-border);
     border-radius: 9999px;
     filter: blur(48px);
     z-index: 0;

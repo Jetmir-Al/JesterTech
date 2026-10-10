@@ -1,5 +1,6 @@
 ﻿using JesterTech.Server.DTO;
 using JesterTech.Server.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -40,17 +41,17 @@ namespace JesterTech.Server.Controllers
         }
 
         [HttpPost("login")]
-        [ProducesResponseType(typeof(AuthResultDTO), 200)]
+        [ProducesResponseType(typeof(LoginResponseDTO), 200)]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO, CancellationToken cancellationToken)
         {
             var result = await _authService.Login(loginDTO, cancellationToken);
             if (result == null)
             {
-                return Unauthorized(new { message = "Invalid credentials." });
+                return Unauthorized();
             }
 
             SetAuthCookie(result.Token);
-            return Ok(result);
+            return Ok(result.User);
         }
 
         [Authorize]
@@ -58,14 +59,14 @@ namespace JesterTech.Server.Controllers
         [ProducesResponseType(typeof(LoginResponseDTO), 200)]
         public IActionResult CheckStatus()
         {
-            var userId = User.FindFirst("Id")?.Value;
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var name = User.FindFirst(ClaimTypes.Name)?.Value;
             var email = User.FindFirst(ClaimTypes.Email)?.Value;
             var role = User.FindFirst(ClaimTypes.Role)?.Value;
 
             if (userId == null || name == null || email == null || role == null)
             {
-                return Unauthorized(new { message = "User is not authenticated." });
+                return Unauthorized();
             }
 
             return Ok(new
