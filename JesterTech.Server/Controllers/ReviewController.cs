@@ -2,6 +2,7 @@
 using JesterTech.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace JesterTech.Server.Controllers
 {
@@ -15,11 +16,11 @@ namespace JesterTech.Server.Controllers
         public async Task<IActionResult> CreateReview(int productId, [FromBody] CreateReviewDto dto, CancellationToken cancellationToken)
         {
 
-            var userIdClaim = User.FindFirst("Id") ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null)
                 return Unauthorized();
 
-            if (!int.TryParse(userIdClaim.Value, out int userId))
+            if (!int.TryParse(userIdClaim, out int userId))
             {
                 return BadRequest();
             }

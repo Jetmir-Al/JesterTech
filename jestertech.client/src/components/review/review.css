@@ -2,11 +2,11 @@
 .productReviews-container {
     display: flex;
     justify-content: center;
-    padding: 2rem 1rem;
     gap: 2rem;
     align-items: center;
     flex-direction: column;
     width: 100%;
+    padding-top: 2rem;
 }
 
 .productReview-form {
@@ -209,9 +209,40 @@
     color: gold;
 }
 
+.reviewPageBtns {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    background-color: var(--color-surface-alt);
+    padding: 1rem;
+}
+.reviewPageBtns-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
 
-@media screen and (max-width: 758px){
-    .productReview-inputs{
+.reviewPageBtn {
+    border: 2px solid var(--color-primary);
+    padding: 0.5rem 0.7rem;
+    color: var(--color-primary);
+    background-color: transparent;
+    border-radius: 4px;
+}
+    .reviewPageBtn:hover {
+        background-color: var(--color-primary);
+        color: white;
+    }
+    .reviewPageBtn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+@media screen and (max-width: 758px) {
+    .productReview-inputs {
         width: 80%;
     }
 }

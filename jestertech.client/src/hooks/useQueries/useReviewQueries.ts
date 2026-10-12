@@ -1,11 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetReviews, AddReview } from "../../api/reviewApi";
+import type { IReviewParams } from "../../types/IReview";
 
 
-export const useGetReviews = (productId: number) => {
+export const useGetReviews = ({productId, pageNumber = 1, pageSize = 10}: IReviewParams) => {
     return useQuery({
-        queryKey: ["reviews", productId],
-        queryFn: () => GetReviews(productId)
+        queryKey: ["reviews", productId, pageNumber, pageSize],
+        queryFn: () => GetReviews(productId, pageNumber, pageSize)
     });
 };
 

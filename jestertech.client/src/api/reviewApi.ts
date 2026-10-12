@@ -11,8 +11,8 @@ export const AddReview = async (rating: number, comment: string, productId: numb
     return response;
 }
 
-export const GetReviews = async (productId: number) => {
-    const response = await api.get<IReviewPagination>(`/Review/product/${productId}`,
+export const GetReviews = async (productId: number, pageNumber: number = 1, pageSize: number = 5) => {
+    const response = await api.get<IReviewPagination>(`/Review/product/${productId}?pageNumber=${pageNumber}&pageSize=${pageSize}`,
         { credentials: 'include' }
     );
     return response;

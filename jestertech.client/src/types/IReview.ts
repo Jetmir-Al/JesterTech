@@ -9,7 +9,11 @@ export interface IReview {
     comment: string;
 }
 
-
+export interface IReviewParams {
+    productId: number;
+    pageNumber: number;
+    pageSize: number;
+}
 
 export interface IReviewPagination{
     totalCount: number;

@@ -79,6 +79,8 @@ const ProductDetails = () => {
                                     id={Number(id)}
                                     setBuyForm={() => setToggleBuy(b => !b)}
                                     Quantity={product.quantity}
+                                    productName={product.title}
+                                    productPrice={product.price}
                                 />
 
                                 : null

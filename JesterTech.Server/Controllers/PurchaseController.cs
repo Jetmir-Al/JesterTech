@@ -2,6 +2,7 @@
 using JesterTech.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace JesterTech.Server.Controllers
 {
@@ -18,15 +19,15 @@ namespace JesterTech.Server.Controllers
         [ProducesResponseType(typeof(void), 200)]
         public async Task<IActionResult> CreatePurchase(int productId, [FromBody] CreatePurchaseDto dto, CancellationToken cancellationToken)
         {
-            var userIdClaim = User.FindFirst("Id");
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value; ;
             if (userIdClaim == null)
-                return Unauthorized(new { message = "User is not logged in" });
+                return Unauthorized();
 
-            int userId = int.Parse(userIdClaim.Value);
+            int userId = int.Parse(userIdClaim);
 
             var product = await _productService.GetProductById(productId, cancellationToken);
             if ( product == null)
-                return BadRequest(new { message = "Product not found" });
+                return BadRequest();
 
 
             if (product.Quantity < dto.Quantity)
@@ -45,11 +46,11 @@ namespace JesterTech.Server.Controllers
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 5)
         {
-            var userIdClaim = User.FindFirst("Id") ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier);
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null)
                 return Unauthorized(new { message = "User is not logged in" });
 
-            if (!int.TryParse(userIdClaim.Value, out int userId))
+            if (!int.TryParse(userIdClaim, out int userId))
             {
                 return BadRequest(new { message = "Invalid user identity format." });
             }

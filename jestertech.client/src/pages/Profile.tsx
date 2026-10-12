@@ -50,7 +50,7 @@ const Profile = () => {
                     <h2>
                         Email: {user && user.email}
                     </h2>
-                    <i>Nr. of purchases: {purchase?.totalPurchases}</i>
+                    <i>Nr. of purchases: {purchase?.totalCount}</i>
                     <Button
                         className="logout-button"
                         onClick={() => handleLogout()}
@@ -65,10 +65,10 @@ const Profile = () => {
                 <div className="purchase-container">
                     {
                         isLoading ? <Loading /> :
-                            purchase?.data.length === 0 ?
+                            purchase?.purchases.length === 0 ?
                                 < NoInfo noInfo="No purchase information available." />
                                 :
-                                purchase?.data.map((p: IPurchase) => (
+                                purchase?.purchases.map((p: IPurchase) => (
                                     <PurchaseCard
                                         key={p.id}
                                         productTitle={p.productTitle}
@@ -84,6 +84,9 @@ const Profile = () => {
                                     />
                                 ))
                     }
+
+                    { 
+                    purchase?.totalCount !== undefined &&
                     <div className="pageNumbers-container">
                         <Button
                             type="button"
@@ -102,13 +105,13 @@ const Profile = () => {
 
 
                         <p>
-                            Page {parseInt(searchParams.get("page") || "1")} of {purchase?.totalPages || 1}
+                            Page {parseInt(searchParams.get("page") || "1")} of {Math.ceil(purchase?.totalCount / 5) || 1}
                         </p>
 
                         <Button
                             type="button"
                             className="arrowBtn"
-                            disabled={parseInt(searchParams.get("page") || "1") >= (purchase?.totalPages || 1)}
+                            disabled={parseInt(searchParams.get("page") || "1") >= (Math.ceil(purchase?.totalCount / 5) || 1)}
                             onClick={() => {
                                 setSearchParams(prev => {
                                     const params = new URLSearchParams(prev);
@@ -120,6 +123,7 @@ const Profile = () => {
                             <FontAwesomeIcon icon={faCaretRight} />
                         </Button>
                     </div>
+                   }
                 </div>
             </div>
             <AiDisplay mode="purchases" />

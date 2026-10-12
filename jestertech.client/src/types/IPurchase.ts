@@ -12,11 +12,21 @@ export interface IPurchase {
     address: string;
 }
 
+
+
+export interface PurchaseFormProps {
+    setBuyForm: () => void;
+    Quantity: number;
+    id: number;
+    productName: string;
+    productPrice: number;
+}
+
 export interface IPurchaseAdvanced {
-    data: IPurchase[];
+    purchases: IPurchase[];
     page: number;
-    totalPurchases: number;
-    totalPages: number;
+    pageSize: number;
+    totalCount: number;
 }
 
 export interface IPurchaseParams {

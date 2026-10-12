@@ -13,14 +13,18 @@ import type { IReview } from "../../types/IReview";
 function Reviews() {
     const [reviewForm, setReviewForm] = useState<boolean>(false);
     const { id } = useParams();
-    const { data: reviews, isLoading } = useGetReviews(Number(id));
+    const [page, setPage] = useState<number>(1);
+    const { data: reviews, isLoading } = useGetReviews({
+        productId: Number(id),
+        pageNumber: page,
+        pageSize: 5
+    });
     const { user, authenticated } = useAuthHook();
     return (
         <div className="productReviews-container">
             <h2 className="review-title">Reviews</h2>
 
             <div className="productReviews">
-
                 {
                     isLoading ? <Loading /> :
                         reviews?.totalCount === 0 ?
@@ -48,7 +52,37 @@ function Reviews() {
                                 </div>
                             ))
                 }
+
+
             </div>
+                {
+                    reviews?.totalCount !== undefined && 
+                    <div className="reviewPageBtns">
+                        <p>Page {reviews?.page} of {Math.ceil(reviews?.totalCount / 5)}</p>
+                                
+                        <div className="reviewPageBtns-container">
+                            <Button
+                                type="button"
+                                disabled={reviews?.page === 1}
+                                onClick={() => reviews?.page && reviews.page > 1 && setPage(reviews.page - 1)}
+                                className="reviewPageBtn"
+                                >
+                                    Prev
+                            </Button>
+
+                            <Button
+                                type="button"
+                                disabled={reviews?.page === Math.ceil(reviews?.totalCount / 5)}
+
+                                onClick={() => reviews?.page && reviews.page < reviews.totalCount && setPage(reviews.page + 1)}
+                                className="reviewPageBtn"
+                                >
+                                Next
+                            </Button>
+
+                        </div>
+                    </div>
+                }
             {
                 (user && authenticated) && (
                     reviewForm ?

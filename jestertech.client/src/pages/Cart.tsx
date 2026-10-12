@@ -60,6 +60,9 @@ const Cart = () => {
                                             id={c.id}
                                             setBuyForm={() => setBuyForm(b => !b)}
                                             Quantity={c.quantity}
+                                            productName={c.name}
+                                            productPrice={c.price}
+
                                         />
                                     }
                                 </div>
