@@ -19,7 +19,7 @@ export const GetTopProducts = async () => {
 
 
 export const GetProductByCategory = async (category: string) => {
-    const response = await api.get<IProduct[]>(`/Product/productsByCategory/${category}`);
+    const response = await api.get<IProduct[]>(`/Product/productsByCategory?category=${category}`);
     return response as unknown as IProduct[];
 }
 

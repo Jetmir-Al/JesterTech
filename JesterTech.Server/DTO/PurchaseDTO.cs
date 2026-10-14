@@ -34,7 +34,7 @@ namespace JesterTech.Server.DTO
         public string Address { get; set; }
         public string CardholderName { get; set; }
         public string CardNumber { get; set; }
-        public DateTime PurchaseDate { get; set; } = DateTime.Now;
+        public DateTime PurchaseDate { get; set; } = DateTime.UtcNow;
     }
 
     public class PurchasePaginationDTO

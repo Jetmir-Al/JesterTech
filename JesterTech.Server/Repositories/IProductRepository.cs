@@ -59,7 +59,7 @@ namespace JesterTech.Server.Repositories
         /// <param name="category"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<List<ProductsDTO>> GetProductsByCategory(string category, CancellationToken cancellationToken);
+        Task<List<ProductByCategoryResponseDTO>> GetProductsByCategory(string category, CancellationToken cancellationToken);
         /// <summary>
         /// Gets a product by its ID from the database.
         /// </summary>

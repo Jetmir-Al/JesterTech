@@ -123,7 +123,7 @@ namespace JesterTech.Server.Services.Service
             return await _productRepository.GetProductByIdForAi(productId, cancellationToken);
         }
 
-        public async Task<List<ProductsDTO>> GetProductsByCategory(string category, CancellationToken cancellationToken)
+        public async Task<List<ProductByCategoryResponseDTO>> GetProductsByCategory(string category, CancellationToken cancellationToken)
         {
             return await _productRepository.GetProductsByCategory(category, cancellationToken);
         }

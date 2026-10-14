@@ -37,13 +37,6 @@ function PurchaseForm({ setBuyForm, Quantity, id, productName, productPrice }: P
                     CardNumber, 
                     quantity, 
                     address 
-                }, 
-                {
-                    onSuccess: () => {
-                        setType("success");
-                        setMessage("Product has been purchased! You can view details on your profile!");
-                        removeCartItem(id);
-                    }
                 }
             );
         } catch {
@@ -51,7 +44,12 @@ function PurchaseForm({ setBuyForm, Quantity, id, productName, productPrice }: P
             setShowAlert(true);
             setType("error");
             setMessage("Could not process your purchase! Try again later!");
+        } finally {
+           setType("success");
+           setMessage("Product has been purchased! You can view details on your profile!");
+           removeCartItem(id);
         }
+
     }
 
     const subtotal = productPrice * quantity;

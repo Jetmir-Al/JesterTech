@@ -188,22 +188,12 @@ namespace JesterTech.Server.Repositories
             return await _context.Products.FirstOrDefaultAsync(p => p.Id == productId, cancellationToken);
         }
 
-        public async Task<List<ProductsDTO>> GetProductsByCategory(string category, CancellationToken cancellationToken)
+        public async Task<List<ProductByCategoryResponseDTO>> GetProductsByCategory(string category, CancellationToken cancellationToken)
         {
             return await _context.Products
                 .AsNoTracking()
                 .Where(p => p.Category == category)
-                .Select(p => new ProductsDTO
-                {
-                    Id = p.Id,
-                    Title = p.Title,
-                    Brand = p.Brand,
-                    Garantee = p.Garantee,
-                    Price = p.Price,
-                    Quantity = p.Quantity,
-                    Category = p.Category,
-                    Image = p.Image
-                })
+                .Select(p => new ProductByCategoryResponseDTO(p.Id, p.Title, p.Brand, p.Garantee, p.Price, p.Quantity, p.Category, p.Specifications, p.Image))
                 .ToListAsync(cancellationToken);
         }
     }

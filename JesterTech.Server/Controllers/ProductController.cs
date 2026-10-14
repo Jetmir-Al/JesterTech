@@ -81,7 +81,7 @@ namespace JesterTech.Server.Controllers
         }
 
         [HttpGet("productsByCategory")]
-        [ProducesResponseType(typeof(List<ProductDTO>), 200)]
+        [ProducesResponseType(typeof(List<ProductByCategoryResponseDTO>), 200)]
         public async Task<IActionResult> GetProductsByCategory([FromQuery] string category, CancellationToken cancellationToken)
         {
             var products = await _productService.GetProductsByCategory(category, cancellationToken);

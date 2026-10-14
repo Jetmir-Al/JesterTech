@@ -34,6 +34,18 @@ namespace JesterTech.Server.DTO
         public double AverageRating { get; set; } = 0;
     }
 
+    public record ProductByCategoryResponseDTO(
+        int Id,
+        string Title,
+        string Brand,
+        int Garantee,
+        decimal Price,
+        int Quantity,
+        string Category,
+        string Specifications,
+        string? Image
+    );
+
     public class InsertProductDTO
     {
         public string Title { get; set; }
