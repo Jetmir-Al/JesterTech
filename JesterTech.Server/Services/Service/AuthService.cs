@@ -17,7 +17,10 @@ namespace JesterTech.Server.Services.Service
         public async Task<AuthResultDTO> Login(LoginDTO loginDto, CancellationToken cancellationToken)
         {
             var user = await _authRepository.GetUserByEmail(loginDto.Email, cancellationToken);
-
+            if (user == null)
+            {
+                return null;
+            }
             var res = _passwordHasher.VerifyHashedPassword(user, user.Password, loginDto.Password);
             
             if (res == PasswordVerificationResult.Failed) 

@@ -13,6 +13,7 @@ import { useAuthHook } from "../../hooks/useAuthHook";
 import { faUserGear } from "@fortawesome/free-solid-svg-icons/faUserGear";
 import { faChartBar } from "@fortawesome/free-solid-svg-icons/faChartBar";
 import { useEffect, useRef } from "react";
+import { faStore } from "@fortawesome/free-solid-svg-icons/faStore";
 
 const NavBar = () => {
     const { toggleMode, mode } = useToggleModeHook();
@@ -61,6 +62,7 @@ const NavBar = () => {
                     <Button
                         type="button"
                         className=""
+                        title={mode ? "Switch to light mode" : "Switch to dark mode"}
                         onClick={toggleMode}>
                         {
                             mode ?
@@ -72,12 +74,23 @@ const NavBar = () => {
                     <Button
                         type="button"
                         className=""
+                        title="Search for products, brands and more..."
                         onClick={() => openSearchBarFunc()}>
                         <FontAwesomeIcon icon={faMagnifyingGlass} className="icons" />
                     </Button>
+                    
+                    <Button
+                        type="button"
+                        className=""
+                        title="Go to products page"
+                        onClick={() => navigate("/products")}>
+                        <FontAwesomeIcon icon={faStore} className="icons" />
+                    </Button>
+
                     <Button
                         className=""
                         type="button"
+                        title="Go to compare products page"
                         onClick={() => navigate("/compare")}
                     >
                         <FontAwesomeIcon
@@ -87,6 +100,7 @@ const NavBar = () => {
                     <Button
                         type="button"
                         className=""
+                        title="Go to cart"
                         onClick={() => navigate("/cart")}>
                         <FontAwesomeIcon icon={faCartShopping} className="icons" />
                     </Button>
@@ -94,12 +108,14 @@ const NavBar = () => {
                         <Button
                             type="button"
                             className=""
+                            title="Go to profile"
                             onClick={() => navigate("/profile")}>
                             <FontAwesomeIcon icon={faUserGear} className="icons" />
                         </Button>
                         : <Button
                             type="button"
                             className=""
+                            title="Go to login"
                             onClick={() => toggleDisplayFormFunc()}>
                             <FontAwesomeIcon icon={faUser} className="icons" />
                         </Button>

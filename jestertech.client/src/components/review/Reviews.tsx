@@ -56,7 +56,7 @@ function Reviews() {
 
             </div>
                 {
-                    reviews?.totalCount !== undefined && 
+                    (reviews?.totalCount !== undefined && reviews.totalCount > 0) && 
                     <div className="reviewPageBtns">
                         <p>Page {reviews?.page} of {Math.ceil(reviews?.totalCount / 5)}</p>
                                 

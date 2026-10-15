@@ -128,7 +128,9 @@ function Dashboard() {
                                 <FontAwesomeIcon icon={faCaretLeft} />
                             </Button>
                             {
-                                Array.from({ length: productData?.pageSize || 1 }, (_, index) => (
+                                productData?.pageSize && productData?.totalCount &&
+
+                                Array.from({ length: Math.ceil(productData?.totalCount / productData?.pageSize) || 1 }, (_, index) => (
                                     <Button
                                         key={index}
                                         type="button"

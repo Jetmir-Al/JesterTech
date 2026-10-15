@@ -16,8 +16,9 @@ export const useCreateReview = () => {
         mutationFn: async (params: { rating: number, comment: string, productId: number }) => {
             return await AddReview(params.rating, params.comment, params.productId);
         },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["reviews"] });
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ["reviews"] });
+            await queryClient.invalidateQueries({ queryKey: ["productDetails"] });
            
         },
         onError: (err) => {

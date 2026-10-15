@@ -10,6 +10,8 @@ import { useToggleAlertHook } from "../../hooks/useToggle/useToggleAlert";
 import { useState } from "react";
 import PurchaseForm from "../purchase/PurchaseForm";
 import AiDisplay from "../ai/AiDisplay";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 
@@ -45,6 +47,15 @@ const ProductDetails = () => {
                                 alt={product.title} />
                             <h2 className='productTitle'>
                                 {product.brand}
+                                <br/>
+                                <span className='review-stars'>
+                                   {Array.from({ length: product.averageRating }).map((_, index) => (
+                                        <FontAwesomeIcon key={index} icon={faStar} className="starIcons" />
+                                   ))}
+                                   {Array.from({ length: 5 - product.averageRating }).map((_, index) => (
+                                        <FontAwesomeIcon key={index} icon={faStar} />
+                                   ))}
+                                </span>
                             </h2>
                             {
                                 product.quantity === 0 && (

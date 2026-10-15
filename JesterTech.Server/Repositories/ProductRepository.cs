@@ -143,8 +143,8 @@ namespace JesterTech.Server.Repositories
             {
                 "price" => query.OrderBy(p => p.Price),
                 "name" => query.OrderByDescending(p => p.Title),
-                "new" => query.OrderBy(p => p.Id),
-                "old" => query.OrderByDescending(p => p.Id),
+                "new" => query.OrderByDescending(p => p.Id),
+                "old" => query.OrderBy(p => p.Id),
                 _ => query
             };
 
@@ -160,7 +160,12 @@ namespace JesterTech.Server.Repositories
                     Price = p.Price,
                     Quantity = p.Quantity,
                     Category = p.Category,
-                    Image = p.Image
+                    Image = p.Image,
+                    AverageRating = _context.Reviews
+                        .Where(r => r.ProductId == p.Id).Any()
+                        ? _context.Reviews
+                        .Where(r => r.ProductId == p.Id).Average(r => r.Rating)
+                        : 0
                 })
                 .ToListAsync(cancellationToken);
             return (products, total);

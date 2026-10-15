@@ -1,14 +1,13 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import './signup.css';
+import { faXmark, faUser, faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import "./auth.css";
 import Button from '../ui/Button';
 import { useToggleNavbarUtilsHook } from "../../hooks/useToggle/useToggleNavbarUtils";
 import { useRegister } from "../../hooks/useQueries/useAuthQueries";
-
+import { Link } from "react-router";
 
 function SignUp() {
-
     const { toggleFormFunc, toggleDisplayFormFunc } = useToggleNavbarUtilsHook();
     const [name, setName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
@@ -30,65 +29,97 @@ function SignUp() {
             setBadInfo(true);
             return;
         }
-    }
-
+    };
 
     return (
-        <div className="login signup grid" id="signup-content">
-            <form className="signup__form grid" onSubmit={handleSignup}>
-                <h3 className="signup__title">Sign Up</h3>
-                {
-                    badInfo &&
-                    <div>
-                        <h5 className="badInfo">Invalid information provided!</h5>
-                    </div>
-                }
-                <div className="signup__group grid">
-                    <div>
-                        <label htmlFor="signup-name" className="signup__label">Name</label>
-                        <input type="text" placeholder="Write your name"
-                            id="signup-name" className="signup__input"
-                            name="emri" required
-                            onChange={(e) => setName(e.target.value)} />
-                    </div>
+        <div className="signup-modal-overlay" id="signup-content">
+            <div className="signup-modal-card">
+                <button 
+                    type="button" 
+                    className="auth-close-btn" 
+                    onClick={() => toggleDisplayFormFunc()}
+                >
+                    <FontAwesomeIcon icon={faXmark} />
+                </button>
 
-                    <div>
-                        <label htmlFor="signup-email" className="signup__label">Email</label>
-                        <input type="email" placeholder="Write your email" id="signup-email"
-                            className="signup__input" name="email" required
-                            onChange={(e) => setEmail(e.target.value)} />
-                    </div>
-
-                    <div>
-                        <label htmlFor="signup-pass" className="signup__label">Password</label>
-                        <input type="password" placeholder="Create a password"
-                            id="signup-pass" className="signup__input" name="fjalekalimi"
-                            minLength={6}
-                            required
-                            onChange={(e) => setPassword(e.target.value)} />
-                    </div>
-               
-                    <div>
-
-                        <span className="signup__login">
-                            Already have an account? <a onClick={() => toggleFormFunc()}>Login</a>
-                        </span>
-                        <Button
-                            type="submit"
-                            className="signup__button button"
-                            onClick={() => { }}>
-                            Signup
-                        </Button>
-                    </div>
+                <div className="auth-header">
+                    <h3>Create Account</h3>
+                    <p>Join EcomTech for fast & secure checkout</p>
                 </div>
-            </form>
-            <Button 
-                className=""
-                type="button"
-                onClick={() => toggleDisplayFormFunc()}>
-                <FontAwesomeIcon icon={faXmark} className="ri-close-line signup__close" />
-            </Button>
+
+                <form className="signup__form" onSubmit={handleSignup}>
+                    {badInfo && (
+                        <div className="bad-info-banner">
+                            <h5 className="badInfo">Invalid information provided!</h5>
+                        </div>
+                    )}
+
+                    <div className="signup__group">
+                        <div className="auth-field">
+                            <label htmlFor="signup-name" className="signup__label">Full Name</label>
+                            <div className="input-icon-wrapper">
+                                <input 
+                                    type="text" 
+                                    placeholder="John Doe"
+                                    id="signup-name" 
+                                    className="signup__input"
+                                    name="emri" 
+                                    required
+                                    onChange={(e) => setName(e.target.value)} 
+                                />
+                                <FontAwesomeIcon icon={faUser} className="input-side-icon" />
+                            </div>
+                        </div>
+
+                        <div className="auth-field">
+                            <label htmlFor="signup-email" className="signup__label">Email Address</label>
+                            <div className="input-icon-wrapper">
+                                <input 
+                                    type="email" 
+                                    placeholder="name@example.com" 
+                                    id="signup-email"
+                                    className="signup__input" 
+                                    name="email" 
+                                    required
+                                    onChange={(e) => setEmail(e.target.value)} 
+                                />
+                                <FontAwesomeIcon icon={faEnvelope} className="input-side-icon" />
+                            </div>
+                        </div>
+
+                        <div className="auth-field">
+                            <label htmlFor="signup-pass" className="signup__label">Password</label>
+                            <div className="input-icon-wrapper">
+                                <input 
+                                    type="password" 
+                                    placeholder="At least 6 characters"
+                                    id="signup-pass" 
+                                    className="signup__input" 
+                                    name="fjalekalimi"
+                                    minLength={6}
+                                    required
+                                    onChange={(e) => setPassword(e.target.value)} 
+                                />
+                                <FontAwesomeIcon icon={faLock} className="input-side-icon" />
+                            </div>
+                        </div>
+                   
+                        <div className="auth-footer-actions">
+                            <Button
+                                type="submit"
+                                className="signup__button button"
+                            >
+                                Register
+                            </Button>
+                            <span className="signup__login">
+                                Already have an account? <span className="toggle-form" onClick={() => toggleFormFunc()}>Login</span>
+                            </span>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }
+
 export default SignUp;

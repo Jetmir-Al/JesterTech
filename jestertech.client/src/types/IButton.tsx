@@ -3,5 +3,6 @@ export interface IButtonProps {
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void,
     type?: 'submit' | 'reset' | 'button',
     className: string,
-    disabled?: boolean
+    disabled?: boolean,
+    title?: string  
 }
