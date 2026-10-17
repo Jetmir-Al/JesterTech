@@ -1,10 +1,11 @@
 ﻿using JesterTech.Server.Data;
 using JesterTech.Server.DTO;
 using JesterTech.Server.Models;
+using JesterTech.Server.Repositories.Interfaces;
 using LinqKit;
 using Microsoft.EntityFrameworkCore;
 
-namespace JesterTech.Server.Repositories
+namespace JesterTech.Server.Repositories.Repository
 {
     public class ProductRepository : IProductRepository
     {
@@ -200,6 +201,15 @@ namespace JesterTech.Server.Repositories
                 .Where(p => p.Category == category)
                 .Select(p => new ProductByCategoryResponseDTO(p.Id, p.Title, p.Brand, p.Garantee, p.Price, p.Quantity, p.Category, p.Specifications, p.Image))
                 .ToListAsync(cancellationToken);
+        }
+
+        public async Task<bool> ReduceProductStock(int productId, int quantity, CancellationToken cancellationToken)
+        {
+            int rowsAffected = await _context.Products
+                .Where(p => p.Id == productId && p.Quantity >= quantity)
+                .ExecuteUpdateAsync(p => p.SetProperty(p => p.Quantity, p => p.Quantity - quantity), cancellationToken);
+            
+            return rowsAffected > 0;
         }
     }
 }

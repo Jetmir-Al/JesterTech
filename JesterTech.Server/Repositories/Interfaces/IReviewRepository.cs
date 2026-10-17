@@ -1,6 +1,6 @@
 ﻿using JesterTech.Server.Models;
 
-namespace JesterTech.Server.Repositories
+namespace JesterTech.Server.Repositories.Interfaces
 {
     public interface IReviewRepository
     {

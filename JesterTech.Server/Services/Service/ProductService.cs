@@ -1,7 +1,7 @@
 ﻿using JesterTech.Server.DTO;
 using JesterTech.Server.Helpers;
 using JesterTech.Server.Models;
-using JesterTech.Server.Repositories;
+using JesterTech.Server.Repositories.Interfaces;
 using JesterTech.Server.Services.Interfaces;
 using LinqKit;
 

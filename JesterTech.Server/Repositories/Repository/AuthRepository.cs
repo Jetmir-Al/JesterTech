@@ -1,8 +1,9 @@
 ﻿using JesterTech.Server.Data;
 using JesterTech.Server.Models;
+using JesterTech.Server.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace JesterTech.Server.Repositories
+namespace JesterTech.Server.Repositories.Repository
 {
     public class AuthRepository: IAuthRepository
     {

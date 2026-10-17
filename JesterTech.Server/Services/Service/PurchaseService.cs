@@ -1,6 +1,6 @@
 ﻿using JesterTech.Server.DTO;
 using JesterTech.Server.Models;
-using JesterTech.Server.Repositories;
+using JesterTech.Server.Repositories.Interfaces;
 using JesterTech.Server.Services.Interfaces;
 
 namespace JesterTech.Server.Services.Service
@@ -11,15 +11,13 @@ namespace JesterTech.Server.Services.Service
     {
         public async Task CreatePurchaseById(int productId, CreatePurchaseDto createPurchaseDto, int userId, CancellationToken cancellationToken)
         {
-            var product = await _productRepository.GetProductById(productId, cancellationToken);
-            if (product == null)
-                return;
+           
+            bool reduceStock = await _productRepository.ReduceProductStock(productId, createPurchaseDto.Quantity, cancellationToken);
 
-            if (product.Quantity < createPurchaseDto.Quantity)
-                return;
-
-            product.Quantity -= createPurchaseDto.Quantity;
-            await _productRepository.SaveAsync(cancellationToken);
+            if(!reduceStock)
+            {
+                throw new InvalidOperationException("Insufficient stock for the product.");
+            }
 
             var purchase = new Purchases
             {

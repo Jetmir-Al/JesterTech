@@ -2,7 +2,7 @@
 using JesterTech.Server.Models;
 using LinqKit;
 
-namespace JesterTech.Server.Repositories
+namespace JesterTech.Server.Repositories.Interfaces
 {
     public interface IProductRepository
     {
@@ -96,6 +96,15 @@ namespace JesterTech.Server.Repositories
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task DeleteProduct(int productId, CancellationToken cancellationToken);
+        /// <summary>
+        /// Reduces the stock of a product by its ID in the database.
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="quantity"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<bool> ReduceProductStock(int productId, int quantity, CancellationToken cancellationToken);
+
         /// <summary>
         /// Saves changes to the database.
         /// </summary>

@@ -1,6 +1,6 @@
 ﻿using JesterTech.Server.DTO;
 using JesterTech.Server.Models;
-using JesterTech.Server.Repositories;
+using JesterTech.Server.Repositories.Interfaces;
 using JesterTech.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 

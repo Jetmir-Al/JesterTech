@@ -31,25 +31,22 @@ function PurchaseForm({ setBuyForm, Quantity, id, productName, productPrice }: P
             setType("info");
             setMessage("Procesing your purchase...!");
             await createPurchase(
-                {   
-                    productId: id, 
-                    CardholderName, 
-                    CardNumber, 
-                    quantity, 
-                    address 
-                }
+                {
+                    productId: id,
+                    CardholderName,
+                    CardNumber,
+                    quantity,
+                    address
+                },
             );
+            setType("success");
+            setMessage("Product has been purchased! You can view details on your profile!");
+            removeCartItem(id);
         } catch {
-            setBuyForm();
             setShowAlert(true);
             setType("error");
-            setMessage("Could not process your purchase! Try again later!");
-        } finally {
-           setType("success");
-           setMessage("Product has been purchased! You can view details on your profile!");
-           removeCartItem(id);
+            setMessage("Not enough stock available for this product!");
         }
-
     }
 
     const subtotal = productPrice * quantity;

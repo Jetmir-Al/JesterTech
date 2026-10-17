@@ -1,9 +1,10 @@
 ﻿using JesterTech.Server.Data;
 using JesterTech.Server.DTO;
 using JesterTech.Server.Models;
+using JesterTech.Server.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace JesterTech.Server.Repositories
+namespace JesterTech.Server.Repositories.Repository
 {
     public class PurchaseRepository: IPurchaseRepository
     {

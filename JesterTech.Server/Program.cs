@@ -1,5 +1,6 @@
 using JesterTech.Server.Data;
-using JesterTech.Server.Repositories;
+using JesterTech.Server.Repositories.Interfaces;
+using JesterTech.Server.Repositories.Repository;
 using JesterTech.Server.Services;
 using JesterTech.Server.Services.Interfaces;
 using JesterTech.Server.Services.Service;
