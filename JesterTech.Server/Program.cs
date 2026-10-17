@@ -1,4 +1,5 @@
 using JesterTech.Server.Data;
+using JesterTech.Server.HttpClients;
 using JesterTech.Server.Repositories.Interfaces;
 using JesterTech.Server.Repositories.Repository;
 using JesterTech.Server.Services;
@@ -18,7 +19,9 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
 // Service registrations
-builder.Services.AddHttpClient<IAiService, GroqAiService>();
+builder.Services.AddHttpClient<IAiClient, AiClient>();
+
+builder.Services.AddScoped<IAiService, AiService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IPurchaseService, PurchaseService>();

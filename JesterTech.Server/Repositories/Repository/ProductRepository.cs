@@ -14,12 +14,13 @@ namespace JesterTech.Server.Repositories.Repository
         {
             _context = context;
         }
+        /// <inheritdoc />
         public async Task CreateProduct(Products product, CancellationToken cancellationToken)
         {
             await _context.Products.AddAsync(product, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
         }
-
+        /// <inheritdoc />
         public async Task DeleteProduct(int productId, CancellationToken cancellationToken)
         {
             var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == productId, cancellationToken);
@@ -30,7 +31,7 @@ namespace JesterTech.Server.Repositories.Repository
                 await _context.SaveChangesAsync(cancellationToken);
             }
         }
-
+        /// <inheritdoc />
         public async Task<List<ProductsDTO>> GetAllProducts(CancellationToken cancellationToken)
         {
 
@@ -57,7 +58,7 @@ namespace JesterTech.Server.Repositories.Repository
                 }).ToListAsync(cancellationToken);
 
         }
-
+        /// <inheritdoc />
         public async Task<ProductsDTO> GetProductById(int id, CancellationToken cancellationToken)
         {
             var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
@@ -80,17 +81,18 @@ namespace JesterTech.Server.Repositories.Repository
                     : 0
             };
         }
-
+        /// <inheritdoc />
         public async Task UpdateProduct(Products product, CancellationToken cancellationToken)
         {
             _context.Products.Update(product);
             await SaveAsync(cancellationToken);
         }
+        /// <inheritdoc />
         public async Task SaveAsync(CancellationToken cancellationToken)
         {
             await _context.SaveChangesAsync(cancellationToken);
         }
-
+        /// <inheritdoc />
         public async Task<List<string>> GetAllCategories(CancellationToken cancellationToken)
         {
             return await _context.Products
@@ -98,7 +100,7 @@ namespace JesterTech.Server.Repositories.Repository
                 .Distinct()
                 .ToListAsync(cancellationToken);
         }
-
+        /// <inheritdoc />
         public async Task<List<string>> GetAllBrands(CancellationToken cancellationToken)
         {
             return await _context.Products
@@ -106,7 +108,7 @@ namespace JesterTech.Server.Repositories.Repository
                 .Distinct()
                 .ToListAsync(cancellationToken);
         }
-
+        /// <inheritdoc />
         public async Task<List<ProductsDTO>> GetFeaturedProducts(CancellationToken cancellationToken)
         {
             return await _context.Products
@@ -128,7 +130,7 @@ namespace JesterTech.Server.Repositories.Repository
                 .Take(8)
                 .ToListAsync(cancellationToken);
         }
-
+        /// <inheritdoc />
         public async Task<(List<ProductsDTO>, int TotalCount)> GetProductsPagination(int page, int pageSize, ExpressionStarter<Products> predicate, string? sort, CancellationToken cancellationToken)
         {
             var total = await _context.Products
@@ -171,7 +173,7 @@ namespace JesterTech.Server.Repositories.Repository
                 .ToListAsync(cancellationToken);
             return (products, total);
         }
-
+        /// <inheritdoc />
         public async Task<List<TopProducts>> GetTopProducts(CancellationToken cancellationToken)
         {
             return await _context.Products
@@ -181,19 +183,19 @@ namespace JesterTech.Server.Repositories.Repository
                 .Take(3)
                 .ToListAsync(cancellationToken);
         }
-
+        /// <inheritdoc />
         public async Task UpdateProductImg(int id, string ImgFile, CancellationToken cancellationToken)
         {
             await _context.Products
                 .Where(p => p.Id == id)
                 .ExecuteUpdateAsync(p => p.SetProperty(p => p.Image, ImgFile), cancellationToken);
         }
-
+        /// <inheritdoc />
         public async Task<Products> GetProductByIdForAi(int productId, CancellationToken cancellationToken)
         {
             return await _context.Products.FirstOrDefaultAsync(p => p.Id == productId, cancellationToken);
         }
-
+        /// <inheritdoc />
         public async Task<List<ProductByCategoryResponseDTO>> GetProductsByCategory(string category, CancellationToken cancellationToken)
         {
             return await _context.Products
@@ -202,7 +204,27 @@ namespace JesterTech.Server.Repositories.Repository
                 .Select(p => new ProductByCategoryResponseDTO(p.Id, p.Title, p.Brand, p.Garantee, p.Price, p.Quantity, p.Category, p.Specifications, p.Image))
                 .ToListAsync(cancellationToken);
         }
-
+        /// <inheritdoc />
+        public async Task<List<ProductsDTO>> GetAllProductsForAi(CancellationToken cancellationToken)
+        {
+            return await _context.Products
+                .AsNoTracking()
+                .Select(p => new ProductsDTO 
+                {
+                    Title = p.Title,
+                    Brand = p.Brand,
+                    Garantee = p.Garantee,
+                    Price = p.Price,
+                    Quantity = p.Quantity,
+                    Category = p.Category,
+                    AverageRating = _context.Reviews
+                        .Where(r => r.ProductId == p.Id).Any()
+                        ? _context.Reviews
+                        .Where(r => r.ProductId == p.Id).Average(r => r.Rating)
+                        : 0
+                })
+                .ToListAsync(cancellationToken);
+        }
         public async Task<bool> ReduceProductStock(int productId, int quantity, CancellationToken cancellationToken)
         {
             int rowsAffected = await _context.Products
@@ -211,5 +233,6 @@ namespace JesterTech.Server.Repositories.Repository
             
             return rowsAffected > 0;
         }
+
     }
 }

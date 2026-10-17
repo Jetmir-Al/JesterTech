@@ -5,7 +5,6 @@ import "./auth.css";
 import Button from '../ui/Button';
 import { useToggleNavbarUtilsHook } from "../../hooks/useToggle/useToggleNavbarUtils";
 import { useRegister } from "../../hooks/useQueries/useAuthQueries";
-import { Link } from "react-router";
 
 function SignUp() {
     const { toggleFormFunc, toggleDisplayFormFunc } = useToggleNavbarUtilsHook();

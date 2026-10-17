@@ -1,5 +1,4 @@
 ﻿using JesterTech.Server.DTO;
-using System.ComponentModel.DataAnnotations;
 
 namespace JesterTech.Server.Services.Interfaces
 {

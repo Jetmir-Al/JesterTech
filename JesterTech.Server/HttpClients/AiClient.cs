@@ -1,23 +1,22 @@
 ﻿using System.Text;
 using System.Text.Json;
 using System.Net.Http.Headers;
-using JesterTech.Server.Services.Interfaces;
 
-namespace JesterTech.Server.Services
+namespace JesterTech.Server.HttpClients
 {
-    public class GroqAiService : IAiService
+    public class AiClient : IAiClient
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
 
         
-        public GroqAiService(HttpClient httpClient, IConfiguration configuration)
+        public AiClient(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
             _configuration = configuration;
         }
 
-        public async Task<string> GetAiResponseAsync(string prompt)
+        public async Task<string> GetAiResponseAsync(string prompt, CancellationToken cancellationToken)
         {
             var apiKey = _configuration["AiSettings: ApiKey"];
             if (string.IsNullOrEmpty(apiKey))
@@ -37,15 +36,15 @@ namespace JesterTech.Server.Services
             request.Content = content;
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
 
-            var response = await _httpClient.SendAsync(request);
+            var response = await _httpClient.SendAsync(request, cancellationToken);
 
             if (!response.IsSuccessStatusCode)
             {
-                var errorResponse = await response.Content.ReadAsStringAsync();
+                var errorResponse = await response.Content.ReadAsStringAsync(cancellationToken);
                 throw new HttpRequestException($"Groq API Error: {response.StatusCode} - {errorResponse}");
             }
 
-            var responseString = await response.Content.ReadAsStringAsync();
+            var responseString = await response.Content.ReadAsStringAsync(cancellationToken);
             using var doc = JsonDocument.Parse(responseString);
 
             var aiResponseText = doc.RootElement

@@ -104,6 +104,12 @@ namespace JesterTech.Server.Repositories.Interfaces
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<bool> ReduceProductStock(int productId, int quantity, CancellationToken cancellationToken);
+        /// <summary>
+        /// Gets all products from the database based on a predicate for AI purposes.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<List<ProductsDTO>> GetAllProductsForAi(CancellationToken cancellationToken);
 
         /// <summary>
         /// Saves changes to the database.

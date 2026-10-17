@@ -19,19 +19,11 @@ namespace JesterTech.Server.Controllers
         [ProducesResponseType(typeof(void), 200)]
         public async Task<IActionResult> CreatePurchase(int productId, [FromBody] CreatePurchaseDto dto, CancellationToken cancellationToken)
         {
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value; ;
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null)
                 return Unauthorized();
 
             int userId = int.Parse(userIdClaim);
-
-            var product = await _productService.GetProductById(productId, cancellationToken);
-            if ( product == null)
-                return BadRequest();
-
-
-            if (product.Quantity < dto.Quantity)
-                return BadRequest(new { message = "Nuk ka sasi të mjaftueshme!" });
 
             await _purchaseService.CreatePurchaseById(productId, dto, userId, cancellationToken);
 

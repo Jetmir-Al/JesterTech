@@ -396,4 +396,8 @@
         width: 300px;
         min-width: 250px;
     }
+
+    .sortFilter-trigger-btn {
+        padding: 0.6rem;
+    }
 }
