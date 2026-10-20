@@ -1,0 +1,138 @@
+.image-view-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: hsla(210, 30%, 10%, 0.75);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    z-index: 9999;
+    animation: fadeInContainer 0.2s ease-out;
+}
+
+@keyframes fadeInContainer {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.image-view {
+    position: relative;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    width: 100%;
+    max-width: 750px;
+    height: 80vh;
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    animation: scaleUpCard 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes scaleUpCard {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Image Viewport container */
+.image-viewport {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    padding: 1rem;
+}
+
+.image-view img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    user-select: none;
+    pointer-events: none; /* Handled by viewport container drag events */
+}
+
+/* Top absolute close button */
+.close-top-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-color: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    color: var(--color-title);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+    .close-top-btn:hover {
+        background-color: var(--color-primary);
+        color: var(--color-text-inverse);
+        border-color: var(--color-primary);
+    }
+
+/* Floating Bottom Zoom Controls Bar */
+.zoom-controls {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 2rem;
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-md);
+    z-index: 10;
+}
+
+.zoomIn, .zoomOut, .closeImageView, .zoom-btn {
+    background-color: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-title);
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+    .zoomIn:hover, .zoomOut:hover, .closeImageView:hover, .zoom-btn:hover {
+        background-color: var(--color-primary);
+        color: var(--color-text-inverse);
+        border-color: var(--color-primary);
+        transform: translateY(-2px);
+    }
+
+

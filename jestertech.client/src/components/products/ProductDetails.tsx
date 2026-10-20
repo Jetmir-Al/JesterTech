@@ -12,6 +12,7 @@ import PurchaseForm from "../purchase/PurchaseForm";
 import AiDisplay from "../ai/AiDisplay";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ImageView from "../ui/ImageView";
 
 
 
@@ -21,6 +22,7 @@ const ProductDetails = () => {
     const { data: product, isLoading } = useGetProductById(Number(id));
     const { setShowAlert, setMessage, setType } = useToggleAlertHook();
     const [toggleBuy, setToggleBuy] = useState<boolean>(false);
+    const [viewImg, setViewImg] = useState<boolean>(false);
 
     async function handleBuyForm() {
         if (authenticated && user) {
@@ -44,7 +46,9 @@ const ProductDetails = () => {
                         <div className='productPresentation'>
                             <img className='productImg'
                                 src={getImageUrl(product.image)}
-                                alt={product.title} />
+                                alt={product.title} 
+                                onClick={() => setViewImg(b => !b)}    
+                            />
                             <h2 className='productTitle'>
                                 {product.brand}
                                 <br/>
@@ -99,6 +103,14 @@ const ProductDetails = () => {
 
                     </div >
                     <Reviews />
+                    {
+                        viewImg &&
+                        <ImageView
+                            imageUrl={getImageUrl(product.image)} 
+                            alt={product.title} 
+                            onClose={() => setViewImg(false)}
+                        />
+                    }
                 </>
             }
             <AiDisplay mode="details" />

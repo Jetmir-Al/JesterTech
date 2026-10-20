@@ -7,6 +7,7 @@ import "./pageStyles/home.css";
 import { useQuery } from "@tanstack/react-query";
 import { getImageUrl, GetTopProducts } from "../api/productApi";
 import Loading from "../utils/Loading";
+import ImageView from "../components/ui/ImageView";
 
 const Home = () => {
 
@@ -51,7 +52,7 @@ const Home = () => {
                             {
                                 isLoading ? <Loading /> : top?.map((product, index) => (
                                     <img
-                                        key={index}
+                                        key={product.img}
                                         src={getImageUrl(product.img)}
                                         alt="Product Image"
                                         className={`product-img product-${index === 0 ? 'left' : index === 1 ? 'center' : 'right'}`}

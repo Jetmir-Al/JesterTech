@@ -1,11 +1,8 @@
 ﻿using JesterTech.Server.DTO;
-using JesterTech.Server.HttpClients;
-using JesterTech.Server.Models;
 using JesterTech.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using System.Text;
 
 namespace JesterTech.Server.Controllers
 {

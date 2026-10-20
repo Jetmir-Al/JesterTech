@@ -179,6 +179,7 @@ namespace JesterTech.Server.Repositories.Repository
             return await _context.Products
                 .AsNoTracking()
                 .Where(p => p.Category == "Smartphones")
+                .OrderByDescending(p => p.Id)
                 .Select(p => new TopProducts(p.Image))
                 .Take(3)
                 .ToListAsync(cancellationToken);

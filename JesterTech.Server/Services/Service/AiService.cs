@@ -34,7 +34,7 @@ namespace JesterTech.Server.Services.Service
                 catalogBuilder.AppendLine($"[PRODUCT: {p.Title}] | Brand: {p.Brand} | AvgRating: {p.AverageRating} | Price: ${p.Price}\n{p.Specifications}\n---");
             }
 
-            var globalPrompt = $@"
+            var globalPrompt = $@"""
                 You are a brilliant retail shopping assistant for the EcomTech tech store.
                 Help the customer choose or compare items using ONLY the strict inventory list provided below.
                 If they ask for something we do not sell, say: 'We do not carry that specific item, but here are our best alternatives...'
@@ -44,7 +44,7 @@ namespace JesterTech.Server.Services.Service
                 [/STORE INVENTORY CATALOG]
 
                 Customer Question: {requestDto.UserQuestion}
-                Customer Answer preference: {requestDto.Preference}";
+                Customer Answer preference: {requestDto.Preference}""";
 
             var answer = await aiClient.GetAiResponseAsync(globalPrompt, cancellationToken);
             return answer;
@@ -67,7 +67,7 @@ namespace JesterTech.Server.Services.Service
                 catalogBuilder.AppendLine($"[REVIEW] Rating: {r.Rating}, Comment: {r.Comment}");
             }
 
-            var structuredPrompt = $@"
+            var structuredPrompt = $@"""
                 You are an expert AI product assistant for the EcomTech e-commerce platform.
                 Answer the customer's question using ONLY the system technical specifications and the reviews provided below. 
                 If the answer cannot be confidently inferred from the specifications or reviews or product information, respond politely: 
@@ -84,7 +84,7 @@ namespace JesterTech.Server.Services.Service
                 [/PRODUCT SPECIFICATIONS]
 
                 Customer Question: {requestDto.UserQuestion},
-                Customer Answer preference: {requestDto.Preference}";
+                Customer Answer preference: {requestDto.Preference}""";
 
             var aiResponse = await aiClient.GetAiResponseAsync(structuredPrompt, cancellationToken);
 
@@ -124,7 +124,7 @@ namespace JesterTech.Server.Services.Service
                 catalogBuilder.AppendLine("--------------------------------");
             }
 
-            var globalPrompt = $@"
+            var globalPrompt = $@"""
                 You are a brilliant retail shopping assistant for the EcomTech tech store.
                 Help the customer learn of the history of their purchases and offer recommendations based on their preferences and purchase history.
                 If they ask for something they did not buy, say: 'You did not buy that specific item, but here are other products you have bought...' 
@@ -138,7 +138,7 @@ namespace JesterTech.Server.Services.Service
                 [/STORE INVENTORY CATALOG]
 
                 Customer Question: {requestDto.UserQuestion}
-                Customer Answer preference: {requestDto.Preference}";
+                Customer Answer preference: {requestDto.Preference}""";
     
             var answer = await aiClient.GetAiResponseAsync(globalPrompt, cancellationToken);
             return answer;
@@ -162,7 +162,7 @@ namespace JesterTech.Server.Services.Service
                 comparisonBuilder.AppendLine("--------------------------------");
             }
 
-            var globalPrompt = $@"
+            var globalPrompt = $@"""
                 You are an expert tech reviewer for JesterTech. 
                 Your job is to objectively compare the products provided in the catalog below.
                 Provide a clear analysis of the pros and cons of each based *only* on their technical specifications.
@@ -173,7 +173,7 @@ namespace JesterTech.Server.Services.Service
                 [/PRODUCTS TO COMPARE]
 
                 Customer Question: {requestDto.UserQuestion}
-                Customer Answer preference: {requestDto.Preference}";  
+                Customer Answer preference: {requestDto.Preference}""";  
 
             var answer = await aiClient.GetAiResponseAsync(globalPrompt, cancellationToken);
 
