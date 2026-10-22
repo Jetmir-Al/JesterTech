@@ -8,9 +8,13 @@ import { getImageUrl } from "../api/productApi";
 import Button from "../components/ui/Button";
 import { useState } from "react";
 import CreateProduct from "../components/dashboard/CreateProduct";
+import ImageView from "../components/ui/ImageView";
 function Dashboard() {
     const { user } = useAuthHook();
     const [page, setPage] = useState<number>(1);
+    const [showImg, setShowImg] = useState<boolean>(false);
+    const [img, setImg] = useState<string>("");
+    const [alt, setAlt] = useState<string>("");
     const [showCreateProduct, setShowCreateProduct] = useState<boolean>(false);
     const { mutateAsync: deleteProduct } = useDeleteProduct();
     const { data: productData, isLoading } = useGetProductsAdvanced({
@@ -65,12 +69,18 @@ function Dashboard() {
                                                 <tr key={product.id}>
                                                     <td className="product-id">#{product.id}</td>
                                                     <td>
-                                                        <div className="product-cell-info">
+                                                        <div className="product-cell-info"
+                                                        >
                                                             {product.image && (
                                                                 <img
                                                                     src={getImageUrl(product.image)}
                                                                     alt={product.title}
                                                                     className="admin-product-thumb"
+                                                                    onClick={() => {
+                                                                        setShowImg(true);
+                                                                        setImg(product.image);
+                                                                        setAlt(product.title);
+                                                                    }}
                                                                 />
                                                             )}
                                                             <span className="product-name" title={product.title}>
@@ -152,6 +162,14 @@ function Dashboard() {
                         </div>
                     </div>
                 </>
+            }
+            {
+            showImg &&
+                <ImageView 
+                    imageUrl={getImageUrl(img)} 
+                    alt={alt} 
+                    onClose={() => setShowImg(false)}            
+                />
             }
         </div>
     );
