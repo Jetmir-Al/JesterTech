@@ -7,7 +7,6 @@ import "./pageStyles/home.css";
 import { useQuery } from "@tanstack/react-query";
 import { getImageUrl, GetTopProducts } from "../api/productApi";
 import Loading from "../utils/Loading";
-import ImageView from "../components/ui/ImageView";
 
 const Home = () => {
 

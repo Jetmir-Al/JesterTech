@@ -9,7 +9,16 @@ export interface IProductParams {
         sort?: string;
     }
 }
-
+export interface IProductUpload {
+    title: string;
+    brand: string;
+    garantee: number;
+    price: number;
+    category: string;
+    quantity: number;
+    specifications: string;
+    imgFile: File | null;
+}
 export interface IProduct {
     id: number;
     title: string;

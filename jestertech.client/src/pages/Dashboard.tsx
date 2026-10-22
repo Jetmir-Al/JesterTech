@@ -9,6 +9,7 @@ import Button from "../components/ui/Button";
 import { useState } from "react";
 import CreateProduct from "../components/dashboard/CreateProduct";
 import ImageView from "../components/ui/ImageView";
+import type { IProduct } from "../types/IProduct";
 function Dashboard() {
     const { user } = useAuthHook();
     const [page, setPage] = useState<number>(1);
@@ -16,6 +17,7 @@ function Dashboard() {
     const [img, setImg] = useState<string>("");
     const [alt, setAlt] = useState<string>("");
     const [showCreateProduct, setShowCreateProduct] = useState<boolean>(false);
+    const [productToEdit, setProductToEdit] = useState<IProduct | null>(null);
     const { mutateAsync: deleteProduct } = useDeleteProduct();
     const { data: productData, isLoading } = useGetProductsAdvanced({
         params: { pageSize: "30", page: page.toString() } 
@@ -43,8 +45,9 @@ function Dashboard() {
                 </Button>
             </div>
             {showCreateProduct ?
-                <CreateProduct
-                setShowCreateProduct={() => setShowCreateProduct(b => !b)}
+               <CreateProduct
+                  setShowCreateProduct={() => setShowCreateProduct(b => !b)}
+                  product={productToEdit}
             /> :
                 <>
                     <div className="dashboard-card">
@@ -101,7 +104,10 @@ function Dashboard() {
                                                         <div className="admin-action-btns">
                                                             <Button
                                                                 className="action-btn edit-btn"
-                                                                onClick={() => console.log('Edit', product.id)}
+                                                                onClick={() => {
+                                                                    setShowCreateProduct(b => !b);
+                                                                    setProductToEdit(product);
+                                                                }}
                                                                 type="button"
                                                             >
                                                                 <FontAwesomeIcon icon={faPenToSquare} />

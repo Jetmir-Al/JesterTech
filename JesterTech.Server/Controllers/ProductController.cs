@@ -88,12 +88,21 @@ namespace JesterTech.Server.Controllers
             return Ok(products);
         }
 
+        [HttpPost("UpdateProductImg")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(void), 200)]
+        public async Task<IActionResult> UpdateProductImg(int id, [FromForm] UpdateProductImgDTO productImgDto, CancellationToken cancellationToken)
+        {
+            await _productService.UpdateProductImg(id, productImgDto, cancellationToken);
+            return Ok();
+        }
+
         [HttpPost("UpdateProduct")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(void), 200)]
         public async Task<IActionResult> UpdateProduct(int id, [FromForm] UpdateProductDTO productDto, CancellationToken cancellationToken)
         {
-            await _productService.UpdateProductImg(id, productDto, cancellationToken);
+            await _productService.UpdateProduct(id, productDto, cancellationToken);
             return Ok();
         }
 

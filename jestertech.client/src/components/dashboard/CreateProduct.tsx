@@ -2,36 +2,25 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudUploadAlt } from "@fortawesome/free-solid-svg-icons";
 import Button from "../ui/Button";
-import { useCreateProduct, useUpdateProduct } from "../../hooks/useQueries/useProductQueries";
+import { useCreateProduct } from "../../hooks/useQueries/useProductQueries";
 import "./createProduct.css";
+import type { IProduct, IProductUpload } from "../../types/IProduct";
+import { useToggleAlertHook } from "../../hooks/useToggle/useToggleAlert";
 
-export interface IProductUpload {
-    title: string;
-    brand: string;
-    garantee: number;
-    price: number;
-    category: string;
-    image: string;
-    quantity: number;
-    specifications: string;
-    imgFile: File | null;
-}
-
-function CreateProduct({ setShowCreateProduct }: { setShowCreateProduct: () => void }) {
+function CreateProduct({ setShowCreateProduct, product }: { setShowCreateProduct: () => void, product: IProduct | null}) {
     const [formData, setFormData] = useState<IProductUpload>({
-        title: "",
-        brand: "",
-        garantee: 0,
-        price: 0,
-        category: "",
-        image: "",
-        quantity: 0,
-        specifications: "",
+        title: product?.title ?? "",
+        brand: product?.brand ?? "",
+        garantee: product?.garantee ?? 0,
+        price: product?.price ?? 0,
+        category: product?.category ?? "",
+        quantity: product?.quantity ?? 0,
+        specifications: product?.specifications ?? "",
         imgFile: null,
     });
 
+    const {setShowAlert, setMessage, setType} = useToggleAlertHook(); 
     const [previewImage, setPreviewImage] = useState<string | null>(null);
-    const { mutateAsync: updateProduct } = useUpdateProduct();
     const { mutateAsync: createProduct } = useCreateProduct();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -55,6 +44,8 @@ function CreateProduct({ setShowCreateProduct }: { setShowCreateProduct: () => v
     const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
+            setShowAlert(false);
+
             const data = new FormData();
             data.append("title", formData.title);
             data.append("brand", formData.brand);
@@ -67,10 +58,20 @@ function CreateProduct({ setShowCreateProduct }: { setShowCreateProduct: () => v
             if (formData.imgFile) {
                 data.append("imgFile", formData.imgFile);
             }
+
+            setShowAlert(true);
+            setType("info");
+            setMessage("Processing action...");
+            
             await createProduct(data);
             setShowCreateProduct();
+
+            setType("success");
+            setMessage("Product created successfully");
         } catch {
-            // Handle error
+            setShowAlert(true);
+            setType("error");
+            setMessage("Problem creating product try again later");
         }
     };
 

@@ -99,7 +99,7 @@ namespace JesterTech.Server.Services.Service
             return await _productRepository.GetTopProducts(cancellationToken);
         }
 
-        public async Task UpdateProductImg(int Id, UpdateProductDTO productDTO, CancellationToken cancellationToken)
+        public async Task UpdateProductImg(int Id, UpdateProductImgDTO productDTO, CancellationToken cancellationToken)
         {
             if (productDTO.ImgFile != null && productDTO.ImgFile.Length > 0)
             {
@@ -126,6 +126,39 @@ namespace JesterTech.Server.Services.Service
         public async Task<List<ProductByCategoryResponseDTO>> GetProductsByCategory(string category, CancellationToken cancellationToken)
         {
             return await _productRepository.GetProductsByCategory(category, cancellationToken);
+        }
+
+        public async Task UpdateProduct(int Id, UpdateProductDTO productDTO, CancellationToken cancellationToken)
+        {
+            var product = new Products
+            {
+                Title = productDTO.Title,
+                Brand = productDTO.Brand,
+                Garantee = productDTO.Garantee,
+                Price = productDTO.Price,
+                Quantity = productDTO.Quantity,
+                Category = productDTO.Category,
+                Specifications = productDTO.Specifications,
+            };
+
+            if (productDTO.ImgFile != null && productDTO.ImgFile.Length > 0)
+            {
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                Directory.CreateDirectory(uploadsFolder);
+
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + productDTO.ImgFile.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    productDTO.ImgFile.CopyTo(fileStream);
+                }
+
+
+                product.Image = "/images/" + uniqueFileName;
+            }
+
+            await _productRepository.UpdateProduct(product, cancellationToken);
         }
     }
 }

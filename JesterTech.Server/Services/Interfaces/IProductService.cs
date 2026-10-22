@@ -78,14 +78,21 @@ namespace JesterTech.Server.Services.Interfaces
         /// <returns></returns>
         Task CreateProduct(InsertProductDTO productDTO, CancellationToken cancellationToken);
         /// <summary>
-        /// Updates the image of a product based on the provided ID and UpdateProductDTO.
+        /// Updates the image of a product based on the provided ID and UpdateProductImgDTO.
         /// </summary>
         /// <param name="Id"></param>
         /// <param name="productDTO"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task UpdateProductImg(int Id, UpdateProductDTO productDTO, CancellationToken cancellationToken);
-
+        Task UpdateProductImg(int Id, UpdateProductImgDTO productDTO, CancellationToken cancellationToken);
+        /// <summary>
+        /// Update whole product based on the provided Id and UpdateProductDTO.
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <param name="productDTO"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task UpdateProduct(int Id, UpdateProductDTO productDTO, CancellationToken cancellationToken);
         /// <summary>
         /// Deletes a product by its ID.
         /// </summary>
