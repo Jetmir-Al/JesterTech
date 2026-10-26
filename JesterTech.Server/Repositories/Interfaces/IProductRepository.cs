@@ -52,7 +52,16 @@ namespace JesterTech.Server.Repositories.Interfaces
         /// <param name="sort"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task<(List<ProductsDTO>, int TotalCount)> GetProductsPagination(int page, int pageSize, ExpressionStarter<Products> predicate, string? sort, CancellationToken cancellationToken);
+        Task<(List<AdvancedProductDto>, int TotalCount)> GetProductsPagination(int page, int pageSize, ExpressionStarter<Products> predicate, string? sort, CancellationToken cancellationToken);
+        /// <summary>
+        /// Get products info for dashboard
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="predicate"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<(List<ProductsDTO>, int TotalCount)> GetProductsDashboardPagination(int page, int pageSize, ExpressionStarter<Products> predicate, CancellationToken cancellationToken);
         /// <summary>
         /// Gets products by category from the database.
         /// </summary>

@@ -131,7 +131,7 @@ namespace JesterTech.Server.Repositories.Repository
                 .ToListAsync(cancellationToken);
         }
         /// <inheritdoc />
-        public async Task<(List<ProductsDTO>, int TotalCount)> GetProductsPagination(int page, int pageSize, ExpressionStarter<Products> predicate, string? sort, CancellationToken cancellationToken)
+        public async Task<(List<AdvancedProductDto>, int TotalCount)> GetProductsPagination(int page, int pageSize, ExpressionStarter<Products> predicate, string? sort, CancellationToken cancellationToken)
         {
             var total = await _context.Products
                 .AsNoTracking()
@@ -154,15 +154,11 @@ namespace JesterTech.Server.Repositories.Repository
             var products = await query
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
-                .Select(p => new ProductsDTO
+                .Select(p => new AdvancedProductDto
                 {
                     Id = p.Id,
                     Title = p.Title,
-                    Brand = p.Brand,
-                    Garantee = p.Garantee,
                     Price = p.Price,
-                    Quantity = p.Quantity,
-                    Category = p.Category,
                     Image = p.Image,
                     AverageRating = _context.Reviews
                         .Where(r => r.ProductId == p.Id).Any()
@@ -218,6 +214,7 @@ namespace JesterTech.Server.Repositories.Repository
                     Price = p.Price,
                     Quantity = p.Quantity,
                     Category = p.Category,
+                    Specifications = p.Specifications,
                     AverageRating = _context.Reviews
                         .Where(r => r.ProductId == p.Id).Any()
                         ? _context.Reviews
@@ -235,5 +232,39 @@ namespace JesterTech.Server.Repositories.Repository
             return rowsAffected > 0;
         }
 
+        public async Task<(List<ProductsDTO>, int TotalCount)> GetProductsDashboardPagination(int page, int pageSize, ExpressionStarter<Products> predicate, CancellationToken cancellationToken)
+        {
+            var total = await _context.Products
+                .AsNoTracking()
+                .Where(predicate)
+                .CountAsync(cancellationToken);
+
+            var query = _context.Products
+                .AsNoTracking()
+                .Where(predicate);
+
+            var products = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(p => new ProductsDTO
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    Price = p.Price,
+                    Brand = p.Brand,
+                    Category = p.Category,
+                    Garantee = p.Garantee,
+                    Quantity = p.Quantity,
+                    Specifications = p.Specifications,
+                    Image = p.Image,
+                    AverageRating = _context.Reviews
+                        .Where(r => r.ProductId == p.Id).Any()
+                        ? _context.Reviews
+                        .Where(r => r.ProductId == p.Id).Average(r => r.Rating)
+                        : 0
+                })
+                .ToListAsync(cancellationToken);
+            return (products, total);
+        }
     }
 }

@@ -1,4 +1,4 @@
-import type { IProduct, IProductAdvanced, ITopProduct } from "../types/IProduct";
+import type { IProduct, IProductAdvanced, IProductDashboardAdvanced, ITopProduct } from "../types/IProduct";
 import { api } from "./api";
 
 
@@ -42,6 +42,14 @@ export const GetProductsAdvanced = async (params: string) => {
     }
 }
 
+export const GetProductsDashboardAdvanced = async (params: string) => {
+   
+    const response = await api.get<IProductDashboardAdvanced>(`/Product/advanced?${params}`);
+    if (response !== null) {
+        return response;
+    }
+}
+
 export const GetAllProducts = async () => {
     const response = await api.get<IProduct[]>('/Product/products');
     return response as unknown as IProduct[];
@@ -58,7 +66,7 @@ export const InsertProduct = async (product: FormData) => {
     return response;
 }
 export const UpdateProductImg = async (img: File | null, id: number) => {
-    const response = await api.post(`/Product/UpdateProduct/${id}`,
+    const response = await api.post(`/Product/UpdateProductImg/${id}`,
         { img },
         { credentials: 'include' });
     return response;
@@ -67,5 +75,16 @@ export const UpdateProductImg = async (img: File | null, id: number) => {
 export const DeleteProduct = async (id: number) => {
     const response = await api.delete(`/Product/DeleteProduct/${id}`,
         { credentials: 'include' });
+    return response;
+}
+
+
+export const UpdateProduct = async (id: number, product: FormData) => {
+    const response = await api.put(`/Product/UpdateProduct/${id}`, 
+        product, 
+        {
+            credentials: 'include'
+        });
+
     return response;
 }

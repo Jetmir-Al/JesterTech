@@ -1,13 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudUploadAlt } from "@fortawesome/free-solid-svg-icons";
 import Button from "../ui/Button";
-import { useCreateProduct } from "../../hooks/useQueries/useProductQueries";
+import { useCreateProduct, useEditProduct } from "../../hooks/useQueries/useProductQueries";
 import "./createProduct.css";
 import type { IProduct, IProductUpload } from "../../types/IProduct";
 import { useToggleAlertHook } from "../../hooks/useToggle/useToggleAlert";
 
-function CreateProduct({ setShowCreateProduct, product }: { setShowCreateProduct: () => void, product: IProduct | null}) {
+
+interface ICreateProductProps{
+  setShowCreateProduct: () => void;
+  product: IProduct | null;
+  editing: boolean;
+}
+function CreateProduct({ setShowCreateProduct, product, editing }: ICreateProductProps) {
     const [formData, setFormData] = useState<IProductUpload>({
         title: product?.title ?? "",
         brand: product?.brand ?? "",
@@ -22,6 +28,7 @@ function CreateProduct({ setShowCreateProduct, product }: { setShowCreateProduct
     const {setShowAlert, setMessage, setType} = useToggleAlertHook(); 
     const [previewImage, setPreviewImage] = useState<string | null>(null);
     const { mutateAsync: createProduct } = useCreateProduct();
+    const { mutateAsync: updateProduct } = useEditProduct();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target;
@@ -38,8 +45,28 @@ function CreateProduct({ setShowCreateProduct, product }: { setShowCreateProduct
                 ...prev,
                 [name]: type === "number" ? parseFloat(value) || 0 : value
             }));
-        }
+        }  
+
     };
+
+    useEffect(() => {
+        if(editing) return;
+        function handleOpen() {
+            setFormData({
+                title: "",
+                brand: "",
+                garantee: 0,
+                price: 0,
+                category: "",
+                quantity: 0,
+                specifications: "",
+                imgFile: null,
+            });
+        }
+
+        handleOpen();
+    }, [editing]);
+
 
     const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -63,23 +90,34 @@ function CreateProduct({ setShowCreateProduct, product }: { setShowCreateProduct
             setType("info");
             setMessage("Processing action...");
             
-            await createProduct(data);
+            if(editing && product) {
+                await updateProduct({
+                    id: product.id,
+                    product: data
+                })
+            }else{
+                await createProduct(data);
+            }
             setShowCreateProduct();
 
             setType("success");
-            setMessage("Product created successfully");
+            setMessage(editing ? "Product updated successfully!" : "Product created successfully!");
         } catch {
             setShowAlert(true);
             setType("error");
-            setMessage("Problem creating product try again later");
+            setMessage("Problem creating product. \n Try again later!");
         }
     };
 
     return (
         <div className="create-product-container">
             <div className="create-product-header">
-                <h2>Create New Product</h2>
-                <p>Fill out the specifications below to add a new item to the inventory catalog.</p>
+                <h2>
+                {
+                   editing ? `Updating ${product?.title}` : "Create New Product"
+                }
+                </h2>
+                <p>{editing ? "Modify" : "Fill out"} the specifications below to {editing ? "update the item in" : "add a new item to"} the inventory catalog.</p>
             </div>
 
             <form className="create-product-form" onSubmit={handleSubmit}>

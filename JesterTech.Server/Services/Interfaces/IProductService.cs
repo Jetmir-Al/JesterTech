@@ -64,6 +64,15 @@ namespace JesterTech.Server.Services.Interfaces
         /// <returns></returns>
         Task<ProductPaginationDTO> GetProductsPagination(int page, int pageSize, string? search, List<string>? categories, string? sort, CancellationToken cancellationToken);
         /// <summary>
+        /// Get products for admin dashboard
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="search"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        Task<AdminProductsPaginationDTO> GetProductsDashboardPagination(int page, int pageSize, string? search, CancellationToken cancellationToken);
+        /// <summary>
         /// Gets a list of top 3 products.
         /// </summary>
         /// <param name="cancellationToken"></param>

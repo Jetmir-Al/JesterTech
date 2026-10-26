@@ -17,6 +17,7 @@ function Dashboard() {
     const [img, setImg] = useState<string>("");
     const [alt, setAlt] = useState<string>("");
     const [showCreateProduct, setShowCreateProduct] = useState<boolean>(false);
+    const [editing, setEditing] = useState<boolean>(false);
     const [productToEdit, setProductToEdit] = useState<IProduct | null>(null);
     const { mutateAsync: deleteProduct } = useDeleteProduct();
     const { data: productData, isLoading } = useGetProductsAdvanced({
@@ -34,20 +35,26 @@ function Dashboard() {
                     <h1>Product Management</h1>
                     <p>Manage inventory, modify product information, or add new listings.</p>
                 </div>
-                <Button
-                    className="admin-btn admin-btn-primary"
-                    onClick={() => setShowCreateProduct(b => !b)}
-                    type="button"
-                >
-
-                    <FontAwesomeIcon icon={faPlus} />
-                    <span>Create Product</span>
-                </Button>
+                {
+                    showCreateProduct !== true && 
+                        <Button
+                            className="admin-btn admin-btn-primary"
+                            onClick={() => setShowCreateProduct(b => !b)}
+                            type="button"
+                        >
+                            <FontAwesomeIcon icon={faPlus} />
+                            <span>Create Product</span>
+                        </Button>
+                }
             </div>
             {showCreateProduct ?
                <CreateProduct
-                  setShowCreateProduct={() => setShowCreateProduct(b => !b)}
+                  setShowCreateProduct={() => {
+                    setShowCreateProduct(b => !b);
+                    setEditing(false);
+                  }}
                   product={productToEdit}
+                  editing={editing}
             /> :
                 <>
                     <div className="dashboard-card">
@@ -107,6 +114,7 @@ function Dashboard() {
                                                                 onClick={() => {
                                                                     setShowCreateProduct(b => !b);
                                                                     setProductToEdit(product);
+                                                                    setEditing(true);
                                                                 }}
                                                                 type="button"
                                                             >

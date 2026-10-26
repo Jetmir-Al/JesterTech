@@ -97,7 +97,7 @@ namespace JesterTech.Server.Controllers
             return Ok();
         }
 
-        [HttpPost("UpdateProduct")]
+        [HttpPut("UpdateProduct")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(void), 200)]
         public async Task<IActionResult> UpdateProduct(int id, [FromForm] UpdateProductDTO productDto, CancellationToken cancellationToken)
@@ -122,6 +122,20 @@ namespace JesterTech.Server.Controllers
         {
             await _productService.DeleteProductById(id, cancellationToken);
             return Ok();
+        }
+
+        [HttpGet("DashboardProducts")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(typeof(AdminProductsPaginationDTO), 200)]
+        public async Task<IActionResult> GetProductsForDashboard(
+             CancellationToken cancellationToken,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 20,
+            [FromQuery] string? search = null)
+        {
+            var result = await _productService.GetProductsDashboardPagination(page, pageSize, search, cancellationToken);
+
+            return Ok(result);
         }
 
     }

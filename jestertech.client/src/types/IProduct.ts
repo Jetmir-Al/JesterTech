@@ -32,7 +32,13 @@ export interface IProduct {
     averageRating: number;
 }
 
-
+export interface IProductPage {
+    id: number;
+    title: string;
+    price: number;
+    image: string;
+    averageRating: number;
+}
 
 export interface ITopProduct {
     img: string;
@@ -50,6 +56,14 @@ export interface IProductUpload {
 }
 
 export interface IProductAdvanced {
+    totalCount: number;
+    page: number;
+    pageSize: number;
+    products: IProductPage[];
+}
+
+
+export interface IProductDashboardAdvanced{
     totalCount: number;
     page: number;
     pageSize: number;

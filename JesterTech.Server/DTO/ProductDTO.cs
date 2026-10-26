@@ -34,6 +34,15 @@ namespace JesterTech.Server.DTO
         public double AverageRating { get; set; } = 0;
     }
 
+    public record AdvancedProductDto
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public decimal Price { get; set; }
+        public string? Image { get; set; }
+        public double AverageRating { get; set; }
+    }
+
     public record ProductByCategoryResponseDTO(
         int Id,
         string Title,
@@ -75,6 +84,14 @@ namespace JesterTech.Server.DTO
     }
 
     public class ProductPaginationDTO
+    {
+        public int TotalCount { get; set; }
+        public int Page { get; set; }
+        public int PageSize { get; set; }
+        public List<AdvancedProductDto> Products { get; set; } = new List<AdvancedProductDto>();
+    }
+
+    public class AdminProductsPaginationDTO
     {
         public int TotalCount { get; set; }
         public int Page { get; set; }

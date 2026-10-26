@@ -160,5 +160,23 @@ namespace JesterTech.Server.Services.Service
 
             await _productRepository.UpdateProduct(product, cancellationToken);
         }
+
+        public async Task<AdminProductsPaginationDTO> GetProductsDashboardPagination(int page, int pageSize, string? search, CancellationToken cancellationToken)
+        {
+            var filter = new FilterBuilder<Products>();
+
+            filter.AddFilter(data => data.Title.Contains(search) || data.Brand.Contains(search), !string.IsNullOrEmpty(search));
+
+
+            var predicate = filter.Build();
+            var (products, totalCount) = await _productRepository.GetProductsDashboardPagination(page, pageSize, predicate, cancellationToken);
+            return new AdminProductsPaginationDTO
+            {
+                Page = page,
+                PageSize = pageSize,
+                Products = products,
+                TotalCount = totalCount
+            };
+        }
     }
 }
