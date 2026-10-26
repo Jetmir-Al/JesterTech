@@ -35,7 +35,6 @@ const Featured = () => {
                                         image: f.image,
                                         name: f.title,
                                         price: f.price,
-                                        quantity: f.quantity
                                     }}
                                 />
 

@@ -9,6 +9,14 @@ export interface IProductParams {
         sort?: string;
     }
 }
+
+export interface IProductDashboardParams {
+    params: {
+        page?: string;
+        pageSize?: string;
+        search?: string;
+    }
+}
 export interface IProductUpload {
     title: string;
     brand: string;

@@ -3,7 +3,7 @@ import Button from "../components/ui/Button";
 import "./pageStyles/products.css";
 import Loading from "../utils/Loading";
 import { useGetProductsAdvanced } from "../hooks/useQueries/useProductQueries";
-import type { IProduct } from "../types/IProduct";
+import type { IProductPage } from "../types/IProduct";
 import { useNavigate, useSearchParams } from "react-router";
 import SearchBar from "../components/products/SearchBar";
 import SortFilter from "../components/products/SortFilter";
@@ -46,7 +46,7 @@ const Products = () => {
                                 <Loading />
                             </div>
                             :
-                            products?.products.map((p: IProduct) => (
+                            products?.products.map((p: IProductPage) => (
                                 <div onClick={() => navigate(`/products/${p.id}`)}
                                     className='productCard'
                                     key={p.id}>
@@ -59,7 +59,6 @@ const Products = () => {
                                             name: p.title,
                                             price: p.price,
                                             image: p.image,
-                                            quantity: p.quantity,
                                             id: p.id,
                                         }}
                                     />

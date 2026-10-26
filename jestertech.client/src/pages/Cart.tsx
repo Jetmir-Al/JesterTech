@@ -59,7 +59,7 @@ const Cart = () => {
                                         <PurchaseForm
                                             id={c.id}
                                             setBuyForm={() => setBuyForm(b => !b)}
-                                            Quantity={c.quantity}
+                                            Quantity={1}
                                             productName={c.name}
                                             productPrice={c.price}
 

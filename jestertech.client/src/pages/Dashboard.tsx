@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faPenToSquare, faTrashCan, faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { useAuthHook } from "../hooks/useAuthHook";
 import NotFound from "./NotFound";
-import { useDeleteProduct, useGetProductsAdvanced } from "../hooks/useQueries/useProductQueries";
+import { useDeleteProduct, useGetDashboardProductsAdvanced } from "../hooks/useQueries/useProductQueries";
 import "./pageStyles/dashboard.css";
 import { getImageUrl } from "../api/productApi";
 import Button from "../components/ui/Button";
@@ -20,7 +20,7 @@ function Dashboard() {
     const [editing, setEditing] = useState<boolean>(false);
     const [productToEdit, setProductToEdit] = useState<IProduct | null>(null);
     const { mutateAsync: deleteProduct } = useDeleteProduct();
-    const { data: productData, isLoading } = useGetProductsAdvanced({
+    const { data: productData, isLoading } = useGetDashboardProductsAdvanced({
         params: { pageSize: "30", page: page.toString() } 
     });
 

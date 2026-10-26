@@ -35,7 +35,7 @@ export const GetProductBrands = async () => {
 }
 
 export const GetProductsAdvanced = async (params: string) => {
-   
+
     const response = await api.get<IProductAdvanced>(`/Product/advanced?${params}`);
     if (response !== null) {
         return response;
@@ -43,8 +43,8 @@ export const GetProductsAdvanced = async (params: string) => {
 }
 
 export const GetProductsDashboardAdvanced = async (params: string) => {
-   
-    const response = await api.get<IProductDashboardAdvanced>(`/Product/advanced?${params}`);
+
+    const response = await api.get<IProductDashboardAdvanced>(`/Product/DashboardProducts?${params}`);
     if (response !== null) {
         return response;
     }
@@ -80,8 +80,8 @@ export const DeleteProduct = async (id: number) => {
 
 
 export const UpdateProduct = async (id: number, product: FormData) => {
-    const response = await api.put(`/Product/UpdateProduct/${id}`, 
-        product, 
+    const response = await api.put(`/Product/UpdateProduct/${id}`,
+        product,
         {
             credentials: 'include'
         });

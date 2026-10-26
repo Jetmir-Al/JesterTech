@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { DeleteProduct, GetProductByCategory, GetProductById, GetProductCategories, GetProductsAdvanced, InsertProduct, UpdateProduct, UpdateProductImg } from "../../api/productApi";
-import type { IProductParams } from "../../types/IProduct";
+import { DeleteProduct, GetProductByCategory, GetProductById, GetProductCategories, GetProductsAdvanced, GetProductsDashboardAdvanced, InsertProduct, UpdateProduct, UpdateProductImg } from "../../api/productApi";
+import type { IProductDashboardParams, IProductParams } from "../../types/IProduct";
 
 export const useGetProductById = (id: number) => {
     return useQuery({
@@ -44,6 +44,27 @@ export const useGetProductsAdvanced = ({ params }: IProductParams) => {
             const queryString = searchParams.toString();
 
             const response = await GetProductsAdvanced(queryString);
+            return response;
+        },
+    });
+}
+
+export const useGetDashboardProductsAdvanced = ({ params }: IProductDashboardParams) => {
+    return useQuery({
+        queryKey: ["products-advanced", params.page,
+            params.pageSize,
+            params.search],
+
+        queryFn: async () => {
+            const searchParams = new URLSearchParams();
+
+            if (params.page) searchParams.append("page", params.page);
+            if (params.pageSize) searchParams.append("pageSize", params.pageSize);
+            if (params.search) searchParams.append("search", params.search);
+
+            const queryString = searchParams.toString();
+
+            const response = await GetProductsDashboardAdvanced(queryString);
             return response;
         },
     });
