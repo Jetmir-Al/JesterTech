@@ -88,7 +88,7 @@ namespace JesterTech.Server.Controllers
             return Ok(products);
         }
 
-        [HttpPost("UpdateProductImg")]
+        [HttpPut("UpdateProductImg/{id}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(void), 200)]
         public async Task<IActionResult> UpdateProductImg(int id, [FromForm] UpdateProductImgDTO productImgDto, CancellationToken cancellationToken)
@@ -97,7 +97,7 @@ namespace JesterTech.Server.Controllers
             return Ok();
         }
 
-        [HttpPut("UpdateProduct")]
+        [HttpPut("UpdateProduct/{id}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(typeof(void), 200)]
         public async Task<IActionResult> UpdateProduct(int id, [FromForm] UpdateProductDTO productDto, CancellationToken cancellationToken)

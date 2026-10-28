@@ -86,10 +86,11 @@ namespace JesterTech.Server.Repositories.Interfaces
         /// <summary>
         /// Updates an existing product in the database.
         /// </summary>
+        /// <param name="Id"></param>
         /// <param name="product"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task UpdateProduct(Products product, CancellationToken cancellationToken);
+        Task UpdateProduct(int Id, Products product, CancellationToken cancellationToken);
         /// <summary>
         /// Updates the image of an existing product in the database.
         /// </summary>

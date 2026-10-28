@@ -158,7 +158,7 @@ namespace JesterTech.Server.Services.Service
                 product.Image = "/images/" + uniqueFileName;
             }
 
-            await _productRepository.UpdateProduct(product, cancellationToken);
+            await _productRepository.UpdateProduct(Id, product, cancellationToken);
         }
 
         public async Task<AdminProductsPaginationDTO> GetProductsDashboardPagination(int page, int pageSize, string? search, CancellationToken cancellationToken)

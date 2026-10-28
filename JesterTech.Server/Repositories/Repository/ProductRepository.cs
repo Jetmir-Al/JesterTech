@@ -23,13 +23,10 @@ namespace JesterTech.Server.Repositories.Repository
         /// <inheritdoc />
         public async Task DeleteProduct(int productId, CancellationToken cancellationToken)
         {
-            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == productId, cancellationToken);
-
-            if (product != null)
-            {
-                _context.Products.Remove(product);
+                await _context.Products
+                    .Where(data => data.Id == productId)
+                    .ExecuteDeleteAsync(cancellationToken);
                 await _context.SaveChangesAsync(cancellationToken);
-            }
         }
         /// <inheritdoc />
         public async Task<List<ProductsDTO>> GetAllProducts(CancellationToken cancellationToken)
@@ -82,9 +79,23 @@ namespace JesterTech.Server.Repositories.Repository
             };
         }
         /// <inheritdoc />
-        public async Task UpdateProduct(Products product, CancellationToken cancellationToken)
+        public async Task UpdateProduct(int Id, Products product, CancellationToken cancellationToken)
         {
-            _context.Products.Update(product);
+            await _context.Products
+                .Where(data => data.Id == Id)
+                .ExecuteUpdateAsync(p =>
+                {
+                    p.SetProperty(b => b.Title, product.Title);
+                    p.SetProperty(b => b.Specifications, product.Specifications);
+                    p.SetProperty(b => b.Brand, product.Brand);
+                    p.SetProperty(b => b.Category, product.Category);
+                    p.SetProperty(b => b.Price, product.Price);
+                    p.SetProperty(b => b.Quantity, product.Quantity);
+                    if(product.Image != null)
+                    {
+                        p.SetProperty(b => b.Image, product.Image);
+                    }
+                }, cancellationToken);
             await SaveAsync(cancellationToken);
         }
         /// <inheritdoc />
@@ -185,12 +196,16 @@ namespace JesterTech.Server.Repositories.Repository
         {
             await _context.Products
                 .Where(p => p.Id == id)
-                .ExecuteUpdateAsync(p => p.SetProperty(p => p.Image, ImgFile), cancellationToken);
+                .ExecuteUpdateAsync(p => 
+                    p.SetProperty(p => p.Image, ImgFile), 
+                    cancellationToken);
         }
         /// <inheritdoc />
         public async Task<Products> GetProductByIdForAi(int productId, CancellationToken cancellationToken)
         {
-            return await _context.Products.FirstOrDefaultAsync(p => p.Id == productId, cancellationToken);
+            return await _context.Products
+                    .FirstOrDefaultAsync(p => p.Id == productId, 
+                    cancellationToken);
         }
         /// <inheritdoc />
         public async Task<List<ProductByCategoryResponseDTO>> GetProductsByCategory(string category, CancellationToken cancellationToken)
@@ -227,7 +242,10 @@ namespace JesterTech.Server.Repositories.Repository
         {
             int rowsAffected = await _context.Products
                 .Where(p => p.Id == productId && p.Quantity >= quantity)
-                .ExecuteUpdateAsync(p => p.SetProperty(p => p.Quantity, p => p.Quantity - quantity), cancellationToken);
+                .ExecuteUpdateAsync(p => 
+                    p.SetProperty(p => p.Quantity, 
+                                  p => p.Quantity - quantity), 
+                                  cancellationToken);
             
             return rowsAffected > 0;
         }

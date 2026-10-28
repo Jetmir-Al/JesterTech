@@ -16,17 +16,16 @@ namespace JesterTech.Server.Repositories.Repository
 
         public async Task CreateUser(Users user, CancellationToken cancellationToken)
         {
-            await _context.Users.AddAsync(user);
+            await _context.Users.AddAsync(user, cancellationToken);
             await SaveAsync(cancellationToken);
         }
 
-        public async Task DeleteUser(Users user, CancellationToken cancellationToken)
+        public async Task DeleteUser(int UserId, CancellationToken cancellationToken)
         {
-            if (user != null)
-            {
-                _context.Users.Remove(user);
+                await _context.Users
+                    .Where(data => data.Id == UserId)
+                    .ExecuteDeleteAsync(cancellationToken);
                 await SaveAsync(cancellationToken);
-            }
         }
 
         public async Task<Users> GetUserByEmail(string email, CancellationToken cancellationToken)

@@ -36,7 +36,7 @@ namespace JesterTech.Server.Repositories.Interfaces
         /// <param name="user"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task DeleteUser(Users user, CancellationToken cancellationToken);
+        Task DeleteUser(int UserId, CancellationToken cancellationToken);
         /// <summary>
         /// Saves changes to the database.
         /// </summary>
