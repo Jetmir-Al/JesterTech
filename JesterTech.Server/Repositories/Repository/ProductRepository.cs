@@ -124,21 +124,30 @@ namespace JesterTech.Server.Repositories.Repository
         {
             return await _context.Products
                 .AsNoTracking()
-                .GroupBy(p => p.Category)
-                .Select(p => p.OrderByDescending(p => p.Id)
-                .Select(p => new ProductsDTO
-                {
-                    Id = p.Id,
-                    Title = p.Title,
-                    Brand = p.Brand,
-                    Garantee = p.Garantee,
-                    Price = p.Price,
-                    Quantity = p.Quantity,
-                    Category = p.Category,
-                    Image = p.Image
-                })
-                .FirstOrDefault())
+                .GroupJoin(
+                    _context.Reviews,
+                    p => p.Id,
+                    r => r.ProductId,
+                    (p, reviews) => new
+                    {
+                        Product = p,
+                        AverageRating = reviews.Any() ? reviews.Average(r => (double)r.Rating) : 0
+                    }
+                )
+                .OrderByDescending(x => x.AverageRating)
                 .Take(8)
+                .Select(x => new ProductsDTO
+                {
+                    Id = x.Product.Id,
+                    Title = x.Product.Title,
+                    Brand = x.Product.Brand,
+                    Garantee = x.Product.Garantee,
+                    Price = x.Product.Price,
+                    Quantity = x.Product.Quantity,
+                    Category = x.Product.Category,
+                    Image = x.Product.Image,
+                    AverageRating = x.AverageRating
+                })
                 .ToListAsync(cancellationToken);
         }
         /// <inheritdoc />
@@ -259,7 +268,8 @@ namespace JesterTech.Server.Repositories.Repository
 
             var query = _context.Products
                 .AsNoTracking()
-                .Where(predicate);
+                .Where(predicate)
+                .OrderByDescending(data => data.Id);
 
             var products = await query
                 .Skip((page - 1) * pageSize)

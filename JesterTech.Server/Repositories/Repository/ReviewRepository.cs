@@ -20,13 +20,12 @@ namespace JesterTech.Server.Repositories.Repository
             await SaveAsync(cancellationToken);
         }
 
-        public async Task DeleteReview(Reviews review, CancellationToken cancellationToken)
+        public async Task DeleteReview(int reviewId, CancellationToken cancellationToken)
         {
-            if (review != null)
-            {
-                _context.Reviews.Remove(review);
-                await SaveAsync(cancellationToken);
-            }
+            await _context.Reviews
+                .Where(data => data.Id == reviewId)
+                .ExecuteDeleteAsync(cancellationToken);
+            await SaveAsync(cancellationToken);
         }
 
         public async Task<(List<Reviews>, int TotalCount)> GetReviewsByProductId(int productId, CancellationToken cancellationToken)

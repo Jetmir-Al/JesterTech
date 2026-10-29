@@ -21,10 +21,10 @@ namespace JesterTech.Server.Repositories.Interfaces
         /// <summary>
         /// Deletes a review from the database.
         /// </summary>
-        /// <param name="review"></param>
+        /// <param name="reviewId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task DeleteReview(Reviews review, CancellationToken cancellationToken);
+        Task DeleteReview(int reviewId, CancellationToken cancellationToken);
         /// <summary>
         /// Saves changes to the database.
         /// </summary>

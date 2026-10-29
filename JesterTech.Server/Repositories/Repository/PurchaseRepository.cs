@@ -20,21 +20,22 @@ namespace JesterTech.Server.Repositories.Repository
             await SaveAsync(cancellationToken);
         }
 
-        public async Task DeletePurchase(Purchases purchases, CancellationToken cancellationToken)
+        public async Task DeletePurchase(int purchaseId, CancellationToken cancellationToken)
         {
-            if (purchases != null)
-            {
-                _context.Remove(purchases);
-                await SaveAsync(cancellationToken);
-            }
+            await _context.Purchases
+                .Where(data => data.Id == purchaseId)
+                .ExecuteDeleteAsync(cancellationToken);
+            await SaveAsync(cancellationToken);
         }
 
         public async Task<List<Purchases>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _context.Purchases.AsNoTracking().ToListAsync(cancellationToken);
+            return await _context.Purchases
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
         }
 
-        public async Task UpdatePurchase(Purchases purchases, CancellationToken cancellationToken)
+        public async Task UpdatePurchase(int purchaseId, Purchases purchases, CancellationToken cancellationToken)
         {
             _context.Update(purchases);
             await SaveAsync(cancellationToken);
@@ -79,10 +80,10 @@ namespace JesterTech.Server.Repositories.Repository
         public async Task<List<PurchaseAiDTO>> GetPurchaseAiByUserIdAsync(int userId, CancellationToken cancellationToken)
         {
             var purchases = await _context.Purchases
+                .AsNoTracking()
                 .Include(p => p.User)
                 .Include(p => p.Product)
                 .Where(p => p.UserId == userId)
-                .AsNoTracking()
                 .Take(12)
                 .OrderByDescending(p => p.PurchaseDate)
                 .ToListAsync(cancellationToken);

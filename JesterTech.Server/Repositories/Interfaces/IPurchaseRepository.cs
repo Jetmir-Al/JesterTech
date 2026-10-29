@@ -30,17 +30,18 @@ namespace JesterTech.Server.Repositories.Interfaces
         /// <summary>
         /// Updates an existing purchase asynchronously.
         /// </summary>
+        /// <param name="purchaseId"></param>
         /// <param name="purchases"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task UpdatePurchase(Purchases purchases, CancellationToken cancellationToken);
+        Task UpdatePurchase(int purchaseId, Purchases purchases, CancellationToken cancellationToken);
         /// <summary>
         /// Deletes a purchase asynchronously.
         /// </summary>
-        /// <param name="purchases"></param>
+        /// <param name="purchaseId"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        Task DeletePurchase(Purchases purchases, CancellationToken cancellationToken);
+        Task DeletePurchase(int purchaseId, CancellationToken cancellationToken);
         /// <summary>
         /// Gets a purchase by user ID asynchronously for AI purposes.
         /// </summary>
