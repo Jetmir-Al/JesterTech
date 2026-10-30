@@ -4,6 +4,7 @@ import Button from "../ui/Button";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
+import { ToolTip, ToolTipContent, ToolTipTrigger } from "../ui/CustomToolTip";
 
 
 function SortFilter() {
@@ -54,14 +55,21 @@ function SortFilter() {
 
         <div className="sortFilter-Container"
             ref={dropdownRef}>
-            <Button
-                className="sortFilter-trigger-btn"
-                onClick={() => setToggleSortFilter(s => !s)}
-                aria-expanded={toggleSortFilter}
-            >
-                <FontAwesomeIcon className="sortFilter-icon" icon={faEllipsisVertical} />
-                <span>Filters & Sort</span>
-            </Button>
+            <ToolTip>
+                <ToolTipTrigger>
+                    <Button
+                        className="sortFilter-trigger-btn"
+                        onClick={() => setToggleSortFilter(s => !s)}
+                        aria-expanded={toggleSortFilter}
+                    >
+                        <FontAwesomeIcon className="sortFilter-icon" icon={faEllipsisVertical} />
+                        <span>Filters & Sort</span>
+                    </Button>
+                </ToolTipTrigger>
+                <ToolTipContent side="bottom">
+                    Adjust your filters
+                </ToolTipContent>
+            </ToolTip>
 
             {toggleSortFilter && (
                 <div className="sortFilter-dropdown" id="sortFilter-field">

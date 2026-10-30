@@ -43,13 +43,20 @@ const NavBar = () => {
         <>
             <nav className="navbar-container">
                 <div className="navbar-left">
-                    <Button
-                        type="button"
-                        onClick={() => openSideBarFunc()}
-                        className=""
-                    >
-                        <FontAwesomeIcon icon={faBars} className="icons" />
-                    </Button>
+                    <ToolTip>
+                        <ToolTipTrigger>
+                            <Button
+                                type="button"
+                                onClick={() => openSideBarFunc()}
+                                className=""
+                            >
+                                <FontAwesomeIcon icon={faBars} className="icons" />
+                            </Button>
+                        </ToolTipTrigger>
+                        <ToolTipContent side="right">
+                            Open sidebar
+                        </ToolTipContent>
+                    </ToolTip>
 
                     <Button
                         className="navbar-title"
@@ -90,46 +97,81 @@ const NavBar = () => {
                         </ToolTipContent>
                     </ToolTip>
 
-                    <Button
-                        type="button"
-                        className=""
-                        title="Go to products page"
-                        onClick={() => navigate("/products")}>
-                        <FontAwesomeIcon icon={faStore} className="icons" />
-                    </Button>
+                    <ToolTip>
+                        <ToolTipTrigger>
+                            <Button
+                                type="button"
+                                className=""
+                                onClick={() => navigate("/products")}>
+                                <FontAwesomeIcon icon={faStore} className="icons" />
+                            </Button>
+                        </ToolTipTrigger>
+                        <ToolTipContent side="bottom">
+                            Go to products page
+                        </ToolTipContent>
+                    </ToolTip>
 
-                    <Button
-                        className=""
-                        type="button"
-                        title="Go to compare products page"
-                        onClick={() => navigate("/compare")}
-                    >
-                        <FontAwesomeIcon
-                            icon={faChartBar}
-                            className="icons" />
-                    </Button>
-                    <Button
-                        type="button"
-                        className=""
-                        title="Go to cart"
-                        onClick={() => navigate("/cart")}>
-                        <FontAwesomeIcon icon={faCartShopping} className="icons" />
-                    </Button>
+                    <ToolTip>
+                        <ToolTipTrigger>
+                            <Button
+                                className=""
+                                type="button"
+                                onClick={() => navigate("/compare")}
+                            >
+                                <FontAwesomeIcon
+                                    icon={faChartBar}
+                                    className="icons" />
+                            </Button>
+                        </ToolTipTrigger>
+                        <ToolTipContent side="bottom">
+                            Go to compare products page
+                        </ToolTipContent>
+                    </ToolTip>
+
+                    <ToolTip>
+                        <ToolTipTrigger>
+                            <Button
+                                type="button"
+                                className=""
+                                onClick={() => navigate("/cart")}>
+                                <FontAwesomeIcon icon={faCartShopping} className="icons" />
+                            </Button>
+                        </ToolTipTrigger>
+                        <ToolTipContent side="bottom">
+                            Go to cart
+                        </ToolTipContent>
+                    </ToolTip>
+
+
                     {authenticated && user ?
-                        <Button
-                            type="button"
-                            className=""
-                            title="Go to profile"
-                            onClick={() => navigate("/profile")}>
-                            <FontAwesomeIcon icon={faUserGear} className="icons" />
-                        </Button>
-                        : <Button
-                            type="button"
-                            className=""
-                            title="Go to login"
-                            onClick={() => toggleDisplayFormFunc()}>
-                            <FontAwesomeIcon icon={faUser} className="icons" />
-                        </Button>
+                        <ToolTip>
+                            <ToolTipTrigger>
+                                <Button
+                                    type="button"
+                                    className=""
+                                    onClick={() => navigate("/profile")}>
+                                    <FontAwesomeIcon icon={faUserGear} className="icons" />
+                                </Button>
+                            </ToolTipTrigger>
+                            <ToolTipContent side="left">
+                                Go to profile
+                            </ToolTipContent>
+                        </ToolTip>
+
+                        :
+                        <ToolTip>
+                            <ToolTipTrigger>
+                                <Button
+                                    type="button"
+                                    className=""
+                                    onClick={() => toggleDisplayFormFunc()}>
+                                    <FontAwesomeIcon icon={faUser} className="icons" />
+                                </Button>
+                            </ToolTipTrigger>
+                            <ToolTipContent side="left">
+                                Go to login
+                            </ToolTipContent>
+                        </ToolTip>
                     }
                 </div>
             </nav>
