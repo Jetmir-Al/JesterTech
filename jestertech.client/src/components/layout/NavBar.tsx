@@ -14,6 +14,7 @@ import { faUserGear } from "@fortawesome/free-solid-svg-icons/faUserGear";
 import { faChartBar } from "@fortawesome/free-solid-svg-icons/faChartBar";
 import { useEffect, useRef } from "react";
 import { faStore } from "@fortawesome/free-solid-svg-icons/faStore";
+import { ToolTip, ToolTipContent, ToolTipTrigger } from "../ui/CustomToolTip";
 
 const NavBar = () => {
     const { toggleMode, mode } = useToggleModeHook();
@@ -58,27 +59,37 @@ const NavBar = () => {
                     </Button>
                 </div>
                 <div className="navbar-right">
+                    <ToolTip>
+                        <ToolTipTrigger>
+                            <Button
+                                type="button"
+                                className=""
+                                onClick={toggleMode}>
+                                {
+                                    mode ?
+                                        <FontAwesomeIcon icon={faSun} className="icons" /> :
+                                        <FontAwesomeIcon icon={faMoon} className="icons" />
+                                }
+                            </Button>
+                        </ToolTipTrigger>
+                        <ToolTipContent side="bottom">
+                            Switch to {mode ? "light" : "dark"} mode
+                        </ToolTipContent>
+                    </ToolTip>
+                    <ToolTip>
+                        <ToolTipTrigger>
+                            <Button
+                                type="button"
+                                className=""
+                                onClick={() => openSearchBarFunc()}>
+                                <FontAwesomeIcon icon={faMagnifyingGlass} className="icons" />
+                            </Button>
+                        </ToolTipTrigger>
+                        <ToolTipContent side="bottom">
+                            Search for products, brands and more...
+                        </ToolTipContent>
+                    </ToolTip>
 
-                    <Button
-                        type="button"
-                        className=""
-                        title={mode ? "Switch to light mode" : "Switch to dark mode"}
-                        onClick={toggleMode}>
-                        {
-                            mode ?
-                                <FontAwesomeIcon icon={faSun} className="icons" /> :
-                                <FontAwesomeIcon icon={faMoon} className="icons" />
-                        }
-                    </Button>
-
-                    <Button
-                        type="button"
-                        className=""
-                        title="Search for products, brands and more..."
-                        onClick={() => openSearchBarFunc()}>
-                        <FontAwesomeIcon icon={faMagnifyingGlass} className="icons" />
-                    </Button>
-                    
                     <Button
                         type="button"
                         className=""

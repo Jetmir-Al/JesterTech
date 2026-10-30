@@ -1,0 +1,97 @@
+.toolTip-container {
+    position: relative;
+    display: inline-block;
+}
+
+.toolTipTrigger-container {
+    position: relative;
+    display: inline-flex;
+}
+
+.toolTipContent-container {
+
+    --b: 2em;
+    --h: 1em;
+    --p: 50%;
+
+    position: absolute;
+    z-index: 1000;
+    min-width: max-content;
+    max-width: 200px;
+    text-align: center;
+    font-size: var(--text-xs);
+    padding: 0.5em 1em;
+    background: var(--color-primary);
+    color: white;
+    border-radius: 0.5em;
+    pointer-events: none;
+    box-shadow: var(--shadow-md);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+
+.toolTip-container:hover .toolTipContent-container {
+    opacity: 1;
+    visibility: visible;
+}
+
+.toolTipContent-container--top {
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding-bottom: calc(0.5em + var(--h));
+    clip-path: polygon(0 0,
+            100% 0,
+            100% calc(100% - var(--h)),
+            calc(var(--p) + var(--b) / 2) calc(100% - var(--h)),
+            var(--p) 100%,
+            calc(var(--p) - var(--b) / 2) calc(100% - var(--h)),
+            0 calc(100% - var(--h)));
+}
+
+/* Tooltip on BOTTOM of trigger (arrow points up) */
+.toolTipContent-container--bottom {
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding-top: calc(0.5em + var(--h));
+    clip-path: polygon(0 var(--h),
+            calc(var(--p) - var(--b) / 2) var(--h),
+            var(--p) 0,
+            calc(var(--p) + var(--b) / 2) var(--h),
+            100% var(--h),
+            100% 100%,
+            0 100%);
+}
+
+/* Tooltip to the LEFT of trigger (arrow points right) */
+.toolTipContent-container--left {
+    right: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%);
+    padding-right: calc(1em + var(--h));
+    clip-path: polygon(0 0,
+            calc(100% - var(--h)) 0,
+            calc(100% - var(--h)) calc(var(--p) - var(--b) / 2),
+            100% var(--p),
+            calc(100% - var(--h)) calc(var(--p) + var(--b) / 2),
+            calc(100% - var(--h)) 100%,
+            0 100%);
+}
+
+/* Tooltip to the RIGHT of trigger (arrow points left) */
+.toolTipContent-container--right {
+    left: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%);
+    padding-left: calc(1em + var(--h));
+    clip-path: polygon(var(--h) 0,
+            100% 0,
+            100% 100%,
+            var(--h) 100%,
+            var(--h) calc(var(--p) + var(--b) / 2),
+            0 var(--p),
+            var(--h) calc(var(--p) - var(--b) / 2));
+}
