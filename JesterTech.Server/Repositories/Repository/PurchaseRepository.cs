@@ -25,7 +25,6 @@ namespace JesterTech.Server.Repositories.Repository
             await _context.Purchases
                 .Where(data => data.Id == purchaseId)
                 .ExecuteDeleteAsync(cancellationToken);
-            await SaveAsync(cancellationToken);
         }
 
         public async Task<List<Purchases>> GetAllAsync(CancellationToken cancellationToken)

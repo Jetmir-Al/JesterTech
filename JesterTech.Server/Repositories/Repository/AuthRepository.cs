@@ -25,7 +25,6 @@ namespace JesterTech.Server.Repositories.Repository
                 await _context.Users
                     .Where(data => data.Id == UserId)
                     .ExecuteDeleteAsync(cancellationToken);
-                await SaveAsync(cancellationToken);
         }
 
         public async Task<Users> GetUserByEmail(string email, CancellationToken cancellationToken)

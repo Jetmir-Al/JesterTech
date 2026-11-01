@@ -26,7 +26,6 @@ namespace JesterTech.Server.Repositories.Repository
                 await _context.Products
                     .Where(data => data.Id == productId)
                     .ExecuteDeleteAsync(cancellationToken);
-                await _context.SaveChangesAsync(cancellationToken);
         }
         /// <inheritdoc />
         public async Task<List<ProductsDTO>> GetAllProducts(CancellationToken cancellationToken)
@@ -96,7 +95,6 @@ namespace JesterTech.Server.Repositories.Repository
                         p.SetProperty(b => b.Image, product.Image);
                     }
                 }, cancellationToken);
-            await SaveAsync(cancellationToken);
         }
         /// <inheritdoc />
         public async Task SaveAsync(CancellationToken cancellationToken)
@@ -174,17 +172,23 @@ namespace JesterTech.Server.Repositories.Repository
             var products = await query
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
+                .GroupJoin(
+                    _context.Reviews,
+                    x => x.Id,
+                    r => r.ProductId,
+                    (x, reviews) => new
+                    {
+                        Product = x,
+                        AverageRating = reviews.Any() ? reviews.Average(r => (double)r.Rating) : 0
+                    }
+                )
                 .Select(p => new AdvancedProductDto
                 {
-                    Id = p.Id,
-                    Title = p.Title,
-                    Price = p.Price,
-                    Image = p.Image,
-                    AverageRating = _context.Reviews
-                        .Where(r => r.ProductId == p.Id).Any()
-                        ? _context.Reviews
-                        .Where(r => r.ProductId == p.Id).Average(r => r.Rating)
-                        : 0
+                    Id = p.Product.Id,
+                    Title = p.Product.Title,
+                    Price = p.Product.Price,
+                    Image = p.Product.Image,
+                    AverageRating = p.AverageRating,
                 })
                 .ToListAsync(cancellationToken);
             return (products, total);
@@ -230,20 +234,26 @@ namespace JesterTech.Server.Repositories.Repository
         {
             return await _context.Products
                 .AsNoTracking()
-                .Select(p => new ProductsDTO 
+                .GroupJoin(
+                    _context.Reviews,
+                    x => x.Id,
+                    r => r.ProductId,
+                    (x, reviews) => new
+                    {
+                        Product = x,
+                        AverageRating = reviews.Any() ? reviews.Average(r => (double)r.Rating) : 0
+                    }
+                )
+                .Select(p => new ProductsDTO
                 {
-                    Title = p.Title,
-                    Brand = p.Brand,
-                    Garantee = p.Garantee,
-                    Price = p.Price,
-                    Quantity = p.Quantity,
-                    Category = p.Category,
-                    Specifications = p.Specifications,
-                    AverageRating = _context.Reviews
-                        .Where(r => r.ProductId == p.Id).Any()
-                        ? _context.Reviews
-                        .Where(r => r.ProductId == p.Id).Average(r => r.Rating)
-                        : 0
+                    Title = p.Product.Title,
+                    Brand = p.Product.Brand,
+                    Garantee = p.Product.Garantee,
+                    Price = p.Product.Price,
+                    Quantity = p.Product.Quantity,
+                    Category = p.Product.Category,
+                    Specifications = p.Product.Specifications,
+                    AverageRating = p.AverageRating
                 })
                 .ToListAsync(cancellationToken);
         }
@@ -274,22 +284,28 @@ namespace JesterTech.Server.Repositories.Repository
             var products = await query
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
+                .GroupJoin(
+                    _context.Reviews,
+                    x => x.Id,
+                    r => r.ProductId,
+                    (x, reviews) => new
+                    {
+                        Product = x,
+                        AverageRating = reviews.Any() ? reviews.Average(r => (double)r.Rating) : 0
+                    }
+                )
                 .Select(p => new ProductsDTO
                 {
-                    Id = p.Id,
-                    Title = p.Title,
-                    Price = p.Price,
-                    Brand = p.Brand,
-                    Category = p.Category,
-                    Garantee = p.Garantee,
-                    Quantity = p.Quantity,
-                    Specifications = p.Specifications,
-                    Image = p.Image,
-                    AverageRating = _context.Reviews
-                        .Where(r => r.ProductId == p.Id).Any()
-                        ? _context.Reviews
-                        .Where(r => r.ProductId == p.Id).Average(r => r.Rating)
-                        : 0
+                    Id = p.Product.Id,
+                    Title = p.Product.Title,
+                    Price = p.Product.Price,
+                    Brand = p.Product.Brand,
+                    Category = p.Product.Category,
+                    Garantee = p.Product.Garantee,
+                    Quantity = p.Product.Quantity,
+                    Specifications = p.Product.Specifications,
+                    Image = p.Product.Image,
+                    AverageRating = p.AverageRating
                 })
                 .ToListAsync(cancellationToken);
             return (products, total);

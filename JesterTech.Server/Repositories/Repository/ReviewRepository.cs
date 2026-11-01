@@ -25,7 +25,6 @@ namespace JesterTech.Server.Repositories.Repository
             await _context.Reviews
                 .Where(data => data.Id == reviewId)
                 .ExecuteDeleteAsync(cancellationToken);
-            await SaveAsync(cancellationToken);
         }
 
         public async Task<(List<Reviews>, int TotalCount)> GetReviewsByProductId(int productId, CancellationToken cancellationToken)
