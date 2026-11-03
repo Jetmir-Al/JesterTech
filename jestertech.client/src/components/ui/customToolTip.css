@@ -9,21 +9,16 @@
 }
 
 .toolTipContent-container {
-
-    --b: 2em;
-    --h: 1em;
-    --p: 50%;
-
     position: absolute;
     z-index: 1000;
     min-width: max-content;
     max-width: 200px;
     text-align: center;
     font-size: var(--text-xs);
-    padding: 0.5em 1em;
+    padding: 0.5rem 0.85rem;
     background: var(--color-primary);
     color: white;
-    border-radius: 0.5em;
+    border-radius: 6px;
     pointer-events: none;
     box-shadow: var(--shadow-md);
     opacity: 0;
@@ -31,67 +26,72 @@
     transition: opacity 0.2s ease, visibility 0.2s ease;
 }
 
-
+/* Show on hover */
 .toolTip-container:hover .toolTipContent-container {
     opacity: 1;
     visibility: visible;
 }
 
+/* Shared Arrow Pseudo-element styling */
+.toolTipContent-container::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--color-primary);
+    transform: rotate(45deg);
+}
+
+/* ================= SIDE POSITIONS ================= */
+
+/* 1. TOP (Tooltip appears above trigger, arrow points DOWN) */
 .toolTipContent-container--top {
     bottom: calc(100% + 8px);
     left: 50%;
     transform: translateX(-50%);
-    padding-bottom: calc(0.5em + var(--h));
-    clip-path: polygon(0 0,
-            100% 0,
-            100% calc(100% - var(--h)),
-            calc(var(--p) + var(--b) / 2) calc(100% - var(--h)),
-            var(--p) 100%,
-            calc(var(--p) - var(--b) / 2) calc(100% - var(--h)),
-            0 calc(100% - var(--h)));
 }
 
-/* Tooltip on BOTTOM of trigger (arrow points up) */
+.toolTipContent-container--top::after {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%) rotate(45deg);
+}
+
+/* 2. BOTTOM (Tooltip appears below trigger, arrow points UP) */
 .toolTipContent-container--bottom {
     top: calc(100% + 8px);
     left: 50%;
     transform: translateX(-50%);
-    padding-top: calc(0.5em + var(--h));
-    clip-path: polygon(0 var(--h),
-            calc(var(--p) - var(--b) / 2) var(--h),
-            var(--p) 0,
-            calc(var(--p) + var(--b) / 2) var(--h),
-            100% var(--h),
-            100% 100%,
-            0 100%);
 }
 
-/* Tooltip to the LEFT of trigger (arrow points right) */
+.toolTipContent-container--bottom::after {
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(50%) rotate(45deg);
+}
+
+/* 3. LEFT (Tooltip appears to the left of trigger, arrow points RIGHT) */
 .toolTipContent-container--left {
     right: calc(100% + 8px);
     top: 50%;
     transform: translateY(-50%);
-    padding-right: calc(1em + var(--h));
-    clip-path: polygon(0 0,
-            calc(100% - var(--h)) 0,
-            calc(100% - var(--h)) calc(var(--p) - var(--b) / 2),
-            100% var(--p),
-            calc(100% - var(--h)) calc(var(--p) + var(--b) / 2),
-            calc(100% - var(--h)) 100%,
-            0 100%);
 }
 
-/* Tooltip to the RIGHT of trigger (arrow points left) */
+.toolTipContent-container--left::after {
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%) translateX(-50%) rotate(45deg);
+}
+
+/* 4. RIGHT (Tooltip appears to the right of trigger, arrow points LEFT) */
 .toolTipContent-container--right {
     left: calc(100% + 8px);
     top: 50%;
     transform: translateY(-50%);
-    padding-left: calc(1em + var(--h));
-    clip-path: polygon(var(--h) 0,
-            100% 0,
-            100% 100%,
-            var(--h) 100%,
-            var(--h) calc(var(--p) + var(--b) / 2),
-            0 var(--p),
-            var(--h) calc(var(--p) - var(--b) / 2));
+}
+
+.toolTipContent-container--right::after {
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%) translateX(50%) rotate(45deg);
 }
