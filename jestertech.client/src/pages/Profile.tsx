@@ -1,6 +1,5 @@
 import { useAuthHook } from "../hooks/useAuthHook";
 import Button from "../components/ui/Button";
-import { Logout } from "../api/authApi";
 import { useNavigate } from "react-router";
 import NoInfo from "../utils/NoInfo";
 import "./pageStyles/profile.css";
@@ -13,19 +12,19 @@ import AiDisplay from "../components/ai/AiDisplay";
 import { useSearchParams } from "react-router";
 import { faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useLogout } from "../hooks/useQueries/useAuthQueries";
 
 const Profile = () => {
-    const { user, setUser, setAuth } = useAuthHook();
+    const { user } = useAuthHook();
     const { setMessage, setShowAlert, setType } = useToggleAlertHook();
+    const { mutateAsync: logout, isPending } = useLogout();
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
 
     const handleLogout = async () => {
         try {
-            await Logout();
+            await logout();
             navigate("/");
-            setUser(null);
-            setAuth(false);
         }
         catch {
             setMessage("Logout failed. Please try again.");
@@ -54,6 +53,7 @@ const Profile = () => {
                     <Button
                         className="logout-button"
                         onClick={() => handleLogout()}
+                        disabled={isPending}
                         type="button">
                         Logout
                     </Button>
@@ -85,45 +85,45 @@ const Profile = () => {
                                 ))
                     }
 
-                    { 
-                    purchase?.totalCount !== undefined &&
-                    <div className="pageNumbers-container">
-                        <Button
-                            type="button"
-                            className="arrowBtn"
-                            disabled={parseInt(searchParams.get("page") || "1") <= 1}
-                            onClick={() => {
-                                setSearchParams(prev => {
-                                    const params = new URLSearchParams(prev);
-                                    params.set("page", (parseInt(params.get("page") || "1") - 1).toString());
-                                    return params;
-                                });
-                            }}
-                        >
-                            <FontAwesomeIcon icon={faCaretLeft} />
-                        </Button>
+                    {
+                        purchase?.totalCount !== undefined &&
+                        <div className="pageNumbers-container">
+                            <Button
+                                type="button"
+                                className="arrowBtn"
+                                disabled={parseInt(searchParams.get("page") || "1") <= 1}
+                                onClick={() => {
+                                    setSearchParams(prev => {
+                                        const params = new URLSearchParams(prev);
+                                        params.set("page", (parseInt(params.get("page") || "1") - 1).toString());
+                                        return params;
+                                    });
+                                }}
+                            >
+                                <FontAwesomeIcon icon={faCaretLeft} />
+                            </Button>
 
 
-                        <p>
-                            Page {parseInt(searchParams.get("page") || "1")} of {Math.ceil(purchase?.totalCount / 5) || 1}
-                        </p>
+                            <p>
+                                Page {parseInt(searchParams.get("page") || "1")} of {Math.ceil(purchase?.totalCount / 5) || 1}
+                            </p>
 
-                        <Button
-                            type="button"
-                            className="arrowBtn"
-                            disabled={parseInt(searchParams.get("page") || "1") >= (Math.ceil(purchase?.totalCount / 5) || 1)}
-                            onClick={() => {
-                                setSearchParams(prev => {
-                                    const params = new URLSearchParams(prev);
-                                    params.set("page", (parseInt(params.get("page") || "1") + 1).toString());
-                                    return params;
-                                });
-                            }}
-                        >
-                            <FontAwesomeIcon icon={faCaretRight} />
-                        </Button>
-                    </div>
-                   }
+                            <Button
+                                type="button"
+                                className="arrowBtn"
+                                disabled={parseInt(searchParams.get("page") || "1") >= (Math.ceil(purchase?.totalCount / 5) || 1)}
+                                onClick={() => {
+                                    setSearchParams(prev => {
+                                        const params = new URLSearchParams(prev);
+                                        params.set("page", (parseInt(params.get("page") || "1") + 1).toString());
+                                        return params;
+                                    });
+                                }}
+                            >
+                                <FontAwesomeIcon icon={faCaretRight} />
+                            </Button>
+                        </div>
+                    }
                 </div>
             </div>
             <AiDisplay mode="purchases" />

@@ -5,7 +5,6 @@ import "./auth.css";
 import Button from '../ui/Button';
 import { useToggleNavbarUtilsHook } from '../../hooks/useToggle/useToggleNavbarUtils';
 import { useLogin } from '../../hooks/useQueries/useAuthQueries';
-import { useAuthHook } from '../../hooks/useAuthHook';
 import { useToggleAlertHook } from '../../hooks/useToggle/useToggleAlert';
 
 function LogIn() {
@@ -14,7 +13,6 @@ function LogIn() {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [badInfo, setBadInfo] = useState<boolean>(false);
-    const { setAuth, setUser } = useAuthHook();
     const { mutateAsync: loginFunc } = useLogin();
 
     const handleLogin = async (e: React.SubmitEvent<HTMLFormElement>) => {
@@ -31,8 +29,6 @@ function LogIn() {
                 return;
             }
             if (result) {
-                setAuth(true);
-                setUser(result);
                 toggleDisplayFormFunc();
                 setMessage("Login successful!");
                 setType("success");
@@ -47,9 +43,9 @@ function LogIn() {
     return (
         <div className="login-modal-overlay" id="login-content">
             <div className="login-modal-card">
-                <button 
-                    type="button" 
-                    className="auth-close-btn" 
+                <button
+                    type="button"
+                    className="auth-close-btn"
                     onClick={() => toggleDisplayFormFunc()}
                 >
                     <FontAwesomeIcon icon={faXmark} />
@@ -65,14 +61,14 @@ function LogIn() {
                         <div className="auth-field">
                             <label htmlFor="login-email" className="login__label">Email Address</label>
                             <div className="input-icon-wrapper">
-                                <input 
-                                    type="email" 
-                                    placeholder="name@example.com" 
+                                <input
+                                    type="email"
+                                    placeholder="name@example.com"
                                     id="login-email"
-                                    className="login__input" 
-                                    name="email" 
+                                    className="login__input"
+                                    name="email"
                                     required
-                                    onChange={(e) => setEmail(e.target.value)} 
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
                                 <FontAwesomeIcon icon={faEnvelope} className="input-side-icon" />
                             </div>
@@ -81,14 +77,14 @@ function LogIn() {
                         <div className="auth-field">
                             <label htmlFor="login-pass" className="login__label">Password</label>
                             <div className="input-icon-wrapper">
-                                <input 
-                                    type="password" 
-                                    placeholder="Enter your password" 
+                                <input
+                                    type="password"
+                                    placeholder="Enter your password"
                                     id="login-pass"
-                                    className="login__input" 
-                                    name="password" 
+                                    className="login__input"
+                                    name="password"
                                     required
-                                    onChange={(e) => setPassword(e.target.value)} 
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                                 <FontAwesomeIcon icon={faLock} className="input-side-icon" />
                             </div>

@@ -4,19 +4,13 @@ import type { IUser } from "../types/IUser";
 interface IAuthContext {
     authenticated: boolean,
     user: IUser | null,
-    setUser: (user: IUser | null) => void,
-    setAuth: (value: boolean) => void,
-    reFetch: boolean,
-    reFetchFunc: (value: boolean) => void,
+    refetch: () => Promise<void>
 }
 
 export const defaultAuth: IAuthContext = {
     authenticated: false,
     user: null,
-    setUser: () => { },
-    setAuth: () => { },
-    reFetch: false,
-    reFetchFunc: () => { }
+    refetch: async () => { }
 }
 
 

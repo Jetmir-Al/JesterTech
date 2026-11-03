@@ -19,7 +19,6 @@ export const ToggleModeProvider: React.FC<IToggleLightDarkProviderProps> = ({ ch
     };
 
     useEffect(() => {
-        console.log("mode", mode);
         if (mode) document.body.classList.add(darkMode);
         else document.body.classList.remove(darkMode);
     }, [mode]);
