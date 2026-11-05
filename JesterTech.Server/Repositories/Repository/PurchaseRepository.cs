@@ -13,38 +13,39 @@ namespace JesterTech.Server.Repositories.Repository
         {
             _context = context;
         }
-
+        /// <inheritdoc />
         public async Task CreatePurchase(Purchases purchases, CancellationToken cancellationToken)
         {
             await _context.AddAsync(purchases, cancellationToken);
             await SaveAsync(cancellationToken);
         }
-
+        /// <inheritdoc />
         public async Task DeletePurchase(int purchaseId, CancellationToken cancellationToken)
         {
             await _context.Purchases
                 .Where(data => data.Id == purchaseId)
                 .ExecuteDeleteAsync(cancellationToken);
         }
-
+        
+        /// <inheritdoc />
         public async Task<List<Purchases>> GetAllAsync(CancellationToken cancellationToken)
         {
             return await _context.Purchases
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
         }
-
+        /// <inheritdoc />
         public async Task UpdatePurchase(int purchaseId, Purchases purchases, CancellationToken cancellationToken)
         {
             _context.Update(purchases);
             await SaveAsync(cancellationToken);
         }
-
+        /// <inheritdoc />
         public async Task SaveAsync(CancellationToken cancellationToken)
         {
             await _context.SaveChangesAsync(cancellationToken);
         }
-
+        /// <inheritdoc />
         public async Task<(List<PurchaseDTO>, int TotalCount)> GetPurchasesByUserIdAsync(int page, int pageSize, int userId, CancellationToken cancellationToken)
         {
             var total = await _context.Purchases
@@ -75,7 +76,7 @@ namespace JesterTech.Server.Repositories.Repository
 
             return (purchases, total);
         }
-
+        /// <inheritdoc />
         public async Task<List<PurchaseAiDTO>> GetPurchaseAiByUserIdAsync(int userId, CancellationToken cancellationToken)
         {
             var purchases = await _context.Purchases

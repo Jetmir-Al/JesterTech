@@ -63,6 +63,18 @@ export interface IProductUpload {
     imgFile: File | null;
 }
 
+export interface IProductUpdateImg{
+    imgFile: File | null;
+}
+
+
+
+export interface IUpdateProductImgProps{
+    img: string | null;
+    onClose: () => void;
+    productId: number | null;
+}
+
 export interface IProductAdvanced {
     totalCount: number;
     page: number;

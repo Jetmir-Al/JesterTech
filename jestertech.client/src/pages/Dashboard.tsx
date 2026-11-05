@@ -10,6 +10,9 @@ import { useState } from "react";
 import CreateProduct from "../components/dashboard/CreateProduct";
 import ImageView from "../components/ui/ImageView";
 import type { IProduct } from "../types/IProduct";
+import { faImage } from "@fortawesome/free-regular-svg-icons";
+import UpdateProductImg from "../components/dashboard/UpdateProductImg";
+import { ToolTip, ToolTipContent, ToolTipTrigger } from "../components/ui/CustomToolTip";
 function Dashboard() {
     const { user } = useAuthHook();
     const [page, setPage] = useState<number>(1);
@@ -17,11 +20,14 @@ function Dashboard() {
     const [img, setImg] = useState<string>("");
     const [alt, setAlt] = useState<string>("");
     const [showCreateProduct, setShowCreateProduct] = useState<boolean>(false);
+    const [showUpdateProductImg, setShowUpdateProductImg] = useState<boolean>(false);
     const [editing, setEditing] = useState<boolean>(false);
     const [productToEdit, setProductToEdit] = useState<IProduct | null>(null);
+    const [productId, setProductId] = useState<number | null>(null);
+
     const { mutateAsync: deleteProduct } = useDeleteProduct();
     const { data: productData, isLoading } = useGetDashboardProductsAdvanced({
-        params: { pageSize: "30", page: page.toString() } 
+        params: { pageSize: "30", page: page.toString() }
     });
 
     if (user?.role !== "Admin") {
@@ -36,26 +42,26 @@ function Dashboard() {
                     <p>Manage inventory, modify product information, or add new listings.</p>
                 </div>
                 {
-                    showCreateProduct !== true && 
-                        <Button
-                            className="admin-btn admin-btn-primary"
-                            onClick={() => setShowCreateProduct(b => !b)}
-                            type="button"
-                        >
-                            <FontAwesomeIcon icon={faPlus} />
-                            <span>Create Product</span>
-                        </Button>
+                    showCreateProduct !== true &&
+                    <Button
+                        className="admin-btn admin-btn-primary"
+                        onClick={() => setShowCreateProduct(b => !b)}
+                        type="button"
+                    >
+                        <FontAwesomeIcon icon={faPlus} />
+                        <span>Create Product</span>
+                    </Button>
                 }
             </div>
             {showCreateProduct ?
-               <CreateProduct
-                  setShowCreateProduct={() => {
-                    setShowCreateProduct(b => !b);
-                    setEditing(false);
-                  }}
-                  product={productToEdit}
-                  editing={editing}
-            /> :
+                <CreateProduct
+                    setShowCreateProduct={() => {
+                        setShowCreateProduct(b => !b);
+                        setEditing(false);
+                    }}
+                    product={productToEdit}
+                    editing={editing}
+                /> :
                 <>
                     <div className="dashboard-card">
                         {isLoading ? (
@@ -109,24 +115,58 @@ function Dashboard() {
                                                     </td>
                                                     <td>
                                                         <div className="admin-action-btns">
-                                                            <Button
-                                                                className="action-btn edit-btn"
-                                                                onClick={() => {
-                                                                    setShowCreateProduct(b => !b);
-                                                                    setProductToEdit(product);
-                                                                    setEditing(true);
-                                                                }}
-                                                                type="button"
-                                                            >
-                                                                <FontAwesomeIcon icon={faPenToSquare} />
-                                                            </Button>
-                                                            <Button
-                                                                className="action-btn delete-btn"
-                                                                onClick={async () => await deleteProduct(product.id)}
-                                                                type="button"
-                                                            >
-                                                                <FontAwesomeIcon icon={faTrashCan} />
-                                                            </Button>
+                                                            <ToolTip>
+                                                                <ToolTipTrigger>
+                                                                    <Button
+                                                                        className="action-btn update-img-btn"
+                                                                        onClick={() => {
+                                                                            setShowUpdateProductImg(true);
+                                                                            setImg(product.image);
+                                                                            setProductId(product.id);
+                                                                        }}
+                                                                        type="button"
+                                                                    >
+                                                                        <FontAwesomeIcon icon={faImage} />
+                                                                    </Button>
+                                                                </ToolTipTrigger>
+                                                                <ToolTipContent side={"bottom"}>
+                                                                    Update product image
+                                                                </ToolTipContent>
+                                                            </ToolTip>
+                                                            <ToolTip>
+                                                                <ToolTipTrigger>
+
+                                                                    <Button
+                                                                        className="action-btn edit-btn"
+                                                                        onClick={() => {
+                                                                            setShowCreateProduct(b => !b);
+                                                                            setProductToEdit(product);
+                                                                            setEditing(true);
+                                                                        }}
+                                                                        type="button"
+                                                                    >
+                                                                        <FontAwesomeIcon icon={faPenToSquare} />
+                                                                    </Button>
+                                                                </ToolTipTrigger>
+                                                                <ToolTipContent side="bottom">
+                                                                    Update product specifications!
+                                                                </ToolTipContent>
+                                                            </ToolTip>
+                                                            <ToolTip>
+                                                                <ToolTipTrigger>
+
+                                                                    <Button
+                                                                        className="action-btn delete-btn"
+                                                                        onClick={async () => await deleteProduct(product.id)}
+                                                                        type="button"
+                                                                    >
+                                                                        <FontAwesomeIcon icon={faTrashCan} />
+                                                                    </Button>
+                                                                </ToolTipTrigger>
+                                                                <ToolTipContent side="bottom">
+                                                                    Delete product!
+                                                                </ToolTipContent>
+                                                            </ToolTip>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -178,11 +218,20 @@ function Dashboard() {
                 </>
             }
             {
-            showImg &&
-                <ImageView 
-                    imageUrl={getImageUrl(img)} 
-                    alt={alt} 
-                    onClose={() => setShowImg(false)}            
+                showImg &&
+                <ImageView
+                    imageUrl={getImageUrl(img)}
+                    alt={alt}
+                    onClose={() => setShowImg(false)}
+                />
+            }
+
+            {
+                showUpdateProductImg &&
+                <UpdateProductImg
+                    img={img}
+                    onClose={() => setShowUpdateProductImg(false)}
+                    productId={productId}
                 />
             }
         </div>

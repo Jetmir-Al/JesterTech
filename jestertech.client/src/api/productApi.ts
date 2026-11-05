@@ -65,9 +65,9 @@ export const InsertProduct = async (product: FormData) => {
         { credentials: 'include' });
     return response;
 }
-export const UpdateProductImg = async (img: File | null, id: number) => {
-    const response = await api.post(`/Product/UpdateProductImg/${id}`,
-        { img },
+export const UpdateProductImg = async (ImgFile: FormData, id: number) => {
+    const response = await api.put(`/Product/UpdateProductImg/${id}`,
+        ImgFile,
         { credentials: 'include' });
     return response;
 }

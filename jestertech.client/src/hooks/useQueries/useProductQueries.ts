@@ -111,7 +111,7 @@ export const useDeleteProduct = () => {
 export const useUpdateProductImg = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: async({id, img}: {id: number, img: File | null}) => {
+        mutationFn: async({id, img}: {id: number, img: FormData}) => {
             return await UpdateProductImg(img, id);
         },
         onSuccess: () => {
