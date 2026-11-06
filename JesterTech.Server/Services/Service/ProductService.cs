@@ -48,6 +48,16 @@ namespace JesterTech.Server.Services.Service
         /// <inheritdoc />
         public async Task DeleteProductById(int productId, CancellationToken cancellationToken)
         {
+            var currentImgPath = await _productRepository.GetProductById(productId, cancellationToken);
+
+            if (currentImgPath?.Image != null)
+            {
+                string currentFilePath = Path.Combine(_webHostEnvironment.WebRootPath, currentImgPath.Image.TrimStart('/'));
+                if (File.Exists(currentFilePath))
+                {
+                    File.Delete(currentFilePath);
+                }
+            }
             await _productRepository.DeleteProduct(productId, cancellationToken);
         }
         /// <inheritdoc />
