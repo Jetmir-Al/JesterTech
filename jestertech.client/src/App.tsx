@@ -31,7 +31,7 @@ function App() {
                 <NavBar />
             </NavbarUtilsProvider>
             <Routes>
-                <Route path="*" element={<NotFound/>} />
+                <Route path="*" element={<NotFound />} />
                 <Route path="/" element={<Home />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/products/:id" element={<ProductDetails />} />

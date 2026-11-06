@@ -1,0 +1,61 @@
+.del-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: hsla(210, 30%, 10%, 0.75);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    z-index: 9999;
+    animation: fadeInContainer 0.2s ease-out;
+}
+
+/* --color-error: hsl(0, 75%, 50%);
+    --color-error-bg: hsl(0, 85%, 92%); */
+.del-form {
+    max-width: 800px;
+    margin: 2.5rem auto;
+    padding: 2rem;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-error);
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
+    max-height: 500px;
+}
+
+.del-header p {
+    font-size: var(--text-sm);
+}
+
+.del-actions {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.del-btn {
+    padding: 0.5rem 0.7rem;
+    border-radius: 0.5rem;
+}
+
+.del-actions :first-child {
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+    background-color: var(--color-surface-alt);
+}
+
+.del-actions :nth-child(2) {
+    color: var(--color-text-inverse);
+    border: 2px solid var(--color-primary);
+    background-color: var(--color-primary);
+}
+
+.del-actions :nth-child(2):hover {
+    background-color: var(--color-primary-hover);
+}

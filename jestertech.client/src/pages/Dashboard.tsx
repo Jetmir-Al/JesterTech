@@ -13,6 +13,7 @@ import type { IProduct } from "../types/IProduct";
 import { faImage } from "@fortawesome/free-regular-svg-icons";
 import UpdateProductImg from "../components/dashboard/UpdateProductImg";
 import { ToolTip, ToolTipContent, ToolTipTrigger } from "../components/ui/CustomToolTip";
+import DeleteActionPopup from "../components/ui/DeleteActionPopup";
 function Dashboard() {
     const { user } = useAuthHook();
     const [page, setPage] = useState<number>(1);
@@ -21,6 +22,7 @@ function Dashboard() {
     const [alt, setAlt] = useState<string>("");
     const [showCreateProduct, setShowCreateProduct] = useState<boolean>(false);
     const [showUpdateProductImg, setShowUpdateProductImg] = useState<boolean>(false);
+    const [openDeleteAction, setOpenDeleteAction] = useState<boolean>(false);
     const [editing, setEditing] = useState<boolean>(false);
     const [productToEdit, setProductToEdit] = useState<IProduct | null>(null);
     const [productId, setProductId] = useState<number | null>(null);
@@ -157,7 +159,10 @@ function Dashboard() {
 
                                                                     <Button
                                                                         className="action-btn delete-btn"
-                                                                        onClick={async () => await deleteProduct(product.id)}
+                                                                        onClick={() => {
+                                                                            setProductId(product.id);
+                                                                            setOpenDeleteAction(true);
+                                                                        }}
                                                                         type="button"
                                                                     >
                                                                         <FontAwesomeIcon icon={faTrashCan} />
@@ -234,6 +239,22 @@ function Dashboard() {
                     productId={productId}
                 />
             }
+
+            {
+                openDeleteAction &&
+                <DeleteActionPopup
+                    title={"Are you sure you want to delete this product?"}
+                    description={"This action is permanent! Proceeding with this action will result in related fields to be deleted as well."}
+                    onAccept={async () => {
+                        if (productId) {
+                            await deleteProduct(productId);
+                            setOpenDeleteAction(false);
+                        }
+                    }}
+                    onClose={() => setOpenDeleteAction(false)}
+                />
+            }
+
         </div>
     );
 }

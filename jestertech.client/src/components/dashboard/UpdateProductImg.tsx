@@ -7,7 +7,7 @@ import type { IProductUpdateImg, IUpdateProductImgProps } from "../../types/IPro
 import Button from "../ui/Button";
 import { getImageUrl } from "../../api/productApi";
 import ImageView from "../ui/ImageView";
-
+import "./createProduct.css";
 
 
 
@@ -16,12 +16,12 @@ function UpdateProductImg({ onClose, img, productId }: IUpdateProductImgProps) {
         imgFile: null,
     });
 
-    const {setShowAlert, setMessage, setType} = useToggleAlertHook(); 
+    const { setShowAlert, setMessage, setType } = useToggleAlertHook();
     const [previewImage, setPreviewImage] = useState<string | null>(null);
     const [showImg, setShowImg] = useState<boolean>(false);
     const [showImgUploaded, setShowImgUploaded] = useState<boolean>(false);
 
-    const {mutateAsync: updateProductImg, isPending: isUpdatingProductImg} = useUpdateProductImg();
+    const { mutateAsync: updateProductImg, isPending: isUpdatingProductImg } = useUpdateProductImg();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target;
@@ -38,7 +38,7 @@ function UpdateProductImg({ onClose, img, productId }: IUpdateProductImgProps) {
                 ...prev,
                 [name]: type === "number" ? parseFloat(value) || 0 : value
             }));
-        }  
+        }
 
     };
 
@@ -57,7 +57,7 @@ function UpdateProductImg({ onClose, img, productId }: IUpdateProductImgProps) {
         e.preventDefault();
         try {
             setShowAlert(false);
-            if(!productId) return;
+            if (!productId) return;
 
             const data = new FormData();
 
@@ -86,92 +86,98 @@ function UpdateProductImg({ onClose, img, productId }: IUpdateProductImgProps) {
 
     return (
         <div className="edit-product-container">
-            <div className="create-product-container"> 
+            <div className="create-product-container">
 
-            <div className="create-product-header">
-                <h2>
-                    Updating product image
-                </h2>
-                <p>Update the image for this product.</p>
-            </div>
+                <div className="create-product-header">
+                    <h2>
+                        Updating product image
+                    </h2>
+                    <p>Update the image for this product.</p>
+                </div>
 
-            <form className="create-product-form" onSubmit={handleSubmit}>
-                <div className="form-grid">
+                <form className="create-product-form" onSubmit={handleSubmit}>
+                    <div className="form-grid">
 
-                    {/* Image File Upload & URL */}
-                        <div className="form-group span-2">
-
-                         <label>Current Image</label>
-
-                            <img 
-                                src={getImageUrl(img ?? "")} 
-                                alt="Preview" 
-                                className="image-preview"
-                                onClick={() => setShowImg(true)}
-                            />
-                        </div>
-                    <div className="form-group span-2">
-                        <label>Product Image File</label>
-
-                        <div className="file-upload-wrapper">
-                            <input
-                                type="file"
-                                id="imgFile"
-                                name="imgFile"
-                                accept="image/*"
-                                onChange={handleChange}
-                                className="file-input-hidden"
-                            />
-                            <label htmlFor="imgFile" className="file-upload-box">
-                                <FontAwesomeIcon icon={faCloudUploadAlt} className="upload-icon" />
-                                <span>{formData.imgFile ? formData.imgFile.name : "Choose an image file or drag it here"}</span>
-                            </label>
-                        </div>
-                        {previewImage && (
-                            <div className="image-preview-container">
-                                <img 
-                                    src={previewImage} 
-                                    alt="Preview" 
-                                    className="image-preview" 
-                                    onClick={() => setShowImgUploaded(true)}
-                                />
+                        {/* Image File Upload & URL */}
+                        <div className="img-beside-container">
+                            <div className="form-group span-2">
+                                <label>Current Image: </label>
+                                <div className="image-preview-container">
+                                    <img
+                                        src={getImageUrl(img ?? "")}
+                                        alt="Preview"
+                                        className="image-preview"
+                                        onClick={() => setShowImg(true)}
+                                    />
+                                </div>
                             </div>
-                        )}
+                            {previewImage && (
+                                <div className="form-group span-2">
+                                    <label>Uploaded Image: </label>
+                                    <div className="image-preview-container">
+                                        <img
+                                            src={previewImage}
+                                            alt="Preview"
+                                            className="image-preview"
+                                            onClick={() => setShowImgUploaded(true)}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                        <div className="form-group span-2">
+                            <label>Product Image File</label>
+
+                            <div className="file-upload-wrapper">
+                                <input
+                                    type="file"
+                                    id="imgFile"
+                                    name="imgFile"
+                                    accept="image/*"
+                                    onChange={handleChange}
+                                    className="file-input-hidden"
+                                />
+                                <label htmlFor="imgFile" className="file-upload-box">
+                                    <FontAwesomeIcon icon={faCloudUploadAlt} className="upload-icon" />
+                                    <span>{formData.imgFile ? formData.imgFile.name : "Choose an image file or drag it here"}</span>
+                                </label>
+                            </div>
+
+                        </div>
                     </div>
-                </div>
 
-                {/* Form Actions */}
-                <div className="form-actions">
-                    <Button type="button" className="back-product-btn"
-                        onClick={() => onClose()}>
-                        Back
-                    </Button>
-                    <Button 
-                        type="submit" 
-                        disabled={isUpdatingProductImg}
-                        className="submit-product-btn">
+                    {/* Form Actions */}
+                    <div className="form-actions">
+                        <Button type="button" className="back-product-btn"
+                            onClick={() => onClose()}>
+                            Back
+                        </Button>
+                        <Button
+                            type="submit"
+                            disabled={isUpdatingProductImg}
+                            className="submit-product-btn">
                             Save
-                    </Button>
-                </div>
-            </form>
+                        </Button>
+                    </div>
+                </form>
 
-            {
-                (showImgUploaded || showImg) && (
-                    <ImageView 
-                        imageUrl={ showImg ?
-                            getImageUrl(img ?? "")
-                            : showImgUploaded ? 
-                                previewImage ?? "" 
+                {
+                    (showImgUploaded || showImg) && (
+                        <ImageView
+                            imageUrl={showImg ?
+                                getImageUrl(img ?? "")
+                                : showImgUploaded ?
+                                    previewImage ?? ""
                                     : ""
-                        } 
-                        alt={"Preview"} 
-                        onClose={() => {
-                            setShowImgUploaded(false);
-                            setShowImg(false);
-                        }}            
-                    />
-                )
-            }
+                            }
+                            alt={"Preview"}
+                            onClose={() => {
+                                setShowImgUploaded(false);
+                                setShowImg(false);
+                            }}
+                        />
+                    )
+                }
             </div>
         </div>
     );
