@@ -7,7 +7,6 @@ const Footer = () => {
     return (
         <footer className="footer-container">
             <div className="footer-content">
-                {/* Brand / About Column */}
                 <div className="footer-info brand-col">
                     <h3 className="footer-brand">EcomTech</h3>
                     <p className="footer-desc">
@@ -25,7 +24,6 @@ const Footer = () => {
                     </div>
                 </div>
 
-                {/* Quick Links Column */}
                 <div className="footer-info">
                     <h5>Quick Links</h5>
                     <a href="/products">All Products</a>
@@ -34,7 +32,6 @@ const Footer = () => {
                     <a href="/about">About Us</a>
                 </div>
 
-                {/* Customer Service Column */}
                 <div className="footer-info">
                     <h5>Customer Service</h5>
                     <a href="/contact">Na kontaktoni</a>
@@ -43,7 +40,6 @@ const Footer = () => {
                     <a href="/returns">Returns Policy</a>
                 </div>
 
-                {/* Socials / Follow Us Column */}
                 <div className="footer-info">
                     <h5>Follow Us</h5>
                     <p className="footer-desc-small">Stay connected for the latest tech drops and deals.</p>
