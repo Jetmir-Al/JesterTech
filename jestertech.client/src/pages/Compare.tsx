@@ -11,7 +11,7 @@ import { useToggleAlertHook } from "../hooks/useToggle/useToggleAlert";
 function Compare() {
     const { data: categories } = useGetProductCategories();
     const { setMessage, setShowAlert, setType } = useToggleAlertHook();
-    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    const [selectedCategory, setSelectedCategory] = useState<string | null>("");
     const [selectedProducts, setSelectedProducts] = useState<IProduct[]>([]);
     const [askAi, setAskAi] = useState<boolean>(false);
     const { data: products, isLoading, isLoadingError } = useGetProductsByCategory(selectedCategory);
@@ -20,7 +20,7 @@ function Compare() {
 
     const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedCategory(e.target.value);
-        setSelectedProducts([]); 
+        setSelectedProducts([]);
         setAskAi(false);
     };
 
@@ -31,7 +31,7 @@ function Compare() {
             if (selectedProducts.length >= 3) {
                 setMessage("You can only select up to 3 products for comparison.");
                 setType("warning");
-                setShowAlert(true); 
+                setShowAlert(true);
                 return;
             }
             setSelectedProducts([...selectedProducts, product]);
@@ -95,7 +95,7 @@ function Compare() {
                                         className="ask-ai-compare-btn"
                                         onClick={() => setAskAi(a => !a)}
                                     >
-                                       Ask AI to Analyze Comparison
+                                        Ask AI to Analyze Comparison
                                     </button>
                                 </div>
                                 <table className="compare-table">

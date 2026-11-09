@@ -1,7 +1,7 @@
 /* Admin Dashboard Layout */
 .admin-dashboard-container {
     max-width: 100%;
-/*    margin: 2rem auto;*/
+    /*    margin: 2rem auto;*/
     padding: 5rem 1.5rem;
     display: flex;
     flex-direction: column;
@@ -35,18 +35,19 @@
     color: white;
     transition: background-color 0.2s ease, transform 0.1s ease;
 }
-    .admin-btn span {
-        color: var(--color-text-inverse);
-    }
+
+.admin-btn span {
+    color: var(--color-text-inverse);
+}
 
 .admin-btn-primary {
     background-color: var(--color-primary);
     color: var(--color-text-inverse);
 }
 
-    .admin-btn-primary:hover {
-        background-color: var(--color-primary-hover);
-    }
+.admin-btn-primary:hover {
+    background-color: var(--color-primary-hover);
+}
 
 /* Dashboard Card Wrapper */
 .dashboard-card {
@@ -76,29 +77,29 @@
     font-size: var(--text-sm);
 }
 
-    .admin-table th {
-        background-color: var(--color-surface-alt);
-        color: var(--color-title);
-        font-weight: var(--fw-semibold);
-        padding: 1rem 1.25rem;
-        border-bottom: 1px solid var(--color-border);
-        white-space: nowrap;
-    }
+.admin-table th {
+    background-color: var(--color-surface-alt);
+    color: var(--color-title);
+    font-weight: var(--fw-semibold);
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--color-border);
+    white-space: nowrap;
+}
 
-    .admin-table td {
-        padding: 1rem 1.25rem;
-        border-bottom: 1px solid var(--color-border);
-        color: var(--color-text);
-        vertical-align: middle;
-    }
+.admin-table td {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text);
+    vertical-align: middle;
+}
 
-    .admin-table tbody tr:last-child td {
-        border-bottom: none;
-    }
+.admin-table tbody tr:last-child td {
+    border-bottom: none;
+}
 
-    .admin-table tbody tr:hover {
-        background-color: var(--color-surface-alt);
-    }
+.admin-table tbody tr:hover {
+    background-color: var(--color-surface-alt);
+}
 
 /* Table Content Specifics */
 .product-id {
@@ -154,15 +155,15 @@
     font-weight: var(--fw-medium);
 }
 
-    .stock-indicator.in-stock {
-        background-color: var(--color-success-bg);
-        color: var(--color-success);
-    }
+.stock-indicator.in-stock {
+    background-color: var(--color-success-bg);
+    color: var(--color-success);
+}
 
-    .stock-indicator.out-stock {
-        background-color: var(--color-error-bg);
-        color: var(--color-error);
-    }
+.stock-indicator.out-stock {
+    background-color: var(--color-error-bg);
+    color: var(--color-error);
+}
 
 /* Action Buttons Container & Micro buttons */
 .admin-action-btns {
@@ -184,17 +185,17 @@
     transition: all 0.2s ease;
 }
 
-    .action-btn.edit-btn:hover {
-        background-color: var(--color-info-bg);
-        color: var(--color-info);
-        border-color: var(--color-info);
-    }
+.action-btn.edit-btn:hover {
+    background-color: var(--color-info-bg);
+    color: var(--color-info);
+    border-color: var(--color-info);
+}
 
-    .action-btn.delete-btn:hover {
-        background-color: var(--color-error-bg);
-        color: var(--color-error);
-        border-color: var(--color-error);
-    }
+.action-btn.delete-btn:hover {
+    background-color: var(--color-error-bg);
+    color: var(--color-error);
+    border-color: var(--color-error);
+}
 
 .text-right {
     text-align: right;
@@ -225,39 +226,38 @@
         width: 100%;
     }
 
-        .admin-table thead {
-            display: none; 
-        }
+    .admin-table thead {
+        display: none;
+    }
 
-        .admin-table tr {
-            background-color: var(--color-surface);
-            border: 1px solid var(--color-border);
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            box-shadow: var(--shadow-sm);
-        }
+    .admin-table tr {
+        background-color: var(--color-surface);
+        border-bottom: 1px solid var(--color-border);
+        margin-bottom: 1rem;
+        padding: 1rem;
+        box-shadow: var(--shadow-sm);
+    }
 
-        .admin-table td {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid var(--color-border);
-            text-align: right;
-        }
+    .admin-table td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--color-border);
+        text-align: right;
+    }
 
-            .admin-table td:last-child {
-                border-bottom: none;
-                padding-top: 0.75rem;
-            }
+    .admin-table td:last-child {
+        border-bottom: none;
+        padding-top: 0.75rem;
+    }
 
-            .admin-table td::before {
-                content: attr(data-label);
-                font-weight: var(--fw-semibold);
-                color: var(--color-text-light);
-                text-align: left;
-            }
+    .admin-table td::before {
+        content: attr(data-label);
+        font-weight: var(--fw-semibold);
+        color: var(--color-text-light);
+        text-align: left;
+    }
 
     .product-cell-info {
         justify-content: flex-end;

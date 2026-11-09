@@ -69,7 +69,10 @@ const SideBar = () => {
                             NavigationSideBar[0].map((p, index) => (
                                 <Button
                                     className=""
-                                    onClick={() => navigate(p.navigate)}
+                                    onClick={() => {
+                                        navigate(p.navigate);
+                                        openSideBarFunc();
+                                    }}
                                     type="button"
                                     key={index}>
                                     <FontAwesomeIcon icon={p.icon} />
@@ -84,7 +87,10 @@ const SideBar = () => {
                             NavigationSideBar[1].map((p, index) => (
                                 <Button
                                     className=""
-                                    onClick={() => navigate(p.navigate)}
+                                    onClick={() => {
+                                        navigate(p.navigate);
+                                        openSideBarFunc();
+                                    }}
                                     type="button"
                                     key={index}>
                                     <FontAwesomeIcon icon={p.icon} />
@@ -99,7 +105,10 @@ const SideBar = () => {
                             NavigationSideBar[2].map((p, index) => (
                                 <Button
                                     className=""
-                                    onClick={() => navigate(p.navigate)}
+                                    onClick={() => {
+                                        navigate(p.navigate);
+                                        openSideBarFunc();
+                                    }}
                                     type="button"
                                     key={index}>
                                     <FontAwesomeIcon icon={p.icon} />
