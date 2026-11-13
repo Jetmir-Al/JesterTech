@@ -2,57 +2,54 @@ import type { IProduct, IProductAdvanced, IProductDashboardAdvanced, ITopProduct
 import { api } from "./api";
 
 
-export const GetProductById = async (id: number) => {
+export const GetProductById = async (id: number): Promise<IProduct> => {
     const response = await api.get<IProduct>(`/Product/${id}`);
-    return response as unknown as IProduct;
+    return response as IProduct;
 }
 
-export const GetFeaturedProducts = async () => {
+export const GetFeaturedProducts = async (): Promise<IProduct[]> => {
     const response = await api.get<IProduct[]>(`/Product/featured`);
-    return response as unknown as IProduct[];
+    return response  as IProduct[];
 }
 
-export const GetTopProducts = async () => {
+export const GetTopProducts = async (): Promise<ITopProduct[]> => {
     const response = await api.get<ITopProduct[]>(`/Product/topProducts`);
-    return response as unknown as ITopProduct[];
+    return response as ITopProduct[];
 }
 
 
-export const GetProductByCategory = async (category: string) => {
+export const GetProductByCategory = async (category: string): Promise<IProduct[]> => {
     const response = await api.get<IProduct[]>(`/Product/productsByCategory?category=${category}`);
-    return response as unknown as IProduct[];
+    return response as IProduct[];
 }
 
 
-export const GetProductCategories = async () => {
+export const GetProductCategories = async (): Promise<string[]> => {
     const response = await api.get<string[]>(`/Product/categories`);
-    return response as unknown as string[];
+    return response  as string[];
 }
 
-export const GetProductBrands = async () => {
+export const GetProductBrands = async (): Promise<string[]> => {
     const response = await api.get<string[]>(`/Product/brands`);
-    return response as unknown as string[];
+    return response as string[];
 }
 
-export const GetProductsAdvanced = async (params: string) => {
+export const GetProductsAdvanced = async (params: string): Promise<IProductAdvanced> => {
 
     const response = await api.get<IProductAdvanced>(`/Product/advanced?${params}`);
-    if (response !== null) {
-        return response;
-    }
+    return response as IProductAdvanced;
 }
 
-export const GetProductsDashboardAdvanced = async (params: string) => {
+export const GetProductsDashboardAdvanced = async (params: string): Promise<IProductDashboardAdvanced> => {
 
     const response = await api.get<IProductDashboardAdvanced>(`/Product/DashboardProducts?${params}`);
-    if (response !== null) {
-        return response;
-    }
+    
+    return response as IProductDashboardAdvanced;
 }
 
-export const GetAllProducts = async () => {
+export const GetAllProducts = async (): Promise<IProduct[]> => {
     const response = await api.get<IProduct[]>('/Product/products');
-    return response as unknown as IProduct[];
+    return response  as IProduct[];
 }
 
 export const getImageUrl = (filename: string) => {
@@ -60,31 +57,26 @@ export const getImageUrl = (filename: string) => {
 }
 
 export const InsertProduct = async (product: FormData) => {
-    const response = await api.post('/Product/InsertProduct',
+    await api.post('/Product/InsertProduct',
         product,
         { credentials: 'include' });
-    return response;
 }
 export const UpdateProductImg = async (ImgFile: FormData, id: number) => {
-    const response = await api.put(`/Product/UpdateProductImg/${id}`,
+    await api.put(`/Product/UpdateProductImg/${id}`,
         ImgFile,
         { credentials: 'include' });
-    return response;
 }
 
 export const DeleteProduct = async (id: number) => {
-    const response = await api.delete(`/Product/DeleteProduct/${id}`,
+    await api.delete(`/Product/DeleteProduct/${id}`,
         { credentials: 'include' });
-    return response;
 }
 
 
 export const UpdateProduct = async (id: number, product: FormData) => {
-    const response = await api.put(`/Product/UpdateProduct/${id}`,
+    await api.put(`/Product/UpdateProduct/${id}`,
         product,
         {
             credentials: 'include'
         });
-
-    return response;
 }

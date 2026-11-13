@@ -158,6 +158,35 @@ input, textarea {
     outline: none; 
 }
 
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--color-border);
+    border-radius: 50%;
+    border: 1px solid transparent;
+    background-clip: content-box;
+    transition: background-color 0.15s ease;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: var(--color-text);
+    }
+
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
 
 @media screen and (max-width: 768px) {
     h1 {

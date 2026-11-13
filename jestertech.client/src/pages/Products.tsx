@@ -4,17 +4,17 @@ import "./pageStyles/products.css";
 import Loading from "../utils/Loading";
 import { useGetProductsAdvanced } from "../hooks/useQueries/useProductQueries";
 import type { IProductPage } from "../types/IProduct";
-import { useNavigate, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
 import SearchBar from "../components/products/SearchBar";
 import SortFilter from "../components/products/SortFilter";
 import AiDisplay from "../components/ai/AiDisplay";
 import { faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router";
 
 
 const Products = () => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const navigate = useNavigate();
 
     const params = {
         page: searchParams.get("page") || undefined,
@@ -47,7 +47,8 @@ const Products = () => {
                             </div>
                             :
                             products?.products.map((p: IProductPage) => (
-                                <div onClick={() => navigate(`/products/${p.id}`)}
+                                <Link
+                                    to={`/products/${p.id}`}
                                     className='productCard'
                                     key={p.id}>
                                     <Card
@@ -62,7 +63,7 @@ const Products = () => {
                                             id: p.id,
                                         }}
                                     />
-                                </div>
+                                </Link>
                             ))
                     }
                 </div>
@@ -106,7 +107,7 @@ const Products = () => {
                     <Button
                         type="button"
                         className="arrowBtn"
-                        disabled={parseInt(params.page || "1") >= (products?.pageSize || 1)}
+                        disabled={parseInt(params.page || "1") >= Math.ceil((products?.totalCount || 1) / (products?.pageSize || 1))}
                         onClick={() => {
                             setSearchParams(prev => {
                                 const params = new URLSearchParams(prev);
