@@ -50,7 +50,12 @@ const Products = () => {
                                 <Link
                                     to={`/products/${p.id}`}
                                     className='productCard'
-                                    key={p.id}>
+                                    key={p.id}
+                                    onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                                        e.stopPropagation();
+                                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                                    }}
+                                >
                                     <Card
                                         img={p.image}
                                         name={p.title}

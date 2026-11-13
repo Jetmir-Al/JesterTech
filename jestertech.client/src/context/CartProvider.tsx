@@ -29,6 +29,13 @@ export const CartProvider = ({ children }: CartProviderProps) => {
             setShowAlert(true);
             return;
         }
+
+        if (cartItems.find(cartItem => cartItem.id === item.id)) {
+            setType("warning");
+            setMessage("This item is already in your cart!");
+            setShowAlert(true);
+            return;
+        }
         setCartItems(prev => {
             const updated = [...prev, item];
             localStorage.setItem("cartItems", JSON.stringify(updated));

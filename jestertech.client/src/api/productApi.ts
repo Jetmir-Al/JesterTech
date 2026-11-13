@@ -9,7 +9,7 @@ export const GetProductById = async (id: number): Promise<IProduct> => {
 
 export const GetFeaturedProducts = async (): Promise<IProduct[]> => {
     const response = await api.get<IProduct[]>(`/Product/featured`);
-    return response  as IProduct[];
+    return response as IProduct[];
 }
 
 export const GetTopProducts = async (): Promise<ITopProduct[]> => {
@@ -26,7 +26,7 @@ export const GetProductByCategory = async (category: string): Promise<IProduct[]
 
 export const GetProductCategories = async (): Promise<string[]> => {
     const response = await api.get<string[]>(`/Product/categories`);
-    return response  as string[];
+    return response as string[];
 }
 
 export const GetProductBrands = async (): Promise<string[]> => {
@@ -49,7 +49,7 @@ export const GetProductsDashboardAdvanced = async (params: string): Promise<IPro
 
 export const GetAllProducts = async (): Promise<IProduct[]> => {
     const response = await api.get<IProduct[]>('/Product/products');
-    return response  as IProduct[];
+    return response as IProduct[];
 }
 
 export const getImageUrl = (filename: string) => {

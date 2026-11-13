@@ -8,12 +8,15 @@ import Loading from "../../utils/Loading";
 import { useNavigate } from "react-router";
 import { useRef, useEffect, useState } from "react";
 import { NavigationSideBar } from "../../types/sidebarTypes";
+import { useAuthHook } from "../../hooks/useAuthHook";
 
 
 const SideBar = () => {
     const { openSideBarFunc, openSideBar } = useToggleNavbarUtilsHook();
     const { data: Categories, isLoading } = useGetProductCategories();
     const [tabs, setTabs] = useState<"Tabs" | "Explore">("Tabs");
+    const { user, authenticated } = useAuthHook();
+    const filterNavigation = user?.role === "admin" ? NavigationSideBar[0] : NavigationSideBar[0].filter((p) => p.label !== "Dashboard");
     const navigate = useNavigate();
     const sideBarRef = useRef<HTMLDivElement>(null);
 
@@ -65,21 +68,21 @@ const SideBar = () => {
                 <div className="sidebar-navigations">
                     <div className="tab-group">
                         <p>Overview</p>
-                        {
-                            NavigationSideBar[0].map((p, index) => (
-                                <Button
-                                    className=""
-                                    onClick={() => {
-                                        navigate(p.navigate);
-                                        openSideBarFunc();
-                                    }}
-                                    type="button"
-                                    key={index}>
-                                    <FontAwesomeIcon icon={p.icon} />
-                                    {p.label}
-                                </Button>
-                            ))
-                        }
+                            {
+                                filterNavigation.map((p, index) => (
+                                    <Button
+                                        className=""
+                                        onClick={() => {
+                                            navigate(p.navigate);
+                                            openSideBarFunc();
+                                        }}
+                                        type="button"
+                                        key={index}>
+                                        <FontAwesomeIcon icon={p.icon} />
+                                        {p.label}
+                                    </Button>
+                                ))
+                            }
                     </div>
                     <div className="tab-group">
                         <p>Shopping</p>
@@ -98,25 +101,28 @@ const SideBar = () => {
                                 </Button>
                             ))
                         }
-                    </div>
-                    <div className="tab-group">
-                        <p>My Account</p>
+                        </div>
                         {
-                            NavigationSideBar[2].map((p, index) => (
-                                <Button
-                                    className=""
-                                    onClick={() => {
-                                        navigate(p.navigate);
-                                        openSideBarFunc();
-                                    }}
-                                    type="button"
-                                    key={index}>
-                                    <FontAwesomeIcon icon={p.icon} />
-                                    {p.label}
-                                </Button>
-                            ))
+                            (authenticated && user) &&
+                            <div className="tab-group">
+                                <p>My Account</p>
+                                {
+                                    NavigationSideBar[2].map((p, index) => (
+                                        <Button
+                                            className=""
+                                            onClick={() => {
+                                                navigate(p.navigate);
+                                                openSideBarFunc();
+                                            }}
+                                            type="button"
+                                            key={index}>
+                                            <FontAwesomeIcon icon={p.icon} />
+                                            {p.label}
+                                        </Button>
+                                    ))
+                                }
+                            </div>
                         }
-                    </div>
                 </div>
             }
             {

@@ -11,7 +11,7 @@ export const CreatePurchase = async (productId: number, CardholderName: string, 
     return response;
 }
 
-export const GetPurchases = async ({ params }: IPurchaseParams) => {
+export const GetPurchases = async ({ params }: IPurchaseParams): Promise<IPurchaseAdvanced> => {
     const searchParams = new URLSearchParams();
     if (params.page) searchParams.append("page", params.page);
     if (params.pageSize) searchParams.append("pageSize", params.pageSize);
@@ -20,5 +20,5 @@ export const GetPurchases = async ({ params }: IPurchaseParams) => {
     const response = await api.get<IPurchaseAdvanced>(`/Purchase/user?${queryString}`,
         { credentials: 'include' }
     );
-    return response;
+    return response as IPurchaseAdvanced;
 }
