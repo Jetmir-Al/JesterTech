@@ -1,5 +1,6 @@
 using JesterTech.Server.Data;
 using JesterTech.Server.HttpClients;
+using JesterTech.Server.Middlewares.Middleware;
 using JesterTech.Server.Repositories.Interfaces;
 using JesterTech.Server.Repositories.Repository;
 using JesterTech.Server.Services;
@@ -13,11 +14,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Middleware registrations
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
 // Repository registrations
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
+
 // Service registrations
 builder.Services.AddHttpClient<IAiClient, AiClient>();
 
@@ -28,9 +33,10 @@ builder.Services.AddScoped<IPurchaseService, PurchaseService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddControllersWithViews();
-
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -51,6 +57,15 @@ builder.Services.AddIdentityServices(builder.Configuration);
 
 var app = builder.Build();
 
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseExceptionHandler();
+}
 
 
 app.UseDefaultFiles();

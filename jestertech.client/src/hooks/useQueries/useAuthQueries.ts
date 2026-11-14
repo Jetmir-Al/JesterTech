@@ -20,8 +20,8 @@ export const useLogin = () => {
 
 export const useRegister = () => {
     return useMutation({
-        mutationFn: async (params: { name: string, email: string, password: string, role: string }) => {
-            return await Register(params.name, params.email, params.password, params.role);
+        mutationFn: async (params: { name: string, email: string, password: string}) => {
+            return await Register(params.name, params.email, params.password);
         },
         onError: (err) => {
             console.error("Error during registration", err);

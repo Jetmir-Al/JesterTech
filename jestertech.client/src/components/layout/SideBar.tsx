@@ -9,11 +9,13 @@ import { useNavigate } from "react-router";
 import { useRef, useEffect, useState } from "react";
 import { NavigationSideBar } from "../../types/sidebarTypes";
 import { useAuthHook } from "../../hooks/useAuthHook";
+import ErrorUtil from "../../utils/ErrorUtil";
+import NoInfo from "../../utils/NoInfo";
 
 
 const SideBar = () => {
     const { openSideBarFunc, openSideBar } = useToggleNavbarUtilsHook();
-    const { data: Categories, isLoading } = useGetProductCategories();
+    const { data: Categories, isLoading, isError, refetch } = useGetProductCategories();
     const [tabs, setTabs] = useState<"Tabs" | "Explore">("Tabs");
     const { user, authenticated } = useAuthHook();
     const filterNavigation = user?.role === "Admin" ? NavigationSideBar[0] : NavigationSideBar[0].filter((p) => p.label !== "Dashboard");
@@ -130,9 +132,14 @@ const SideBar = () => {
                 <div className="sidebar-show">
                     {
                         isLoading ? <Loading /> :
-                            Categories?.map((c: string, index: number) => (
-                                <Button
-                                    key={index}
+                            isError ? <ErrorUtil 
+                                msg="Failed to load product categories"
+                                func={refetch}
+                            /> :
+                                Categories?.length === 0 ? <NoInfo noInfo="No product categories available" /> :
+                                Categories?.map((c: string, index: number) => (
+                                    <Button
+                                        key={index}
                                     className=""
                                     type="button"
                                     onClick={() => {

@@ -10,7 +10,7 @@ namespace JesterTech.Server.Services
         public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
         {
             var jwtSettings = config.GetSection("JwtSettings");
-            var key = Encoding.UTF8.GetBytes(jwtSettings["SecretKey"] ?? "fallback_key_for_local_dev_only");
+            var key = Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]);
 
             services.AddAuthentication(options =>
             {

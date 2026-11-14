@@ -41,7 +41,7 @@ namespace JesterTech.Server.HttpClients
             if (!response.IsSuccessStatusCode)
             {
                 var errorResponse = await response.Content.ReadAsStringAsync(cancellationToken);
-                throw new HttpRequestException($"Groq API Error: {response.StatusCode} - {errorResponse}");
+                throw new HttpRequestException($"Problem with AI API request!");
             }
 
             var responseString = await response.Content.ReadAsStringAsync(cancellationToken);

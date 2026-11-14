@@ -22,7 +22,7 @@ function SignUp() {
                 setBadInfo(true);
                 return;
             }
-            await registerFunc({ name, email, password, role: "User" });
+            await registerFunc({ name, email, password });
             toggleFormFunc();
         } catch {
             setBadInfo(true);

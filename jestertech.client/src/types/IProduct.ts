@@ -89,3 +89,39 @@ export interface IProductDashboardAdvanced{
     pageSize: number;
     products: IProduct[];
 }
+
+
+
+
+export interface ICreateProductProps{
+  setShowCreateProduct: () => void;
+  product: IProduct | null;
+  editing: boolean;
+}
+
+export const emptyProduct: IProductUpload = {
+    title: "",
+    brand: "",
+    garantee: 0,
+    price: 0,
+    category: "",
+    quantity: 0,
+    specifications: "",
+    imgFile: null,
+};
+
+export type FieldName = keyof IProductUpload;
+
+export const STEPS: { label: string; required: FieldName[] }[] = [
+    { label: "Basics", required: ["title", "brand", "category"] },
+    { label: "Pricing", required: [] },
+    { label: "Details", required: [] },
+    { label: "Image", required: [] },
+    { label: "Review", required: [] },
+];
+
+export const FIELD_LABELS: Partial<Record<FieldName, string>> = {
+    title: "Product title",
+    brand: "Brand",
+    category: "Category",
+};

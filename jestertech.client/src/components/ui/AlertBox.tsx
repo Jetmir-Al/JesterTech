@@ -9,6 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Button from "./Button";
 import './alertBox.css';
+import { useEffect } from "react";
 
 interface AlertBoxProps {
     message?: string;
@@ -24,6 +25,13 @@ const iconMap = {
 
 const AlertBox = ({ message, type = 'info' }: AlertBoxProps) => {
     const { setShowAlert } = useToggleAlertHook();
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setShowAlert(false);
+            }, 5000);
+        return () => clearTimeout(timer); 
+    }, [setShowAlert]);
 
     return (
         <div className="alert-container">

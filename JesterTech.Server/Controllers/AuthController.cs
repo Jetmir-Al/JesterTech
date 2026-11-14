@@ -79,6 +79,7 @@ namespace JesterTech.Server.Controllers
             });
         }
 
+        [Authorize]
         [HttpPost("logout")]
         [ProducesResponseType(typeof(void), 200)]
         public IActionResult Logout()

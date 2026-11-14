@@ -1,14 +1,14 @@
 /* Create Product Dashboard Layout */
 .create-product-container {
     max-width: 800px;
-    margin: 2.5rem auto;
+    margin: auto;
     padding: 2rem;
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: 16px;
     box-shadow: var(--shadow-md);
-    max-height: 500px;
-    /* overflow-y: auto; */
+    max-height: 600px;
+    overflow-y: auto;
 }
 
 .create-product-header {
@@ -21,6 +21,169 @@
     color: var(--color-text-light);
     font-size: var(--text-sm);
     margin-top: 0.25rem;
+}
+
+/* Stepper */
+.steps-indicator {
+    display: flex;
+    list-style: none;
+    margin-bottom: 1.5rem;
+    padding: 0;
+}
+
+.step-item {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.step-item::before {
+    content: "";
+    position: absolute;
+    top: 15px;
+    right: 50%;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-border);
+}
+
+.step-item:first-child::before {
+    display: none;
+}
+
+.step-item.is-active::before,
+.step-item.is-done::before {
+    background-color: var(--color-primary);
+}
+
+.step-bubble {
+    width: 32px;
+    height: 32px;
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    font-size: var(--text-sm);
+    font-weight: var(--fw-semibold);
+    color: var(--color-text-light);
+    background-color: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.step-bubble:hover:enabled {
+    border-color: var(--color-primary);
+    color: var(--color-title);
+}
+
+.step-bubble:disabled {
+    cursor: not-allowed;
+}
+
+.step-item.is-active .step-bubble {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-text-inverse);
+}
+
+.step-item.is-done .step-bubble {
+    background-color: var(--color-success-bg);
+    border-color: var(--color-success);
+    color: var(--color-success);
+}
+
+.step-label {
+    font-size: var(--text-xs);
+    font-weight: var(--fw-medium);
+    color: var(--color-text-light);
+    text-align: center;
+}
+
+.step-item.is-active .step-label {
+    color: var(--color-title);
+}
+
+/* Step Panel */
+.step-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.step-panel-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.step-panel-title {
+    font-size: var(--text-lg);
+    font-weight: var(--fw-semibold);
+    color: var(--color-title);
+}
+
+.step-counter {
+    font-size: var(--text-xs);
+    color: var(--color-text-light);
+}
+
+/* Field Errors */
+.form-group input.is-invalid,
+.form-group textarea.is-invalid {
+    border-color: var(--color-error);
+}
+
+.form-group input.is-invalid:focus,
+.form-group textarea.is-invalid:focus {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 2px var(--color-error-bg);
+}
+
+.field-error {
+    font-size: var(--text-xs);
+    color: var(--color-error);
+}
+
+/* Review Summary */
+.review-grid {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.review-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.75rem 1rem;
+    background-color: var(--color-surface-alt);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+}
+
+.review-item.span-2 {
+    grid-column: span 2;
+}
+
+.review-label {
+    font-size: var(--text-xs);
+    font-weight: var(--fw-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-light);
+}
+
+.review-value {
+    font-size: var(--text-sm);
+    color: var(--color-title);
+    word-break: break-word;
 }
 
 /* Form Grid System */
@@ -128,8 +291,19 @@
 .form-actions {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     border-top: 1px solid var(--color-border);
     padding-top: 1.25rem;
+}
+
+.form-actions-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.form-actions-right .back-product-btn {
+    margin-right: 0;
 }
 
 .submit-product-btn {
@@ -188,5 +362,14 @@
 
     .form-group.span-2 {
         grid-column: span 1;
+    }
+
+    .review-grid {
+        grid-column: span 1;
+        grid-template-columns: 1fr;
+    }
+
+    .step-label {
+        font-size: 0.7rem;
     }
 }

@@ -55,7 +55,7 @@ namespace JesterTech.Server.Services.Service
             {
                 Name = authDto.Name,
                 Email = authDto.Email,
-                Role = authDto.Role,
+                Role = "User",
                 CreatedAt = DateTime.UtcNow,
             };
 

@@ -15,29 +15,15 @@ namespace JesterTech.Server.Controllers
         [HttpPost("ask")]
         public async Task<IActionResult> AskProductAi([FromBody] AiQuestionDTO dto, CancellationToken cancellationToken)
         {
-            try
-            {
-                var answer = await aiService.AskAiForProductAsync(dto, cancellationToken);
-                return Ok(new { answer });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            var answer = await aiService.AskAiForProductAsync(dto, cancellationToken);
+            return Ok(new { answer });
         }
 
         [HttpPost("ask-general")]
         public async Task<IActionResult> AskGlobalAi([FromBody] GeneralQuestionDTO dto, CancellationToken cancellationToken)
         {
-            try
-            {
-                var answer = await aiService.AskAiForAllProductsAsync(dto, cancellationToken);
-                return Ok(new { answer });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            var answer = await aiService.AskAiForAllProductsAsync(dto, cancellationToken);
+            return Ok(new { answer });
         }
         [Authorize]
         [HttpPost("ask-purchases")]
@@ -49,15 +35,8 @@ namespace JesterTech.Server.Controllers
 
             int userId = int.Parse(userIdClaim);
 
-            try
-            {
-                var answer = await aiService.AskAiForPurchasesAsync(userId, dto, cancellationToken);
-                return Ok(new { answer });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            var answer = await aiService.AskAiForPurchasesAsync(userId, dto, cancellationToken);
+            return Ok(new { answer });
         }
 
         [HttpPost("ask-AiCompare")]
@@ -69,15 +48,8 @@ namespace JesterTech.Server.Controllers
                 return BadRequest(new { message = "Chose at least two products for comparison." });
             }
 
-            try
-            {
-                var answer = await aiService.AskAiToCompareProductsAsync(dto, cancellationToken);
-                return Ok(new { answer });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
+            var answer = await aiService.AskAiToCompareProductsAsync(dto, cancellationToken);
+            return Ok(new { answer });
         }
     }
 }

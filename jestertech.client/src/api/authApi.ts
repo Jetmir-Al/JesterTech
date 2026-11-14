@@ -2,8 +2,8 @@ import type { IAPIMessage } from "../types/apiTypes";
 import type { IUser } from "../types/IUser";
 import { api } from "./api";
 
-export const Register = async (Name: string, Email: string, Password: string, Role: string) => {
-    return await api.post<IAPIMessage>('/Auth/register', { Name, Email, Password, Role });
+export const Register = async (Name: string, Email: string, Password: string) => {
+    return await api.post<IAPIMessage>('/Auth/register', { Name, Email, Password });
 }
 
 export const Login = async (email: string, password: string): Promise<IUser> => {
