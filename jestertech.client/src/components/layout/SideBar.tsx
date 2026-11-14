@@ -16,7 +16,7 @@ const SideBar = () => {
     const { data: Categories, isLoading } = useGetProductCategories();
     const [tabs, setTabs] = useState<"Tabs" | "Explore">("Tabs");
     const { user, authenticated } = useAuthHook();
-    const filterNavigation = user?.role === "admin" ? NavigationSideBar[0] : NavigationSideBar[0].filter((p) => p.label !== "Dashboard");
+    const filterNavigation = user?.role === "Admin" ? NavigationSideBar[0] : NavigationSideBar[0].filter((p) => p.label !== "Dashboard");
     const navigate = useNavigate();
     const sideBarRef = useRef<HTMLDivElement>(null);
 

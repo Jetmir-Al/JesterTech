@@ -1,7 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faPenToSquare, faTrashCan, faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
-import { useAuthHook } from "../hooks/useAuthHook";
-import NotFound from "./NotFound";
 import { useDeleteProduct, useGetDashboardProductsAdvanced } from "../hooks/useQueries/useProductQueries";
 import "./pageStyles/dashboard.css";
 import { getImageUrl } from "../api/productApi";
@@ -15,7 +13,6 @@ import UpdateProductImg from "../components/dashboard/UpdateProductImg";
 import { ToolTip, ToolTipContent, ToolTipTrigger } from "../components/ui/CustomToolTip";
 import DeleteActionPopup from "../components/ui/DeleteActionPopup";
 function Dashboard() {
-    const { user } = useAuthHook();
     const [page, setPage] = useState<number>(1);
     const [showImg, setShowImg] = useState<boolean>(false);
     const [img, setImg] = useState<string>("");
@@ -31,10 +28,6 @@ function Dashboard() {
     const { data: productData, isLoading } = useGetDashboardProductsAdvanced({
         params: { pageSize: "30", page: page.toString() }
     });
-
-    if (user?.role !== "Admin") {
-        return <NotFound />;
-    }
 
     return (
         <div className="admin-dashboard-container">

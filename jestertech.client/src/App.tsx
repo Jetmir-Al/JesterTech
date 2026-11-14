@@ -1,19 +1,21 @@
 import './App.css';
 import NavBar from './components/layout/NavBar';
+import Footer from './components/layout/Footer';
 import { BrowserRouter as Router, Route, Routes } from 'react-router';
 import { NavbarUtilsProvider } from './context/NavbarUtilsProvider';
-import Home from './pages/Home';
-import Footer from './components/layout/Footer';
-import Products from './pages/Products';
-import NotFound from './pages/NotFound';
-import Cart from './pages/Cart';
-import ProductDetails from './components/products/ProductDetails';
-import AlertBox from './components/ui/AlertBox';
 import { useToggleAlertHook } from './hooks/useToggle/useToggleAlert';
+import { lazy } from 'react';
+import AlertBox from './components/ui/AlertBox';
 import ProtectedRoutes from './routes/ProtectedRoutes';
-import Profile from './pages/Profile';
-import Compare from './pages/Compare';
-import Dashboard from './pages/Dashboard';
+
+const Home = lazy(() => import('./pages/Home'));
+const Products = lazy(() => import('./pages/Products'));
+const NotFound = lazy(() => import('./pages/NotFound'));
+const Cart = lazy(() => import('./pages/Cart'));
+const ProductDetails = lazy(() => import('./components/products/ProductDetails'));
+const Profile = lazy(() => import('./pages/Profile'));
+const Compare = lazy(() => import('./pages/Compare'));
+const Dashboard = lazy(() => import('./pages/Dashboard'));
 
 
 function App() {
@@ -40,7 +42,7 @@ function App() {
                 <Route element={<ProtectedRoutes />}>
                     <Route path="/profile" element={<Profile />} />
                 </Route>
-                <Route element={<ProtectedRoutes />}>
+                <Route element={<ProtectedRoutes allowedRoles="Admin" />}>
                     <Route path="/dashboard" element={<Dashboard />} />
                 </Route>
 
