@@ -26,6 +26,7 @@ const Card = ({ img, price, name, rating, cartItem }: ICard) => {
             <Button
                 type="button"
                 onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                    e.preventDefault();
                     e.stopPropagation();
                     addCartItems(cartItem);
                 }}

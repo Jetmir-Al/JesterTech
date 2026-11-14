@@ -240,6 +240,14 @@
     margin: 16px 0;
 }
 
+.refetchBtn {
+    padding: 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    background-color: var(--color-surface);
+    color: var(--color-text);
+}
+
 /* Sort Options (Radio layout) */
 .sortForm-inputs {
     display: grid;

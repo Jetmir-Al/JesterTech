@@ -11,6 +11,9 @@ import AiDisplay from "../components/ai/AiDisplay";
 import { faCaretLeft, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router";
+import NoInfo from "../utils/NoInfo";
+import ErrorUtil from "../utils/ErrorUtil";
+import { faRotate } from "@fortawesome/free-solid-svg-icons/faRotate";
 
 
 const Products = () => {
@@ -24,37 +27,45 @@ const Products = () => {
         categories: searchParams.getAll("categories"),
     };
 
-    const { data: products, isLoading } = useGetProductsAdvanced({
+    const { data: products, isLoading, refetch, isError, isRefetchError} = useGetProductsAdvanced({
         params: params
     });
-
-
-
 
     return (
         <main className="products-container">
             <div className="productSearch-container">
+                {
+                 isError &&
+                    <Button 
+                        className="refetchBtn"
+                        type="button"
+                        onClick={() => refetch()}>
+                        <FontAwesomeIcon icon={faRotate} />
+                    </Button>
+                }
                 <SearchBar />
                 <SortFilter />
-
             </div>
+            {
+            isRefetchError && 
+                <ErrorUtil func={() => refetch()} msg="Error occurred while refetching products." />
+            }
             <div className="productsDisplay-wrapper">
                 <div className="productsDisplay-container">
                     {
+                        (!isError || !isRefetchError) &&
                         isLoading ?
                             <div className="loadingProducts"> 
                                 <Loading />
                             </div>
                             :
+                            products?.products.length === 0 ?
+                            <NoInfo noInfo="No products found. Try adjusting your filter!" /> :
                             products?.products.map((p: IProductPage) => (
                                 <Link
                                     to={`/products/${p.id}`}
                                     className='productCard'
                                     key={p.id}
-                                    onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                                        e.stopPropagation();
-                                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                                    }}
                                 >
                                     <Card
                                         img={p.image}
