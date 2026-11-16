@@ -33,7 +33,10 @@ namespace JesterTech.Server.Controllers
             if (userIdClaim == null)
                 return Unauthorized();
 
-            int userId = int.Parse(userIdClaim);
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                return Unauthorized();
+            }
 
             var answer = await aiService.AskAiForPurchasesAsync(userId, dto, cancellationToken);
             return Ok(new { answer });

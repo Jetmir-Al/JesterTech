@@ -17,13 +17,13 @@ export const queryClient = new QueryClient({
   },
 
   queryCache: new QueryCache({
-    onError: (error, query) => {
+    onError: (_, query) => {
       if (query.meta?.skipGlobarlError) return
       console.error("Problem with caching data");
     },
   }),
   mutationCache: new MutationCache({
-    onError: (error, _variables, _context, mutation) => {
+    onError: (_, _variables, _context, mutation) => {
       if (mutation.options.onError) return
       console.error("Problem with caching data");
     },

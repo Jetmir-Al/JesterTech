@@ -20,9 +20,9 @@ namespace JesterTech.Server.Controllers
                 var products = await _productService.GetAllProducts(cancellationToken);
                 return Ok(products);
             }
-            catch (Exception ex)
+            catch
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return StatusCode(500, $"Internal server error");
             }
         }
 

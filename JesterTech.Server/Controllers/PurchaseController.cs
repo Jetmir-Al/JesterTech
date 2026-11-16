@@ -23,7 +23,10 @@ namespace JesterTech.Server.Controllers
             if (userIdClaim == null)
                 return Unauthorized();
 
-            int userId = int.Parse(userIdClaim);
+            if (!int.TryParse(userIdClaim, out int userId))
+            {
+                return BadRequest(new { message = "Invalid user session!" });
+            }
 
             await _purchaseService.CreatePurchaseById(productId, dto, userId, cancellationToken);
 
@@ -40,11 +43,11 @@ namespace JesterTech.Server.Controllers
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim == null)
-                return Unauthorized(new { message = "User is not logged in" });
+                return Unauthorized(new { message = "Invalid user session!" });
 
             if (!int.TryParse(userIdClaim, out int userId))
             {
-                return BadRequest(new { message = "Invalid user identity format." });
+                return BadRequest(new { message = "Invalid user session!" });
             }
             
             var result = await _purchaseService.GetPurchasesAsync(page, pageSize, userId, cancellationToken);

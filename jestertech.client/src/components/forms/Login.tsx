@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faLock, faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useActionState } from "react";
 import "./auth.css";
 import Button from '../ui/Button';
 import { useToggleNavbarUtilsHook } from '../../hooks/useToggle/useToggleNavbarUtils';
@@ -10,35 +10,35 @@ import { useToggleAlertHook } from '../../hooks/useToggle/useToggleAlert';
 function LogIn() {
     const { toggleFormFunc, toggleDisplayFormFunc } = useToggleNavbarUtilsHook();
     const { setMessage, setType, setShowAlert } = useToggleAlertHook();
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
-    const [badInfo, setBadInfo] = useState<boolean>(false);
     const { mutateAsync: loginFunc } = useLogin();
 
-    const handleLogin = async (e: React.SubmitEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        try {
-            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            if (email === "" || password === "" || !emailRegex.test(email)) {
-                setBadInfo(true);
-                return;
-            }
-            const result = await loginFunc({ email, password });
-            if (!result) {
-                setBadInfo(true);
-                return;
-            }
-            if (result) {
+    const [state, formAction, isPending] = useActionState(
+        async (_prev: { error: boolean }, formData: FormData) => {
+            const email = formData.get("email");
+            const password = formData.get("password");
+            try {
+                const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                if (!email || !password)
+                    return { error: true }
+
+                if (email === "" || password === "" || !emailRegex.test(String(email))) {
+                    return { error: true };
+                }
+                const result = await loginFunc({ email: String(email), password: String(password) });
+                if (!result) {
+                    return { error: true };
+                }
                 toggleDisplayFormFunc();
                 setMessage("Login successful!");
                 setType("success");
                 setShowAlert(true);
+                return { error: false };
+            } catch {
+                return { error: true };
             }
-        } catch {
-            setBadInfo(true);
-            return;
-        }
-    };
+        },
+        { error: false }
+    );
 
     return (
         <div className="login-modal-overlay" id="login-content">
@@ -56,7 +56,7 @@ function LogIn() {
                     <p>Access your EcomTech account & orders</p>
                 </div>
 
-                <form className="login__form" onSubmit={handleLogin}>
+                <form className="login__form" action={formAction}>
                     <div className="login__group">
                         <div className="auth-field">
                             <label htmlFor="login-email" className="login__label">Email Address</label>
@@ -68,7 +68,6 @@ function LogIn() {
                                     className="login__input"
                                     name="email"
                                     required
-                                    onChange={(e) => setEmail(e.target.value)}
                                 />
                                 <FontAwesomeIcon icon={faEnvelope} className="input-side-icon" />
                             </div>
@@ -84,16 +83,15 @@ function LogIn() {
                                     className="login__input"
                                     name="password"
                                     required
-                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                                 <FontAwesomeIcon icon={faLock} className="input-side-icon" />
                             </div>
                         </div>
                     </div>
 
-                    {badInfo && (
+                    {state.error && (
                         <div className="bad-info-banner">
-                            <h5 className="badInfo">Email or password is incorrect!</h5>
+                            <h5 className="badInfo">Invalid Credentials!</h5>
                         </div>
                     )}
 
@@ -101,8 +99,9 @@ function LogIn() {
                         <Button
                             type="submit"
                             className="login__button button"
+                            disabled={isPending}
                         >
-                            Sign In
+                            {isPending ? "Signing in…" : "Sign In"}
                         </Button>
                         <span className="login__signup">
                             Don't have an account? <span className="toggle-form" onClick={() => toggleFormFunc()}>Sign up</span>

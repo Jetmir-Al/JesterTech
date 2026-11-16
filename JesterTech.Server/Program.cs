@@ -15,6 +15,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Middleware registrations
+builder.Services.AddProblemDetails();
+builder.Services.AddRateLimiting(builder.Configuration);
+builder.Services.AddApiProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 // Repository registrations
@@ -33,8 +36,6 @@ builder.Services.AddScoped<IPurchaseService, PurchaseService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IJwtService, JwtService>();
 
-builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.AddProblemDetails();
 
 builder.Services.AddControllersWithViews();
 
@@ -87,6 +88,8 @@ app.UseCors("JesterTechPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseRateLimiter();
 
 app.MapControllers();
 
