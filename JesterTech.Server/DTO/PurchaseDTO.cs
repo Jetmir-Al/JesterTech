@@ -30,9 +30,13 @@ namespace JesterTech.Server.DTO
     }
     public class CreatePurchaseDto
     {
+        [Required]
         public int Quantity { get; set; }
+        [Required]
         public string Address { get; set; }
+        [Required]
         public string CardholderName { get; set; }
+        [Required]
         public string CardNumber { get; set; }
         public DateTime PurchaseDate { get; set; } = DateTime.UtcNow;
     }

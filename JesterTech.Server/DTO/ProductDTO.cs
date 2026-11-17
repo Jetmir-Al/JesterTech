@@ -57,28 +57,45 @@ namespace JesterTech.Server.DTO
 
     public class InsertProductDTO
     {
+        [Required]
+        [StringLength(100, ErrorMessage = "The title must be between 1 and 100 characters.", MinimumLength = 1)]
         public string Title { get; set; }
+        [Required]
         public string Brand { get; set; }
+        [Required]
         public int Garantee { get; set; }
+        [Required]
         public decimal Price { get; set; }
+        [Required]
         public int Quantity { get; set; }
+        [Required]
         public string Category { get; set; }
+        [Required]
         public string Specifications { get; set; }
         public IFormFile? ImgFile { get; set; }
     }
 
     public class UpdateProductImgDTO
     {
+        [Required]
         public IFormFile? ImgFile { get; set; }
     }
     public class UpdateProductDTO
     {
+        [Required]
+        [StringLength(100, ErrorMessage = "The title must be between 1 and 100 characters.", MinimumLength = 1)]
         public string Title { get; set; }
+        [Required]
         public string Brand { get; set; }
+        [Required]
         public int Garantee { get; set; }
+        [Required]  
         public decimal Price { get; set; }
+        [Required]
         public int Quantity { get; set; }
+        [Required]
         public string Category { get; set; }
+        [Required]
         public string Specifications { get; set; }
         public IFormFile? ImgFile { get; set; }
     }

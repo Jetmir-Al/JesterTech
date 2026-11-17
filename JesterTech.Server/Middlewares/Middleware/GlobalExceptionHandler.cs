@@ -4,30 +4,51 @@ using Microsoft.AspNetCore.Mvc;
 namespace JesterTech.Server.Middlewares.Middleware;
 
 public class GlobalExceptionHandler(
-    ILogger<GlobalExceptionHandler> _logger,
+    ILogger<GlobalExceptionHandler> logger,
     IProblemDetailsService problemDetailsService
-    ) : IExceptionHandler
+) : IExceptionHandler
 {
-
-    public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
+    public async ValueTask<bool> TryHandleAsync(
+        HttpContext httpContext,
+        Exception exception,
+        CancellationToken cancellationToken)
     {
-        _logger.LogError(exception, "Unhandled exception {TraceId}",
-            httpContext.TraceIdentifier);
+        logger.LogError(exception, "Unhandled exception {TraceId}", httpContext.TraceIdentifier);
+
+        var (statusCode, title, detail) = exception switch
+        {
+            KeyNotFoundException => (
+                StatusCodes.Status404NotFound,
+                "Resource not found",
+                exception.Message
+            ),
+            ConflictException => (
+                StatusCodes.Status409Conflict,
+                "Conflict",
+                exception.Message
+            ),
+            _ => (
+                StatusCodes.Status500InternalServerError,
+                "An unexpected error occurred",
+                "An internal server error occurred. Please try again later."
+            )
+        };
 
         var problem = new ProblemDetails
         {
-            Status = StatusCodes.Status500InternalServerError,
-            Title = "An unexpected error occurred",
-            Detail = exception.Message 
+            Status = statusCode,
+            Title = title,
+            Detail = detail,
+            Instance = httpContext.Request.Path
         };
 
-        await problemDetailsService.WriteAsync(new ProblemDetailsContext
+        return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext
         {
             HttpContext = httpContext,
             ProblemDetails = problem,
             Exception = exception
         });
-
-        return true;
     }
 }
+
+public class ConflictException(string message) : Exception(message);
