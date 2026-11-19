@@ -16,21 +16,48 @@ namespace JesterTech.Server.Services.Service
     {
         public async Task<string> AskAiForAllProductsAsync(GeneralQuestionDTO requestDto, CancellationToken cancellationToken)
         {
-            var keywords = requestDto.UserQuestion.ToLower().Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            var keywords = requestDto.UserQuestion
+                .ToLower()
+                .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                .Where(kw => kw.Length > 2)
+                .Distinct()
+                .ToArray();
             
             var allProducts = await productRepository.GetAllProductsForAi(cancellationToken);
 
-            var matchedProducts = allProducts.OrderByDescending(p => keywords.Count(kw =>
-                (!string.IsNullOrEmpty(p.Title) && p.Title.ToLower().Contains(kw)) ||
-                (!string.IsNullOrEmpty(p.Brand) && p.Brand.ToLower().Contains(kw)) ||
-                (!string.IsNullOrEmpty(p.Category) && p.Category.ToLower().Contains(kw))))
+            var ranked = allProducts
+            .Select(p => new
+            {
+                Product = p,
+                Score = keywords.Count(kw =>
+                    (!string.IsNullOrEmpty(p.Title) && p.Title.ToLower().Contains(kw)) ||
+                    (!string.IsNullOrEmpty(p.Brand) && p.Brand.ToLower().Contains(kw)) ||
+                    (!string.IsNullOrEmpty(p.Category) && p.Category.ToLower().Contains(kw)))
+            })
+            .ToList();
+
+            var hasMatches = ranked.Any(x => x.Score > 0);
+
+            var selectedProducts = (hasMatches
+                    ? ranked.OrderByDescending(x => x.Score).ThenByDescending(x => x.Product.AverageRating)
+                    : ranked.OrderByDescending(x => x.Product.AverageRating))
                 .Take(10)
+                .Select(x => x.Product)
                 .ToList();
 
             var catalogBuilder = new StringBuilder();
-            foreach (var p in allProducts)
+            foreach (var p in selectedProducts)
             {
-                catalogBuilder.AppendLine($"[PRODUCT: {p.Title}] | Brand: {p.Brand} | AvgRating: {p.AverageRating} | Price: ${p.Price}\n{p.Specifications}\n---");
+                var specs = string.IsNullOrWhiteSpace(p.Specifications)
+                    ? string.Empty
+                    : (p.Specifications.Length > 250 ? p.Specifications[..250] + "..." : p.Specifications);
+
+                catalogBuilder.AppendLine($"[PRODUCT: {p.Title}] | Brand: {p.Brand} | Category: {p.Category} | AvgRating: {p.AverageRating:0.0} | Price: ${p.Price}");
+                if (!string.IsNullOrWhiteSpace(specs))
+                {
+                    catalogBuilder.AppendLine($"Specs: {specs}");
+                }
+                catalogBuilder.AppendLine("---");
             }
 
             var globalPrompt = $@"""

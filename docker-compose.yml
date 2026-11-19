@@ -1,0 +1,37 @@
+services:
+  api:
+    build:
+      context: ./JesterTech.Server
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    volumes:
+      - product_images:/app/wwwroot/images
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: ${DEFAULT_CONNECTION}
+      JwtSettings__SecretKey: ${JWT_SECRET_KEY}
+      JwtSettings__Issuer: JesterTechServer
+      JwtSettings__Audience: JesterTechClient
+      AiSettings__ApiKey: ${AI_API_KEY}
+
+  client:
+    build:
+      context: ./jestertech.client
+      dockerfile: Dockerfile
+    restart: unless-stopped
+
+  proxy:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - api
+      - client
+
+volumes:
+  product_images:

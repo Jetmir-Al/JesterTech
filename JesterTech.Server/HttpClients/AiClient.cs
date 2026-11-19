@@ -18,7 +18,7 @@ namespace JesterTech.Server.HttpClients
 
         public async Task<string> GetAiResponseAsync(string prompt, CancellationToken cancellationToken)
         {
-            var apiKey = _configuration["AiSettings: ApiKey"];
+            var apiKey = _configuration["AiSettings:ApiKey"];
             if (string.IsNullOrEmpty(apiKey))
                 throw new InvalidOperationException("AI service configuration is missing.");
 

@@ -43,7 +43,7 @@ export const GetProductsAdvanced = async (params: string): Promise<IProductAdvan
 export const GetProductsDashboardAdvanced = async (params: string): Promise<IProductDashboardAdvanced> => {
 
     const response = await api.get<IProductDashboardAdvanced>(`/Product/DashboardProducts?${params}`);
-    
+
     return response as IProductDashboardAdvanced;
 }
 
@@ -53,8 +53,10 @@ export const GetAllProducts = async (): Promise<IProduct[]> => {
 }
 
 export const getImageUrl = (filename: string) => {
-    return `${import.meta.env.VITE_IMG_API_URL}/${filename}`;
-}
+    const base = (import.meta.env.VITE_IMG_API_URL ?? '/').replace(/\/+$/, '');
+    const cleanPath = filename.replace(/^\/+/, '');
+    return `${base}/${cleanPath}`;
+};
 
 export const InsertProduct = async (product: FormData) => {
     await api.post('/Product/InsertProduct',

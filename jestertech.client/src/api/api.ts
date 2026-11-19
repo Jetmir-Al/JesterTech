@@ -1,6 +1,6 @@
 import type { RequestOptions, RequestParams } from '../types/apiTypes';
 
-const BASE_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = (import.meta.env.VITE_API_URL ?? '/api').replace(/\/+$/, '');
 
 
 const request = async <T>({ endpoint, options = {} }: RequestParams): Promise<T | null> => {
@@ -13,7 +13,7 @@ const request = async <T>({ endpoint, options = {} }: RequestParams): Promise<T 
             ...(options.headers as Record<string, string>),
         },
         credentials: options.credentials || 'include',
-    } as RequestInit; 
+    } as RequestInit;
 
     const response = await fetch(`${BASE_URL}${endpoint}`, config);
 
@@ -36,20 +36,20 @@ export const api = {
     post: <T>(endpoint: string, body?: Record<string, unknown> | FormData, options?: RequestOptions) =>
         request<T>({
             endpoint,
-            options: { 
-                ...options, 
-                method: 'POST', 
-                body: body instanceof FormData ? body : JSON.stringify(body) 
+            options: {
+                ...options,
+                method: 'POST',
+                body: body instanceof FormData ? body : JSON.stringify(body)
             },
         }),
 
     put: <T>(endpoint: string, body?: Record<string, unknown> | FormData, options?: RequestOptions) =>
         request<T>({
             endpoint,
-            options: { 
-                ...options, 
-                method: 'PUT', 
-                body: body instanceof FormData ? body : JSON.stringify(body) 
+            options: {
+                ...options,
+                method: 'PUT',
+                body: body instanceof FormData ? body : JSON.stringify(body)
             }
         }),
 
