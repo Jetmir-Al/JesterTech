@@ -21,7 +21,7 @@ namespace JesterTech.Server.Controllers
         {
             _configuration = configuration;
             _authService = authService;
-            _environment = webHostEnvironment
+            _environment = webHostEnvironment;
         }
 
         [HttpPost("register")]
