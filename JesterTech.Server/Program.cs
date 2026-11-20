@@ -41,18 +41,22 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+var allowedOrigins = builder.Configuration
+    .GetSection("Cors:AllowedOrigins")
+    .Get<string[]>()
+    ?? ["https://localhost:62346", "http://localhost:5231", "https://localhost:7070"];
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "JesterTechPolicy",
-                      policy => 
+                      policy =>
                       {
-                          policy.WithOrigins("https://localhost:62346", "http://localhost:5231", "https://localhost:7070")
+                          policy.WithOrigins(allowedOrigins)
                                 .AllowAnyHeader()
                                 .AllowAnyMethod()
                                 .AllowCredentials();
                       });
-}
-    );
+});
 
 builder.Services.AddIdentityServices(builder.Configuration);
 

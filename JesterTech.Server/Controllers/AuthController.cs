@@ -14,12 +14,14 @@ namespace JesterTech.Server.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IAuthService _authService;
+        private readonly IWebHostEnvironment _environment;
 
 
-        public AuthController(IConfiguration configuration, IAuthService authService)
+        public AuthController(IConfiguration configuration, IAuthService authService, IWebHostEnvironment webHostEnvironment)
         {
             _configuration = configuration;
             _authService = authService;
+            _environment = webHostEnvironment
         }
 
         [HttpPost("register")]
@@ -99,7 +101,7 @@ namespace JesterTech.Server.Controllers
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Strict,
+                SameSite = _environment.IsDevelopment() ? SameSiteMode.Lax : SameSiteMode.None,
                 Expires = DateTimeOffset.UtcNow.AddDays(6)
             };
 
@@ -112,7 +114,7 @@ namespace JesterTech.Server.Controllers
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Strict,
+                SameSite = _environment.IsDevelopment() ? SameSiteMode.Lax : SameSiteMode.None,
                 Expires = DateTimeOffset.UtcNow.AddDays(-1)
             };
             Response.Cookies.Append("JesterTechToken", "", cookieOptions);
