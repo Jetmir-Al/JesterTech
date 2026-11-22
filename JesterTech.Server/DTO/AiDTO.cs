@@ -7,6 +7,7 @@ namespace JesterTech.Server.DTO
         [Required]
         public int ProductId { get; set; }
         [Required]
+        [StringLength(250, ErrorMessage = "The question must be between 1 and 250 characters.", MinimumLength = 2)]
         public string UserQuestion { get; set; } = string.Empty;
         [Required]
         public string Preference { get; set; } = string.Empty;
@@ -14,6 +15,7 @@ namespace JesterTech.Server.DTO
     public class GeneralQuestionDTO
     {
         [Required]
+        [StringLength(250, ErrorMessage = "The question must be between 1 and 250 characters.", MinimumLength = 2)]
         public string UserQuestion { get; set; } = string.Empty;
         [Required]
         public string Preference { get; set; } = string.Empty;
@@ -24,7 +26,7 @@ namespace JesterTech.Server.DTO
         [Required]
         public List<int> ProductIds { get; set; }
         [Required]
-        [StringLength(200, ErrorMessage = "The question must be between 1 and 200 characters.", MinimumLength = 2)]
+        [StringLength(250, ErrorMessage = "The question must be between 1 and 250 characters.", MinimumLength = 2)]
         public string UserQuestion { get; set; } = string.Empty;
         [Required]
         public string Preference { get; set; } = string.Empty;
