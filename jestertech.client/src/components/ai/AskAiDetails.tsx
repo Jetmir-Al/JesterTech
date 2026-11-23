@@ -28,8 +28,8 @@ function AskAiDetails({ mode, setDisplay, ids }: IAskAiDetailsProps) {
         setDisplaySettings(false);
         if (mode === "details") {
             if (!id || isPending || question === "") return;
-            if(question.length > 300) {
-                setResponse("Question is too long. Please keep it under 300 characters.");
+            if(question.length > 250) {
+                setResponse("Question is too long. Please keep it under 250 characters.");
                 return;
             }
             await askDetails(
