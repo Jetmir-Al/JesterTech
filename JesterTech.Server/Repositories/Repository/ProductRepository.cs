@@ -1,5 +1,5 @@
-﻿using JesterTech.Server.Data;
-using JesterTech.Server.DTO;
+﻿using JesterTech.Server.Common.DTO;
+using JesterTech.Server.Data;
 using JesterTech.Server.Models;
 using JesterTech.Server.Repositories.Interfaces;
 using LinqKit;

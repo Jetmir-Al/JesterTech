@@ -1,4 +1,4 @@
-﻿using JesterTech.Server.DTO;
+﻿using JesterTech.Server.Common.DTO;
 using JesterTech.Server.Models;
 
 namespace JesterTech.Server.Services.Interfaces

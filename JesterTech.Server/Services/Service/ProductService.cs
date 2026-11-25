@@ -1,4 +1,4 @@
-﻿using JesterTech.Server.DTO;
+﻿using JesterTech.Server.Common.DTO;
 using JesterTech.Server.Helpers;
 using JesterTech.Server.Models;
 using JesterTech.Server.Repositories.Interfaces;

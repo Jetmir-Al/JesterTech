@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace JesterTech.Server.DTO
+namespace JesterTech.Server.Common.DTO
 {
     public class ProductDTO
     {

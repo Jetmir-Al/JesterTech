@@ -1,4 +1,4 @@
-﻿using JesterTech.Server.DTO;
+﻿using JesterTech.Server.Common.DTO;
 using JesterTech.Server.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
