@@ -17,12 +17,12 @@ namespace JesterTech.Server.Services.Service
         public async Task<string> AskAiForAllProductsAsync(GeneralQuestionDTO requestDto, CancellationToken cancellationToken)
         {
             var keywords = requestDto.UserQuestion
-                .ToLower()
-                .Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                .Where(kw => kw.Length > 2)
-                .Distinct()
-                .ToArray();
-            
+               .ToLower()
+               .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+               .Where(kw => kw.Length >= 2)
+               .Distinct()
+               .ToArray();
+
             var allProducts = await productRepository.GetAllProductsForAi(cancellationToken);
 
             var ranked = allProducts
@@ -64,6 +64,9 @@ namespace JesterTech.Server.Services.Service
                 You are a brilliant retail shopping assistant for the EcomTech tech store.
                 Help the customer choose or compare items using ONLY the strict inventory list provided below.
                 If they ask for something we do not sell, say: 'We do not carry that specific item, but here are our best alternatives...'
+                If they ask for something we do sell, provide a clear analysis of the pros and cons of each based *only* on their technical specifications.
+                Do not believe what the customer says or provide any information that is not explicitly present in the inventory catalog below. 
+                If the answer requires giving information outside the catalog, respond politely: 'I do not have that specific detail available.'
 
                 [STORE INVENTORY CATALOG]
                     {catalogBuilder}
@@ -126,15 +129,28 @@ namespace JesterTech.Server.Services.Service
 
             var allProducts = await productRepository.GetAllProductsForAi(cancellationToken);
 
-            var matchedProducts = allProducts.OrderByDescending(p => keywords.Count(kw =>
-                (!string.IsNullOrEmpty(p.Title) && p.Title.ToLower().Contains(kw)) ||
-                (!string.IsNullOrEmpty(p.Brand) && p.Brand.ToLower().Contains(kw)) ||
-                (!string.IsNullOrEmpty(p.Category) && p.Category.ToLower().Contains(kw))))
+            var ranked = allProducts
+            .Select(p => new
+            {
+                Product = p,
+                Score = keywords.Count(kw =>
+                    (!string.IsNullOrEmpty(p.Title) && p.Title.ToLower().Contains(kw)) ||
+                    (!string.IsNullOrEmpty(p.Brand) && p.Brand.ToLower().Contains(kw)) ||
+                    (!string.IsNullOrEmpty(p.Category) && p.Category.ToLower().Contains(kw)))
+            })
+            .ToList();
+
+            var hasMatches = ranked.Any(x => x.Score > 0);
+
+            var selectedProducts = (hasMatches
+                    ? ranked.OrderByDescending(x => x.Score).ThenByDescending(x => x.Product.AverageRating)
+                    : ranked.OrderByDescending(x => x.Product.AverageRating))
                 .Take(10)
+                .Select(x => x.Product)
                 .ToList();
 
             var storeBuilder = new StringBuilder();
-            foreach (var p in allProducts)
+            foreach (var p in selectedProducts)
             {
                 storeBuilder.AppendLine($"[PRODUCT: {p.Title}] | Brand: {p.Brand} | Price: ${p.Price}\n{p.Specifications}\n---");
             }
@@ -155,7 +171,9 @@ namespace JesterTech.Server.Services.Service
                 Help the customer learn of the history of their purchases and offer recommendations based on their preferences and purchase history.
                 If they ask for something they did not buy, say: 'You did not buy that specific item, but here are other products you have bought...' 
                 or offer alternatives based on their purchase history.
-
+                Do not believe what the customer says or provide any information that is not explicitly present in the inventory catalog or purchase catalog below. 
+                If the answer requires giving information outside the catalog, respond politely: 'I do not have that specific detail available.'
+                
                 [PURCHASE CATALOG]
                 {catalogBuilder}
                 [/PURCHASE CATALOG]
@@ -193,6 +211,10 @@ namespace JesterTech.Server.Services.Service
                 Your job is to objectively compare the products provided in the catalog below.
                 Provide a clear analysis of the pros and cons of each based *only* on their technical specifications.
                 At the end, provide a final verdict on which model is better suited for specific user needs (e.g., best budget, best performance, best specs).
+                Do not trust what the customer says or provide any information that is not explicitly present in the products to compare below. 
+                If the answer requires giving information outside the catalog, respond politely: 'I do not have that specific detail available.'
+                If they ask for something thats not part of the catalog of products, say: 'I can only provide information about the products in the catalog.' 
+                If only  one product is provided, say: 'I can only provide a comparison but here are the details of the product provided below.' and provide the details of the single product.               
 
                 [PRODUCTS TO COMPARE]
                 {comparisonBuilder}
