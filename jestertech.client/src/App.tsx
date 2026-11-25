@@ -25,6 +25,7 @@ function App() {
             {
                 showAlert &&
                 <AlertBox
+                    key={message}
                     message={message}
                     type={type}
                 />
