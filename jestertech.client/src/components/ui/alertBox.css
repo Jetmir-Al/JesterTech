@@ -79,13 +79,14 @@
     width: 100%;
 }
 
-.alert p {
+.alert-message {
     margin: 0;
     font-size: var(--text-sm);
     line-height: var(--lh-normal);
     color: var(--color-text);
     white-space: pre-line;
     word-break: break-word;
+    align-self: anchor-center;
 }
 
 .alert .btn-close {

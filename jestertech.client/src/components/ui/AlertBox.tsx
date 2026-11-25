@@ -31,7 +31,7 @@ const AlertBox = ({ message, type = 'info' }: AlertBoxProps) => {
     const closeTimer = useRef<number>(0);
 
     const dismiss = useCallback(() => {
-        setClosing(true);
+        // setClosing(true);
         closeTimer.current = window.setTimeout(() => setShowAlert(false), 280);
     }, [setShowAlert]);
 
@@ -51,7 +51,7 @@ const AlertBox = ({ message, type = 'info' }: AlertBoxProps) => {
                     <div className="alert-icon-wrapper">
                         <FontAwesomeIcon icon={iconMap[type]} className="alert-type-icon" />
                     </div>
-                    <p>{message}</p>
+                    <p className="alert-message">{message}</p>
                 </div>
                 <Button
                     type="button"
